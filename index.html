@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Aysel</title>
+  <title>Nejla</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -110,6 +110,40 @@
       background: var(--pink-mid);
       transform: rotate(45deg);
       box-shadow: 0 0 12px var(--pink-rose);
+    }
+
+    /* Zeferin Karısı badge */
+    .badge {
+      background: linear-gradient(135deg, rgba(255,255,255,0.7), rgba(252,228,236,0.8));
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(233,30,140,0.3);
+      border-radius: 50px;
+      padding: 10px 28px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 20px rgba(194,24,91,0.12);
+      animation: fadeDown 1.2s ease 0.15s both;
+    }
+
+    .badge-text {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--pink-deep);
+      letter-spacing: 0.05em;
+    }
+
+    .badge-heart {
+      font-size: 1.1rem;
+      animation: heartbeat 1.4s ease-in-out infinite;
+      display: inline-block;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      30%       { transform: scale(1.3); }
+      60%       { transform: scale(1.1); }
     }
 
     .hero {
@@ -365,17 +399,17 @@
     </div>
 
     <!-- Zeferin Karısı Badge -->
-    <div style="background: linear-gradient(135deg, rgba(255,255,255,0.7), rgba(252,228,236,0.8)); backdrop-filter: blur(12px); border: 1px solid rgba(233,30,140,0.3); border-radius: 50px; padding: 10px 28px; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 20px rgba(194,24,91,0.12); animation: fadeDown 1.2s ease 0.15s both;">
-      <span style="font-size:1.1rem; animation: heartbeat 1.4s ease-in-out infinite; display:inline-block;">💍</span>
-      <span style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.05rem; color: #c2185b; letter-spacing: 0.05em;">Zeferin Karısı</span>
-      <span style="font-size:1.1rem;">💗</span>
+    <div class="badge">
+      <span class="badge-heart">💍</span>
+      <span class="badge-text">Zeferin Karısı</span>
+      <span class="badge-heart">💗</span>
     </div>
 
     <div class="hero">
       <p class="hero-label">✦ İsim ✦</p>
       <div class="name-wrapper">
         <div class="name-bg-blur"></div>
-        <h1 class="main-name"><span class="name-italic">Aysel</span></h1>
+        <h1 class="main-name"><span class="name-italic">Nejla</span></h1>
       </div>
     </div>
 
@@ -387,18 +421,19 @@
 
     <div class="meaning-card">
       <p class="meaning-title">✦ İsmin Anlamı ✦</p>
-      <span class="meaning-name-small">Aysel</span>
+      <span class="meaning-name-small">Nejla</span>
       <p class="meaning-text">
-        <strong>Aysel</strong>, Türkçe kökenli, şiirsel ve zarif bir kadın ismidir.<br/><br/>
-        <strong>"Ay"</strong> ve <strong>"sel"</strong> kelimelerinin birleşiminden oluşur.<br/><br/>
-        <strong>Ay</strong> — Gökyüzünün en parlak ve gizemli ışığı, güzelliğin simgesi.<br/>
-        <strong>Sel</strong> — Coşkun akan su, dingin ama güçlü.<br/><br/>
-        Birlikte anlamı: <strong>"Ay gibi parlayan"</strong> ya da<br/>
-        <strong>"Ay ışığı gibi süzülen, coşkun ve aydınlık"</strong> demektir.
+        <strong>Nejla</strong>, Arapça kökenli zarif bir kadın ismidir.<br/><br/>
+        <strong>"Necl"</strong> kökünden gelmekte olup<br/>
+        <strong>"iri ve güzel gözlü"</strong> anlamını taşır.<br/><br/>
+        Özellikle <strong>büyük, parlak ve derin gözlere</strong> sahip,<br/>
+        bakışlarıyla insanı büyüleyen kadınlar için kullanılır.<br/><br/>
+        Aynı zamanda <strong>asalet, zarafet ve güzellik</strong> ile<br/>
+        özdeşleşen, nadide bir isimdir.
       </p>
       <p class="meaning-quote">
-        🌙 Ay'ın ışığını taşıyan, geceyi aydınlatan,<br/>
-        tıpkı bir sel gibi coşkun ve özgür... 🌸
+        🌸 Gözlerinde derin bir deniz saklı,<br/>
+        bakışları kadar güzel, kalbi kadar saf... 🌸
       </p>
       <div style="margin-top:24px; padding-top:20px; border-top:1px solid rgba(244,143,177,0.3);">
         <p style="font-family:'Cormorant Garamond',serif; font-size:0.75rem; letter-spacing:0.4em; text-transform:uppercase; color:#c2185b; opacity:0.7; margin-bottom:8px;">✦ Meslek ✦</p>
@@ -412,7 +447,7 @@
         <div class="dot"></div>
         <div class="dot"></div>
       </div>
-      <p class="footer-text">Aysel 🌙</p>
+      <p class="footer-text">Nejla 🌹</p>
     </div>
 
   </div>
