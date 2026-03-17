@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aysel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --pink-deep: #c2185b;
+      --pink-mid: #e91e8c;
+      --pink-light: #f8bbd0;
+      --pink-pale: #fce4ec;
+      --pink-blush: #fff0f5;
+      --pink-rose: #ff80ab;
+      --text-dark: #4a1030;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--pink-blush);
+      font-family: 'Cormorant Garamond', serif;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: 
+        radial-gradient(ellipse at 20% 20%, #ffd6e7 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 10%, #ffb3d1 0%, transparent 40%),
+        radial-gradient(ellipse at 60% 80%, #f48fb1 0%, transparent 50%),
+        radial-gradient(ellipse at 10% 70%, #fce4ec 0%, transparent 40%),
+        linear-gradient(135deg, #fff0f7 0%, #fdd9e8 50%, #fce4ec 100%);
+      animation: bgShift 8s ease-in-out infinite alternate;
+      z-index: 0;
+    }
+
+    @keyframes bgShift {
+      0% { opacity: 1; }
+      100% { opacity: 0.7; filter: hue-rotate(10deg); }
+    }
+
+    .petal {
+      position: fixed;
+      width: 12px;
+      height: 18px;
+      background: radial-gradient(ellipse, #ffb3d1 30%, #f48fb1 100%);
+      border-radius: 50% 0 50% 0;
+      opacity: 0;
+      animation: fall linear infinite;
+      z-index: 1;
+    }
+
+    @keyframes fall {
+      0%   { transform: translateY(-60px) rotate(0deg); opacity: 0; }
+      10%  { opacity: 0.7; }
+      90%  { opacity: 0.5; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+
+    .petal:nth-child(1)  { left: 5%;  width:10px; height:14px; animation-duration: 7s;  animation-delay: 0s;   background: radial-gradient(ellipse,#ffd6e7 30%,#f48fb1 100%); }
+    .petal:nth-child(2)  { left: 15%; width:14px; height:20px; animation-duration: 9s;  animation-delay: 1s;   }
+    .petal:nth-child(3)  { left: 28%; width:8px;  height:12px; animation-duration: 6s;  animation-delay: 2s;   background: radial-gradient(ellipse,#ffb3d1 30%,#c2185b 100%); }
+    .petal:nth-child(4)  { left: 40%; width:12px; height:17px; animation-duration: 10s; animation-delay: 0.5s; }
+    .petal:nth-child(5)  { left: 55%; width:9px;  height:13px; animation-duration: 8s;  animation-delay: 3s;   background: radial-gradient(ellipse,#fce4ec 30%,#e91e8c 100%); }
+    .petal:nth-child(6)  { left: 67%; width:15px; height:22px; animation-duration: 11s; animation-delay: 1.5s; }
+    .petal:nth-child(7)  { left: 78%; width:11px; height:16px; animation-duration: 7.5s;animation-delay: 4s;   background: radial-gradient(ellipse,#ffd6e7 30%,#ad1457 100%); }
+    .petal:nth-child(8)  { left: 88%; width:13px; height:19px; animation-duration: 9.5s;animation-delay: 2.5s; }
+    .petal:nth-child(9)  { left: 50%; width:7px;  height:11px; animation-duration: 6.5s;animation-delay: 5s;   background: radial-gradient(ellipse,#ffb3d1 30%,#f06292 100%); }
+    .petal:nth-child(10) { left: 33%; width:16px; height:23px; animation-duration: 12s; animation-delay: 3.5s; }
+
+    .container {
+      position: relative;
+      z-index: 10;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px;
+      gap: 50px;
+    }
+
+    .ornament {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      animation: fadeDown 1.2s ease both;
+    }
+
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .ornament-line {
+      width: 80px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--pink-mid), transparent);
+    }
+
+    .ornament-diamond {
+      width: 10px;
+      height: 10px;
+      background: var(--pink-mid);
+      transform: rotate(45deg);
+      box-shadow: 0 0 12px var(--pink-rose);
+    }
+
+    .hero {
+      text-align: center;
+      animation: riseUp 1.4s cubic-bezier(0.16,1,0.3,1) 0.2s both;
+    }
+
+    @keyframes riseUp {
+      from { opacity: 0; transform: translateY(50px) scale(0.95); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .hero-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: 0.85rem;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: var(--pink-deep);
+      margin-bottom: 20px;
+      opacity: 0.8;
+    }
+
+    .name-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    .name-bg-blur {
+      position: absolute;
+      inset: -30px -50px;
+      background: radial-gradient(ellipse, rgba(233,30,140,0.15) 0%, transparent 70%);
+      animation: pulse 3s ease-in-out infinite;
+      border-radius: 50%;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.6; }
+      50%       { transform: scale(1.1); opacity: 1; }
+    }
+
+    .main-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(5rem, 15vw, 11rem);
+      font-weight: 700;
+      line-height: 1;
+      background: linear-gradient(135deg, #ad1457 0%, #e91e8c 35%, #f06292 60%, #c2185b 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.02em;
+      position: relative;
+      filter: drop-shadow(0 4px 24px rgba(194,24,91,0.25));
+      animation: shimmer 4s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0%, 100% { filter: drop-shadow(0 4px 24px rgba(194,24,91,0.25)); }
+      50%       { filter: drop-shadow(0 4px 40px rgba(233,30,140,0.5)); }
+    }
+
+    .name-italic { font-style: italic; font-weight: 400; }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      width: 100%;
+      max-width: 500px;
+      animation: fadeIn 1.5s ease 0.6s both;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--pink-light), transparent);
+    }
+
+    .divider-rose {
+      font-size: 1.4rem;
+      animation: spin 6s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    .meaning-card {
+      max-width: 580px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.55);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(244,143,177,0.35);
+      border-radius: 24px;
+      padding: 48px 48px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow:
+        0 8px 40px rgba(194,24,91,0.1),
+        0 2px 8px rgba(255,255,255,0.8) inset,
+        inset 0 -1px 0 rgba(244,143,177,0.3);
+      animation: riseUp 1.4s cubic-bezier(0.16,1,0.3,1) 0.5s both;
+    }
+
+    .meaning-card::before {
+      content: '';
+      position: absolute;
+      top: -60px; left: -60px;
+      width: 180px; height: 180px;
+      background: radial-gradient(circle, rgba(255,128,171,0.2) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .meaning-card::after {
+      content: '';
+      position: absolute;
+      bottom: -40px; right: -40px;
+      width: 140px; height: 140px;
+      background: radial-gradient(circle, rgba(194,24,91,0.12) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .meaning-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: var(--pink-deep);
+      margin-bottom: 20px;
+      opacity: 0.75;
+    }
+
+    .meaning-name-small {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.9rem;
+      color: var(--pink-mid);
+      margin-bottom: 24px;
+      display: block;
+    }
+
+    .meaning-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      font-weight: 300;
+      line-height: 1.85;
+      color: var(--text-dark);
+      position: relative;
+      z-index: 1;
+    }
+
+    .meaning-text strong {
+      color: var(--pink-deep);
+      font-weight: 600;
+    }
+
+    .meaning-quote {
+      margin-top: 28px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(244,143,177,0.3);
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--pink-deep);
+      opacity: 0.8;
+      line-height: 1.7;
+    }
+
+    .bottom-ornament {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      animation: fadeIn 1.5s ease 0.9s both;
+    }
+
+    .dots { display: flex; gap: 8px; }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--pink-light);
+      animation: dotPulse 2s ease-in-out infinite;
+    }
+
+    .dot:nth-child(2) { animation-delay: 0.3s; background: var(--pink-mid); }
+    .dot:nth-child(3) { animation-delay: 0.6s; }
+
+    @keyframes dotPulse {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50%       { transform: scale(1.4); opacity: 1; }
+    }
+
+    .footer-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.3em;
+      color: var(--pink-deep);
+      opacity: 0.5;
+      text-transform: uppercase;
+    }
+
+    .sparkle {
+      position: fixed;
+      pointer-events: none;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--pink-rose);
+      animation: sparkleAnim ease-out forwards;
+      z-index: 5;
+    }
+
+    @keyframes sparkleAnim {
+      0%   { transform: scale(0) rotate(0deg); opacity: 1; }
+      50%  { transform: scale(1.5) rotate(180deg); opacity: 0.8; }
+      100% { transform: scale(0) rotate(360deg) translate(40px, -40px); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="petal"></div>
+  <div class="petal"></div>
+  <div class="petal"></div>
+  <div class="petal"></div>
+  <div class="petal"></div>
+  <div class="petal"></div>
+  <div class="petal"></div>
+  <div class="petal"></div>
+  <div class="petal"></div>
+  <div class="petal"></div>
+
+  <div class="container">
+
+    <div class="ornament">
+      <div class="ornament-line"></div>
+      <div class="ornament-diamond"></div>
+      <div class="ornament-line" style="background: linear-gradient(90deg, transparent, #e91e8c, transparent);"></div>
+      <div class="ornament-diamond"></div>
+      <div class="ornament-line"></div>
+    </div>
+
+    <!-- Zeferin Karısı Badge -->
+    <div style="background: linear-gradient(135deg, rgba(255,255,255,0.7), rgba(252,228,236,0.8)); backdrop-filter: blur(12px); border: 1px solid rgba(233,30,140,0.3); border-radius: 50px; padding: 10px 28px; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 20px rgba(194,24,91,0.12); animation: fadeDown 1.2s ease 0.15s both;">
+      <span style="font-size:1.1rem; animation: heartbeat 1.4s ease-in-out infinite; display:inline-block;">💍</span>
+      <span style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.05rem; color: #c2185b; letter-spacing: 0.05em;">Zeferin Karısı</span>
+      <span style="font-size:1.1rem;">💗</span>
+    </div>
+
+    <div class="hero">
+      <p class="hero-label">✦ İsim ✦</p>
+      <div class="name-wrapper">
+        <div class="name-bg-blur"></div>
+        <h1 class="main-name"><span class="name-italic">Aysel</span></h1>
+      </div>
+    </div>
+
+    <div class="divider">
+      <div class="divider-line"></div>
+      <span class="divider-rose">✿</span>
+      <div class="divider-line"></div>
+    </div>
+
+    <div class="meaning-card">
+      <p class="meaning-title">✦ İsmin Anlamı ✦</p>
+      <span class="meaning-name-small">Aysel</span>
+      <p class="meaning-text">
+        <strong>Aysel</strong>, Türkçe kökenli, şiirsel ve zarif bir kadın ismidir.<br/><br/>
+        <strong>"Ay"</strong> ve <strong>"sel"</strong> kelimelerinin birleşiminden oluşur.<br/><br/>
+        <strong>Ay</strong> — Gökyüzünün en parlak ve gizemli ışığı, güzelliğin simgesi.<br/>
+        <strong>Sel</strong> — Coşkun akan su, dingin ama güçlü.<br/><br/>
+        Birlikte anlamı: <strong>"Ay gibi parlayan"</strong> ya da<br/>
+        <strong>"Ay ışığı gibi süzülen, coşkun ve aydınlık"</strong> demektir.
+      </p>
+      <p class="meaning-quote">
+        🌙 Ay'ın ışığını taşıyan, geceyi aydınlatan,<br/>
+        tıpkı bir sel gibi coşkun ve özgür... 🌸
+      </p>
+      <div style="margin-top:24px; padding-top:20px; border-top:1px solid rgba(244,143,177,0.3);">
+        <p style="font-family:'Cormorant Garamond',serif; font-size:0.75rem; letter-spacing:0.4em; text-transform:uppercase; color:#c2185b; opacity:0.7; margin-bottom:8px;">✦ Meslek ✦</p>
+        <p style="font-family:'Playfair Display',serif; font-style:italic; font-size:1.2rem; color:#e91e8c;">📺 Makedonska Radio Televiziya</p>
+      </div>
+    </div>
+
+    <div class="bottom-ornament">
+      <div class="dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <p class="footer-text">Aysel 🌙</p>
+    </div>
+
+  </div>
+
+  <script>
+    document.addEventListener('click', (e) => {
+      for (let i = 0; i < 6; i++) {
+        const s = document.createElement('div');
+        s.className = 'sparkle';
+        s.style.left = e.clientX + (Math.random()-0.5)*30 + 'px';
+        s.style.top  = e.clientY + (Math.random()-0.5)*30 + 'px';
+        s.style.background = ['#ff80ab','#f48fb1','#e91e8c','#ffd6e7'][Math.floor(Math.random()*4)];
+        s.style.animationDuration = (0.6 + Math.random()*0.6) + 's';
+        document.body.appendChild(s);
+        setTimeout(() => s.remove(), 1200);
+      }
+    });
+  </script>
+</body>
+</html>
