@@ -1,2 +1,2 @@
-# ASKLARIM
-Aşklarım
+# deneme
+deneme
