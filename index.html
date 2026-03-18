@@ -1,470 +1,1405 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Nejla</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet"/>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Play TV — Canlı Yayın</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Oswald:wght@700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<style>
+:root {
+  --bg: #000000;
+  --bg2: #0d0d0d;
+  --bg3: #141414;
+  --card: #1a1a1a;
+  --card2: #202020;
+  --border: #2c2c2c;
+  --purple: #ffffff;
+  --purple2: #e0e0e0;
+  --purple3: #cccccc;
+  --accent: #ffffff;
+  --text: #ffffff;
+  --text2: #999999;
+  --text3: #555555;
+  --live: #ff3b3b;
+  --green: #10b981;
+  --gold: #f59e0b;
+  --radius: 12px;
+  --radius2: 8px;
+}
 
-    :root {
-      --pink-deep: #c2185b;
-      --pink-mid: #e91e8c;
-      --pink-light: #f8bbd0;
-      --pink-pale: #fce4ec;
-      --pink-blush: #fff0f5;
-      --pink-rose: #ff80ab;
-      --text-dark: #4a1030;
-    }
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-    body {
-      min-height: 100vh;
-      background: var(--pink-blush);
-      font-family: 'Cormorant Garamond', serif;
-      overflow-x: hidden;
-      position: relative;
-    }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background: 
-        radial-gradient(ellipse at 20% 20%, #ffd6e7 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 10%, #ffb3d1 0%, transparent 40%),
-        radial-gradient(ellipse at 60% 80%, #f48fb1 0%, transparent 50%),
-        radial-gradient(ellipse at 10% 70%, #fce4ec 0%, transparent 40%),
-        linear-gradient(135deg, #fff0f7 0%, #fdd9e8 50%, #fce4ec 100%);
-      animation: bgShift 8s ease-in-out infinite alternate;
-      z-index: 0;
-    }
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: var(--bg2); }
+::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
 
-    @keyframes bgShift {
-      0% { opacity: 1; }
-      100% { opacity: 0.7; filter: hue-rotate(10deg); }
-    }
+/* ─── HEADER ─── */
+.header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(10,10,10,0.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  height: 60px;
+  display: flex; align-items: center;
+  padding: 0 20px; gap: 16px;
+}
 
-    .petal {
-      position: fixed;
-      width: 12px;
-      height: 18px;
-      background: radial-gradient(ellipse, #ffb3d1 30%, #f48fb1 100%);
-      border-radius: 50% 0 50% 0;
-      opacity: 0;
-      animation: fall linear infinite;
-      z-index: 1;
-    }
+.logo {
+  font-family: 'Oswald', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  flex-shrink: 0;
+  -webkit-text-fill-color: #ffffff;
+  background: none;
+}
 
-    @keyframes fall {
-      0%   { transform: translateY(-60px) rotate(0deg); opacity: 0; }
-      10%  { opacity: 0.7; }
-      90%  { opacity: 0.5; }
-      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
-    }
+.header-search {
+  flex: 1; max-width: 360px;
+  display: flex; align-items: center; gap: 8px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  padding: 0 14px;
+  transition: border-color .2s;
+}
+.header-search:focus-within { border-color: var(--purple); }
+.header-search input {
+  background: none; border: none; outline: none;
+  color: var(--text); font-family: 'Inter', sans-serif;
+  font-size: 14px; width: 100%; padding: 8px 0;
+}
+.header-search input::placeholder { color: var(--text3); }
+.header-search svg { color: var(--text3); flex-shrink: 0; }
 
-    .petal:nth-child(1)  { left: 5%;  width:10px; height:14px; animation-duration: 7s;  animation-delay: 0s;   background: radial-gradient(ellipse,#ffd6e7 30%,#f48fb1 100%); }
-    .petal:nth-child(2)  { left: 15%; width:14px; height:20px; animation-duration: 9s;  animation-delay: 1s;   }
-    .petal:nth-child(3)  { left: 28%; width:8px;  height:12px; animation-duration: 6s;  animation-delay: 2s;   background: radial-gradient(ellipse,#ffb3d1 30%,#c2185b 100%); }
-    .petal:nth-child(4)  { left: 40%; width:12px; height:17px; animation-duration: 10s; animation-delay: 0.5s; }
-    .petal:nth-child(5)  { left: 55%; width:9px;  height:13px; animation-duration: 8s;  animation-delay: 3s;   background: radial-gradient(ellipse,#fce4ec 30%,#e91e8c 100%); }
-    .petal:nth-child(6)  { left: 67%; width:15px; height:22px; animation-duration: 11s; animation-delay: 1.5s; }
-    .petal:nth-child(7)  { left: 78%; width:11px; height:16px; animation-duration: 7.5s;animation-delay: 4s;   background: radial-gradient(ellipse,#ffd6e7 30%,#ad1457 100%); }
-    .petal:nth-child(8)  { left: 88%; width:13px; height:19px; animation-duration: 9.5s;animation-delay: 2.5s; }
-    .petal:nth-child(9)  { left: 50%; width:7px;  height:11px; animation-duration: 6.5s;animation-delay: 5s;   background: radial-gradient(ellipse,#ffb3d1 30%,#f06292 100%); }
-    .petal:nth-child(10) { left: 33%; width:16px; height:23px; animation-duration: 12s; animation-delay: 3.5s; }
+.header-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
 
-    .container {
-      position: relative;
-      z-index: 10;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 60px 20px;
-      gap: 50px;
-    }
+.header-btn {
+  background: none; border: 1px solid var(--border);
+  border-radius: var(--radius2); color: var(--text2);
+  padding: 7px 14px; font-family: 'Inter', sans-serif;
+  font-size: 13px; cursor: pointer; transition: all .2s;
+  display: flex; align-items: center; gap: 6px;
+}
+.header-btn:hover { border-color: var(--purple); color: var(--purple3); }
+.header-btn.primary {
+  background: #ffffff; border-color: #ffffff;
+  color: #000000; font-weight: 600;
+}
+.header-btn.primary:hover { background: #e0e0e0; border-color: #e0e0e0; }
 
-    .ornament {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      animation: fadeDown 1.2s ease both;
-    }
+.user-avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--purple), var(--purple3));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  border: 2px solid var(--purple);
+  position: relative;
+}
 
-    @keyframes fadeDown {
-      from { opacity: 0; transform: translateY(-30px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+.nav-tabs {
+  display: flex; gap: 4px;
+  background: var(--card); border-radius: 50px;
+  padding: 4px; border: 1px solid var(--border);
+}
+.nav-tab {
+  padding: 6px 16px; border-radius: 50px;
+  font-size: 13px; font-weight: 500; cursor: pointer;
+  transition: all .2s; color: var(--text2);
+  white-space: nowrap;
+}
+.nav-tab.active {
+  background: #ffffff; color: #000000; font-weight: 600;
+}
+.nav-tab:not(.active):hover { color: var(--text); }
 
-    .ornament-line {
-      width: 80px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--pink-mid), transparent);
-    }
+/* ─── LAYOUT ─── */
+.app {
+  padding-top: 60px;
+  display: flex; height: 100vh; overflow: hidden;
+}
 
-    .ornament-diamond {
-      width: 10px;
-      height: 10px;
-      background: var(--pink-mid);
-      transform: rotate(45deg);
-      box-shadow: 0 0 12px var(--pink-rose);
-    }
+/* ─── SIDEBAR ─── */
+.sidebar {
+  width: 280px; flex-shrink: 0;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
 
-    /* Zeferin Karısı badge */
-    .badge {
-      background: linear-gradient(135deg, rgba(255,255,255,0.7), rgba(252,228,236,0.8));
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(233,30,140,0.3);
-      border-radius: 50px;
-      padding: 10px 28px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      box-shadow: 0 4px 20px rgba(194,24,91,0.12);
-      animation: fadeDown 1.2s ease 0.15s both;
-    }
+.sidebar-header {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 10px;
+}
 
-    .badge-text {
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-size: 1.05rem;
-      color: var(--pink-deep);
-      letter-spacing: 0.05em;
-    }
+.m3u-input-row {
+  display: flex; gap: 8px;
+}
+.m3u-input {
+  flex: 1; background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius2); color: var(--text);
+  padding: 8px 12px; font-family: 'Inter', sans-serif; font-size: 12px;
+  outline: none; transition: border-color .2s;
+}
+.m3u-input:focus { border-color: var(--purple); }
+.m3u-input::placeholder { color: var(--text3); }
+.m3u-load-btn {
+  background: #ffffff; border: none; border-radius: var(--radius2);
+  color: #000; padding: 8px 14px; font-family: 'Inter', sans-serif;
+  font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap;
+  transition: background .2s;
+}
+.m3u-load-btn:hover { background: #e0e0e0; }
 
-    .badge-heart {
-      font-size: 1.1rem;
-      animation: heartbeat 1.4s ease-in-out infinite;
-      display: inline-block;
-    }
+.channel-search {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius2); padding: 0 10px;
+}
+.channel-search input {
+  background: none; border: none; outline: none;
+  color: var(--text); font-family: 'Inter', sans-serif;
+  font-size: 13px; padding: 8px 0; width: 100%;
+}
+.channel-search input::placeholder { color: var(--text3); }
 
-    @keyframes heartbeat {
-      0%, 100% { transform: scale(1); }
-      30%       { transform: scale(1.3); }
-      60%       { transform: scale(1.1); }
-    }
+.groups-scroll {
+  display: flex; gap: 6px;
+  overflow-x: auto; padding: 0 16px 12px;
+  scrollbar-width: none;
+}
+.groups-scroll::-webkit-scrollbar { display: none; }
 
-    .hero {
-      text-align: center;
-      animation: riseUp 1.4s cubic-bezier(0.16,1,0.3,1) 0.2s both;
-    }
+.group-chip {
+  padding: 4px 12px; border-radius: 50px;
+  border: 1px solid var(--border); background: none;
+  color: var(--text3); font-size: 11px; cursor: pointer;
+  white-space: nowrap; transition: all .2s; font-family: 'Inter', sans-serif;
+}
+.group-chip.active {
+  background: #ffffff; border-color: #ffffff; color: #000000; font-weight: 600;
+}
+.group-chip:not(.active):hover { border-color: var(--purple); color: var(--text); }
 
-    @keyframes riseUp {
-      from { opacity: 0; transform: translateY(50px) scale(0.95); }
-      to   { opacity: 1; transform: translateY(0) scale(1); }
-    }
+.channels-list {
+  flex: 1; overflow-y: auto; padding: 8px;
+}
 
-    .hero-label {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 300;
-      font-size: 0.85rem;
-      letter-spacing: 0.5em;
-      text-transform: uppercase;
-      color: var(--pink-deep);
-      margin-bottom: 20px;
-      opacity: 0.8;
-    }
+.channel-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 10px; border-radius: var(--radius2);
+  cursor: pointer; transition: background .15s;
+  position: relative;
+}
+.channel-item:hover { background: var(--card); }
+.channel-item.active { background: var(--card2); }
+.channel-item.active::before {
+  content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+  width: 3px; height: 60%; background: #ffffff; border-radius: 0 3px 3px 0;
+}
 
-    .name-wrapper {
-      position: relative;
-      display: inline-block;
-    }
+.ch-logo {
+  width: 38px; height: 38px; border-radius: 8px;
+  background: var(--card2); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; overflow: hidden; border: 1px solid var(--border);
+}
+.ch-logo img { width: 100%; height: 100%; object-fit: contain; }
 
-    .name-bg-blur {
-      position: absolute;
-      inset: -30px -50px;
-      background: radial-gradient(ellipse, rgba(233,30,140,0.15) 0%, transparent 70%);
-      animation: pulse 3s ease-in-out infinite;
-      border-radius: 50%;
-    }
+.ch-info { flex: 1; min-width: 0; }
+.ch-name {
+  font-size: 13px; font-weight: 500; color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ch-group { font-size: 11px; color: var(--text3); margin-top: 1px; }
 
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); opacity: 0.6; }
-      50%       { transform: scale(1.1); opacity: 1; }
-    }
+.ch-fav {
+  background: none; border: none; color: var(--text3);
+  cursor: pointer; padding: 4px; font-size: 14px;
+  transition: color .2s; flex-shrink: 0;
+}
+.ch-fav:hover { color: var(--gold); }
+.ch-fav.active { color: var(--gold); }
 
-    .main-name {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(5rem, 15vw, 11rem);
-      font-weight: 700;
-      line-height: 1;
-      background: linear-gradient(135deg, #ad1457 0%, #e91e8c 35%, #f06292 60%, #c2185b 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      letter-spacing: -0.02em;
-      position: relative;
-      filter: drop-shadow(0 4px 24px rgba(194,24,91,0.25));
-      animation: shimmer 4s ease-in-out infinite;
-    }
+.no-channels {
+  padding: 40px 16px; text-align: center; color: var(--text3);
+}
+.no-channels .nc-icon { font-size: 40px; margin-bottom: 12px; }
+.no-channels p { font-size: 13px; line-height: 1.6; }
 
-    @keyframes shimmer {
-      0%, 100% { filter: drop-shadow(0 4px 24px rgba(194,24,91,0.25)); }
-      50%       { filter: drop-shadow(0 4px 40px rgba(233,30,140,0.5)); }
-    }
+/* ─── MAIN CONTENT ─── */
+.main {
+  flex: 1; overflow-y: auto;
+  display: flex; flex-direction: column;
+}
 
-    .name-italic { font-style: italic; font-weight: 400; }
+/* ─── PLAYER ─── */
+.player-wrap {
+  background: #000;
+  position: relative;
+  aspect-ratio: 16/9;
+  max-height: calc(100vh - 60px - 200px);
+  flex-shrink: 0;
+}
+.player-wrap video {
+  width: 100%; height: 100%; display: block; background: #000;
+}
 
-    .divider {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      width: 100%;
-      max-width: 500px;
-      animation: fadeIn 1.5s ease 0.6s both;
-    }
+.player-overlay {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  justify-content: flex-end;
+  background: linear-gradient(to top, rgba(0,0,0,.8) 0%, transparent 50%);
+  opacity: 0; transition: opacity .3s;
+  pointer-events: none;
+}
+.player-wrap:hover .player-overlay { opacity: 1; pointer-events: all; }
 
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
+.player-idle {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 12px;
+}
+.player-idle .idle-icon { font-size: 64px; opacity: .3; }
+.player-idle p { color: var(--text3); font-size: 14px; }
 
-    .divider-line {
-      flex: 1;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--pink-light), transparent);
-    }
+.player-controls {
+  padding: 12px 16px;
+  display: flex; align-items: center; gap: 12px;
+}
+.ctrl-btn {
+  background: none; border: none; color: #fff;
+  cursor: pointer; font-size: 20px; padding: 4px;
+  transition: transform .15s;
+}
+.ctrl-btn:hover { transform: scale(1.1); }
 
-    .divider-rose {
-      font-size: 1.4rem;
-      animation: spin 6s linear infinite;
-      display: inline-block;
-    }
+.live-badge {
+  background: var(--live); color: #fff;
+  font-size: 11px; font-weight: 700; letter-spacing: 1px;
+  padding: 3px 8px; border-radius: 4px;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; }
+  50% { opacity: .7; }
+}
 
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
-    }
+.vol-row { display: flex; align-items: center; gap: 6px; }
+.vol-slider {
+  -webkit-appearance: none; appearance: none;
+  width: 80px; height: 3px;
+  background: rgba(255,255,255,.3); border-radius: 3px; outline: none; cursor: pointer;
+}
+.vol-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 12px; height: 12px;
+  background: #fff; border-radius: 50%;
+}
 
-    .meaning-card {
-      max-width: 580px;
-      width: 100%;
-      background: rgba(255, 255, 255, 0.55);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(244,143,177,0.35);
-      border-radius: 24px;
-      padding: 48px 48px 40px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      box-shadow:
-        0 8px 40px rgba(194,24,91,0.1),
-        0 2px 8px rgba(255,255,255,0.8) inset,
-        inset 0 -1px 0 rgba(244,143,177,0.3);
-      animation: riseUp 1.4s cubic-bezier(0.16,1,0.3,1) 0.5s both;
-    }
+.player-channel-name {
+  font-size: 14px; font-weight: 600; color: #fff; margin-right: auto;
+}
 
-    .meaning-card::before {
-      content: '';
-      position: absolute;
-      top: -60px; left: -60px;
-      width: 180px; height: 180px;
-      background: radial-gradient(circle, rgba(255,128,171,0.2) 0%, transparent 70%);
-      border-radius: 50%;
-    }
+.fullscreen-btn { margin-left: auto; }
 
-    .meaning-card::after {
-      content: '';
-      position: absolute;
-      bottom: -40px; right: -40px;
-      width: 140px; height: 140px;
-      background: radial-gradient(circle, rgba(194,24,91,0.12) 0%, transparent 70%);
-      border-radius: 50%;
-    }
+/* ─── PLAYER ERROR/LOADING ─── */
+.player-status {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 12px; background: rgba(0,0,0,.7);
+}
+.spinner {
+  width: 40px; height: 40px; border: 3px solid rgba(124,58,237,.3);
+  border-top-color: var(--purple); border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
 
-    .meaning-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 0.75rem;
-      font-weight: 400;
-      letter-spacing: 0.45em;
-      text-transform: uppercase;
-      color: var(--pink-deep);
-      margin-bottom: 20px;
-      opacity: 0.75;
-    }
+/* ─── INFO BAR ─── */
+.info-bar {
+  padding: 12px 20px;
+  display: flex; align-items: center; gap: 16px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.info-ch-logo {
+  width: 44px; height: 44px; border-radius: 10px;
+  background: var(--card); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; overflow: hidden;
+}
+.info-ch-logo img { width: 100%; height: 100%; object-fit: contain; }
+.info-ch-details { flex: 1; }
+.info-ch-name { font-size: 16px; font-weight: 700; }
+.info-ch-group { font-size: 12px; color: var(--text3); margin-top: 2px; }
+.info-actions { display: flex; gap: 8px; }
+.info-action-btn {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius2); color: var(--text2);
+  padding: 7px 14px; font-size: 12px; font-weight: 500;
+  cursor: pointer; transition: all .2s; font-family: 'Inter', sans-serif;
+  display: flex; align-items: center; gap: 6px;
+}
+.info-action-btn:hover { border-color: var(--purple); color: var(--purple3); }
+.info-action-btn.fav-active { border-color: var(--gold); color: var(--gold); }
 
-    .meaning-name-small {
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-size: 1.9rem;
-      color: var(--pink-mid);
-      margin-bottom: 24px;
-      display: block;
-    }
+/* ─── TABS BELOW PLAYER ─── */
+.content-tabs {
+  display: flex; gap: 0;
+  border-bottom: 1px solid var(--border);
+  padding: 0 20px;
+  flex-shrink: 0;
+}
+.content-tab {
+  padding: 12px 16px; font-size: 13px; font-weight: 500;
+  color: var(--text3); cursor: pointer; border-bottom: 2px solid transparent;
+  transition: all .2s; white-space: nowrap;
+}
+.content-tab.active { color: #ffffff; border-bottom-color: #ffffff; }
+.content-tab:hover:not(.active) { color: var(--text); }
 
-    .meaning-text {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.25rem;
-      font-weight: 300;
-      line-height: 1.85;
-      color: var(--text-dark);
-      position: relative;
-      z-index: 1;
-    }
+/* ─── CONTENT PANELS ─── */
+.content-panel { flex: 1; overflow-y: auto; padding: 20px; }
+.content-panel.hidden { display: none; }
 
-    .meaning-text strong {
-      color: var(--pink-deep);
-      font-weight: 600;
-    }
+/* Favoriler / Geçmiş grid */
+.fav-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+}
+.fav-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+  cursor: pointer; transition: all .2s; position: relative;
+}
+.fav-card:hover { border-color: var(--purple); transform: translateY(-2px); }
+.fav-card-logo {
+  width: 100%; aspect-ratio: 16/9;
+  background: var(--bg3); display: flex; align-items: center;
+  justify-content: center; font-size: 32px;
+}
+.fav-card-logo img { width: 100%; height: 100%; object-fit: contain; }
+.fav-card-info { padding: 10px; }
+.fav-card-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fav-card-group { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.fav-card-remove {
+  position: absolute; top: 6px; right: 6px;
+  background: rgba(0,0,0,.7); border: none; border-radius: 50%;
+  color: #fff; width: 24px; height: 24px; font-size: 12px;
+  cursor: pointer; display: none; align-items: center; justify-content: center;
+}
+.fav-card:hover .fav-card-remove { display: flex; }
 
-    .meaning-quote {
-      margin-top: 28px;
-      padding-top: 24px;
-      border-top: 1px solid rgba(244,143,177,0.3);
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-size: 1.05rem;
-      color: var(--pink-deep);
-      opacity: 0.8;
-      line-height: 1.7;
-    }
+.empty-state {
+  text-align: center; padding: 60px 20px;
+  color: var(--text3);
+}
+.empty-state .es-icon { font-size: 48px; margin-bottom: 16px; opacity: .5; }
+.empty-state h3 { font-size: 16px; font-weight: 600; color: var(--text2); margin-bottom: 8px; }
+.empty-state p { font-size: 13px; }
 
-    .bottom-ornament {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      animation: fadeIn 1.5s ease 0.9s both;
-    }
+/* History list */
+.history-list { display: flex; flex-direction: column; gap: 6px; }
+.history-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 12px; border-radius: var(--radius2);
+  background: var(--card); border: 1px solid var(--border);
+  cursor: pointer; transition: border-color .2s;
+}
+.history-item:hover { border-color: var(--purple); }
+.history-item-logo {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: var(--bg3); display: flex; align-items: center;
+  justify-content: center; font-size: 16px; flex-shrink: 0;
+}
+.history-item-logo img { width: 100%; height: 100%; object-fit: contain; border-radius: 8px; }
+.history-item-info { flex: 1; }
+.history-item-name { font-size: 13px; font-weight: 500; }
+.history-item-time { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.history-item-remove {
+  background: none; border: none; color: var(--text3);
+  cursor: pointer; font-size: 14px; padding: 4px;
+  transition: color .2s;
+}
+.history-item-remove:hover { color: var(--live); }
 
-    .dots { display: flex; gap: 8px; }
+/* ─── MODAL ─── */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,.75); backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px; animation: fadeIn .2s ease;
+}
+.modal-overlay.hidden { display: none; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-    .dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--pink-light);
-      animation: dotPulse 2s ease-in-out infinite;
-    }
+.modal {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 16px; width: 100%; max-width: 420px;
+  animation: slideUp .25s ease;
+}
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-    .dot:nth-child(2) { animation-delay: 0.3s; background: var(--pink-mid); }
-    .dot:nth-child(3) { animation-delay: 0.6s; }
+.modal-header {
+  padding: 20px 24px 0;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.modal-title { font-size: 18px; font-weight: 700; }
+.modal-close {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 50%; width: 30px; height: 30px;
+  color: var(--text2); cursor: pointer; font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .2s;
+}
+.modal-close:hover { border-color: var(--purple); color: var(--purple3); }
 
-    @keyframes dotPulse {
-      0%, 100% { transform: scale(1); opacity: 0.5; }
-      50%       { transform: scale(1.4); opacity: 1; }
-    }
+.modal-body { padding: 20px 24px; }
+.modal-tabs {
+  display: flex; background: var(--card); border-radius: 10px;
+  padding: 4px; margin-bottom: 20px; border: 1px solid var(--border);
+}
+.modal-tab {
+  flex: 1; padding: 8px; text-align: center;
+  border-radius: 8px; font-size: 13px; font-weight: 500;
+  color: var(--text3); cursor: pointer; transition: all .2s;
+}
+.modal-tab.active { background: var(--purple); color: #fff; }
 
-    .footer-text {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 0.8rem;
-      letter-spacing: 0.3em;
-      color: var(--pink-deep);
-      opacity: 0.5;
-      text-transform: uppercase;
-    }
+.form-group { margin-bottom: 14px; }
+.form-label { font-size: 12px; font-weight: 600; color: var(--text3); margin-bottom: 6px; display: block; letter-spacing: .5px; text-transform: uppercase; }
+.form-input {
+  width: 100%; background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius2); color: var(--text);
+  padding: 11px 14px; font-family: 'Inter', sans-serif; font-size: 14px;
+  outline: none; transition: border-color .2s;
+}
+.form-input:focus { border-color: var(--purple); }
+.form-input::placeholder { color: var(--text3); }
 
-    .sparkle {
-      position: fixed;
-      pointer-events: none;
-      width: 4px;
-      height: 4px;
-      border-radius: 50%;
-      background: var(--pink-rose);
-      animation: sparkleAnim ease-out forwards;
-      z-index: 5;
-    }
+.form-submit {
+  width: 100%; background: #ffffff;
+  border: none; border-radius: var(--radius2); color: #000000;
+  padding: 12px; font-family: 'Inter', sans-serif; font-size: 15px;
+  font-weight: 700; cursor: pointer; margin-top: 6px;
+  transition: opacity .2s;
+}
+.form-submit:hover { opacity: .85; }
 
-    @keyframes sparkleAnim {
-      0%   { transform: scale(0) rotate(0deg); opacity: 1; }
-      50%  { transform: scale(1.5) rotate(180deg); opacity: 0.8; }
-      100% { transform: scale(0) rotate(360deg) translate(40px, -40px); opacity: 0; }
-    }
-  </style>
+.form-error {
+  background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.3);
+  border-radius: var(--radius2); padding: 10px 12px;
+  color: #fca5a5; font-size: 13px; margin-bottom: 12px; display: none;
+}
+.form-error.show { display: block; }
+
+.or-divider {
+  display: flex; align-items: center; gap: 12px;
+  margin: 14px 0; color: var(--text3); font-size: 12px;
+}
+.or-divider::before, .or-divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+
+.guest-btn {
+  width: 100%; background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius2); color: var(--text2);
+  padding: 11px; font-family: 'Inter', sans-serif; font-size: 14px;
+  cursor: pointer; transition: all .2s;
+}
+.guest-btn:hover { border-color: var(--purple); color: var(--text); }
+
+/* ─── USER DROPDOWN ─── */
+.user-menu {
+  position: absolute; top: calc(100% + 10px); right: 0;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 12px; width: 220px; padding: 8px;
+  z-index: 150; animation: slideUp .2s ease;
+}
+.user-menu.hidden { display: none; }
+.user-menu-head {
+  padding: 10px 12px 12px;
+  border-bottom: 1px solid var(--border); margin-bottom: 6px;
+}
+.user-menu-name { font-size: 14px; font-weight: 600; }
+.user-menu-email { font-size: 12px; color: var(--text3); margin-top: 2px; }
+.user-menu-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; border-radius: 8px;
+  color: var(--text2); font-size: 13px; cursor: pointer;
+  transition: all .2s;
+}
+.user-menu-item:hover { background: var(--card); color: var(--text); }
+.user-menu-item.danger:hover { color: var(--live); }
+.user-menu-item span { font-size: 16px; }
+
+/* ─── ADMIN PANEL ─── */
+.admin-overlay {
+  position: fixed; inset: 0; z-index: 300;
+  background: var(--bg); display: flex; flex-direction: column;
+  animation: fadeIn .2s ease;
+}
+.admin-overlay.hidden { display: none; }
+
+.admin-header {
+  background: var(--bg2); border-bottom: 1px solid var(--border);
+  padding: 0 20px; height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.admin-logo {
+  font-family: 'Oswald', sans-serif; font-size: 22px;
+  color: #ffffff; letter-spacing: 3px; font-weight: 700;
+}
+.admin-close {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius2); color: var(--text2);
+  padding: 7px 14px; font-family: 'Inter', sans-serif;
+  font-size: 13px; cursor: pointer; transition: all .2s;
+  display: flex; align-items: center; gap: 6px;
+}
+.admin-close:hover { border-color: var(--live); color: var(--live); }
+
+.admin-body { display: flex; flex: 1; overflow: hidden; }
+
+.admin-sidebar {
+  width: 200px; background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 12px;
+}
+.admin-nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: var(--radius2);
+  color: var(--text2); font-size: 13px; cursor: pointer;
+  transition: all .2s; margin-bottom: 2px;
+}
+.admin-nav-item:hover { background: var(--card); color: var(--text); }
+.admin-nav-item.active { background: var(--card2); color: var(--purple3); }
+.admin-nav-item span:first-child { font-size: 16px; }
+
+.admin-content { flex: 1; overflow-y: auto; padding: 24px; }
+
+.admin-stats {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px;
+}
+.admin-stat {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 18px;
+}
+.admin-stat-val { font-size: 28px; font-weight: 700; font-family: 'Oswald', sans-serif; }
+.admin-stat-label { font-size: 12px; color: var(--text3); margin-top: 4px; }
+
+.admin-table {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+}
+.admin-table-header {
+  padding: 14px 20px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.admin-table-title { font-size: 15px; font-weight: 600; }
+.admin-table table { width: 100%; border-collapse: collapse; }
+.admin-table th {
+  padding: 12px 16px; text-align: left; font-size: 11px;
+  font-weight: 600; color: var(--text3); text-transform: uppercase;
+  letter-spacing: .5px; border-bottom: 1px solid var(--border);
+}
+.admin-table td {
+  padding: 12px 16px; font-size: 13px; color: var(--text2);
+  border-bottom: 1px solid rgba(46,40,82,.5);
+}
+.admin-table tr:last-child td { border-bottom: none; }
+.admin-table tr:hover td { background: var(--bg3); color: var(--text); }
+
+.badge {
+  padding: 3px 8px; border-radius: 50px; font-size: 11px; font-weight: 600;
+}
+.badge-admin { background: rgba(124,58,237,.2); color: var(--purple3); }
+.badge-user { background: rgba(16,185,129,.2); color: #34d399; }
+.badge-banned { background: rgba(239,68,68,.2); color: #fca5a5; }
+
+.admin-section { display: none; }
+.admin-section.active { display: block; }
+
+/* ─── DEVELOPER ─── */
+.developer-badge {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius2); padding: 7px 12px;
+  font-size: 12px; color: var(--text2); text-decoration: none;
+  transition: all .2s;
+}
+.developer-badge:hover { border-color: var(--purple); color: var(--purple3); }
+
+/* ─── TOAST ─── */
+.toast-container {
+  position: fixed; bottom: 24px; right: 24px;
+  z-index: 500; display: flex; flex-direction: column; gap: 8px;
+}
+.toast {
+  background: var(--card2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 16px;
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px; min-width: 240px; max-width: 320px;
+  animation: toastIn .3s ease;
+  box-shadow: 0 8px 24px rgba(0,0,0,.4);
+}
+@keyframes toastIn {
+  from { transform: translateX(100px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+.toast.success { border-left: 3px solid var(--green); }
+.toast.error { border-left: 3px solid var(--live); }
+.toast.info { border-left: 3px solid var(--purple); }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 768px) {
+  .sidebar { width: 240px; }
+  .admin-stats { grid-template-columns: repeat(2, 1fr); }
+  .nav-tabs { display: none; }
+}
+@media (max-width: 600px) {
+  .sidebar { position: fixed; left: -240px; top: 60px; bottom: 0; z-index: 90; transition: left .3s; }
+  .sidebar.open { left: 0; }
+  .admin-sidebar { width: 56px; }
+  .admin-nav-item span:last-child { display: none; }
+}
+</style>
 </head>
 <body>
 
-  <div class="petal"></div>
-  <div class="petal"></div>
-  <div class="petal"></div>
-  <div class="petal"></div>
-  <div class="petal"></div>
-  <div class="petal"></div>
-  <div class="petal"></div>
-  <div class="petal"></div>
-  <div class="petal"></div>
-  <div class="petal"></div>
+<!-- ─── HEADER ─── -->
+<header class="header">
+  <div class="logo" onclick="goHome()">▶ PLAY TV</div>
 
-  <div class="container">
-
-    <div class="ornament">
-      <div class="ornament-line"></div>
-      <div class="ornament-diamond"></div>
-      <div class="ornament-line" style="background: linear-gradient(90deg, transparent, #e91e8c, transparent);"></div>
-      <div class="ornament-diamond"></div>
-      <div class="ornament-line"></div>
-    </div>
-
-    <!-- Zeferin Karısı Badge -->
-    <div class="badge">
-      <span class="badge-heart">💍</span>
-      <span class="badge-text">Zeferin Karısı</span>
-      <span class="badge-heart">💗</span>
-    </div>
-
-    <div class="hero">
-      <p class="hero-label">✦ İsim ✦</p>
-      <div class="name-wrapper">
-        <div class="name-bg-blur"></div>
-        <h1 class="main-name"><span class="name-italic">Nejla</span></h1>
-      </div>
-    </div>
-
-    <div class="divider">
-      <div class="divider-line"></div>
-      <span class="divider-rose">✿</span>
-      <div class="divider-line"></div>
-    </div>
-
-    <div class="meaning-card">
-      <p class="meaning-title">✦ İsmin Anlamı ✦</p>
-      <span class="meaning-name-small">Nejla</span>
-      <p class="meaning-text">
-        <strong>Nejla</strong>, Arapça kökenli zarif bir kadın ismidir.<br/><br/>
-        <strong>"Necl"</strong> kökünden gelmekte olup<br/>
-        <strong>"iri ve güzel gözlü"</strong> anlamını taşır.<br/><br/>
-        Özellikle <strong>büyük, parlak ve derin gözlere</strong> sahip,<br/>
-        bakışlarıyla insanı büyüleyen kadınlar için kullanılır.<br/><br/>
-        Aynı zamanda <strong>asalet, zarafet ve güzellik</strong> ile<br/>
-        özdeşleşen, nadide bir isimdir.
-      </p>
-      <p class="meaning-quote">
-        🌸 Gözlerinde derin bir deniz saklı,<br/>
-        bakışları kadar güzel, kalbi kadar saf... 🌸
-      </p>
-      <div style="margin-top:24px; padding-top:20px; border-top:1px solid rgba(244,143,177,0.3);">
-        <p style="font-family:'Cormorant Garamond',serif; font-size:0.75rem; letter-spacing:0.4em; text-transform:uppercase; color:#c2185b; opacity:0.7; margin-bottom:8px;">✦ Meslek ✦</p>
-        <p style="font-family:'Playfair Display',serif; font-style:italic; font-size:1.2rem; color:#e91e8c;">📺 Makedonska Radio Televiziya</p>
-      </div>
-    </div>
-
-    <div class="bottom-ornament">
-      <div class="dots">
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-      </div>
-      <p class="footer-text">Nejla 🌹</p>
-    </div>
-
+  <div class="header-search">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="globalSearch" placeholder="Kanal ara..." oninput="handleGlobalSearch(this.value)">
   </div>
 
-  <script>
-    document.addEventListener('click', (e) => {
-      for (let i = 0; i < 6; i++) {
-        const s = document.createElement('div');
-        s.className = 'sparkle';
-        s.style.left = e.clientX + (Math.random()-0.5)*30 + 'px';
-        s.style.top  = e.clientY + (Math.random()-0.5)*30 + 'px';
-        s.style.background = ['#ff80ab','#f48fb1','#e91e8c','#ffd6e7'][Math.floor(Math.random()*4)];
-        s.style.animationDuration = (0.6 + Math.random()*0.6) + 's';
-        document.body.appendChild(s);
-        setTimeout(() => s.remove(), 1200);
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="switchTab('tv',this)">📺 Canlı TV</div>
+    <div class="nav-tab" onclick="switchTab('favs',this)">⭐ Favoriler</div>
+    <div class="nav-tab" onclick="switchTab('history',this)">🕒 Geçmiş</div>
+  </div>
+
+  <div class="header-right">
+    <button class="header-btn" onclick="showAdminPanel()">🛡️ Admin</button>
+    <a href="https://t.me/Zaferri" target="_blank" class="developer-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.25l-2.01 9.471c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.19 14.367l-2.938-.918c-.64-.196-.651-.64.136-.948l11.457-4.417c.537-.194 1.006.131.717.166z"/></svg>
+      Geliştirici
+    </a>
+  </div>
+</header>
+
+<!-- ─── APP ─── -->
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="m3u-input-row" style="display:none;">
+        <input type="text" class="m3u-input" id="m3uUrl" placeholder="M3U URL yapıştır...">
+        <button class="m3u-load-btn" onclick="loadM3U()">Yükle</button>
+      </div>
+      <div class="channel-search">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text3)"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="channelSearch" placeholder="Kanal filtrele..." oninput="filterChannels(this.value)">
+      </div>
+    </div>
+
+    <div class="groups-scroll" id="groupsScroll"></div>
+
+    <div class="channels-list" id="channelsList">
+      <div class="no-channels">
+        <div class="nc-icon">📡</div>
+        <p>M3U URL girerek<br>kanalları yükleyin</p>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- PLAYER -->
+    <div class="player-wrap" id="playerWrap">
+      <video id="videoPlayer" controls style="display:none;"></video>
+
+      <div class="player-idle" id="playerIdle">
+        <div class="idle-icon">▶</div>
+        <p>İzlemek için bir kanal seçin</p>
+      </div>
+
+      <div class="player-status hidden" id="playerStatus">
+        <div class="spinner"></div>
+        <p style="color:var(--text3);font-size:13px;">Yükleniyor...</p>
+      </div>
+
+      <div class="player-overlay" id="playerOverlay">
+        <div class="player-controls">
+          <div class="live-badge">● CANLI</div>
+          <div class="player-channel-name" id="overlayChName">—</div>
+          <div class="vol-row">
+            <button class="ctrl-btn" onclick="toggleMute()">🔊</button>
+            <input type="range" class="vol-slider" id="volSlider" min="0" max="100" value="80" oninput="setVolume(this.value)">
+          </div>
+          <button class="ctrl-btn fullscreen-btn" onclick="toggleFullscreen()" title="Tam Ekran">⛶</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- INFO BAR -->
+    <div class="info-bar" id="infoBar" style="display:none;">
+      <div class="info-ch-logo" id="infoChLogo">📺</div>
+      <div class="info-ch-details">
+        <div class="info-ch-name" id="infoChName">—</div>
+        <div class="info-ch-group" id="infoChGroup">—</div>
+      </div>
+      <div class="info-actions">
+        <button class="info-action-btn" id="favToggleBtn" onclick="toggleCurrentFav()">☆ Favoriye Ekle</button>
+        <button class="info-action-btn" onclick="copyLink()">🔗 Linki Kopyala</button>
+      </div>
+    </div>
+
+    <!-- CONTENT TABS -->
+    <div class="content-tabs" id="contentTabs">
+      <div class="content-tab active" onclick="switchContentTab('now',this)">Şu An</div>
+      <div class="content-tab" onclick="switchContentTab('favs',this)">⭐ Favoriler</div>
+      <div class="content-tab" onclick="switchContentTab('history',this)">🕒 Geçmiş</div>
+    </div>
+
+    <!-- NOW PANEL -->
+    <div class="content-panel" id="panelNow">
+      <div style="color:var(--text3);font-size:13px;line-height:1.7;padding:8px 0;">
+        Soldaki listeden bir kanal seçin ve izlemeye başlayın. M3U URL girerek kanalları yükleyebilirsiniz.
+      </div>
+    </div>
+
+    <!-- FAVS PANEL -->
+    <div class="content-panel hidden" id="panelFavs">
+      <div class="fav-grid" id="favGrid"></div>
+    </div>
+
+    <!-- HISTORY PANEL -->
+    <div class="content-panel hidden" id="panelHistory">
+      <div class="history-list" id="historyList"></div>
+    </div>
+
+  </main>
+</div>
+
+<!-- AUTH MODAL KALDIRILDI -->
+
+<!-- ─── ADMIN PANEL ─── -->
+<div class="admin-overlay hidden" id="adminOverlay">
+  <div class="admin-header">
+    <div class="admin-logo">▶ PLAY TV — ADMİN</div>
+    <button class="admin-close" onclick="hideAdminPanel()">✕ Kapat</button>
+  </div>
+  <div class="admin-body">
+    <div class="admin-sidebar">
+      <div class="admin-nav-item active" onclick="adminTab('dashboard',this)">
+        <span>📊</span><span>Dashboard</span>
+      </div>
+      <div class="admin-nav-item" onclick="adminTab('channels',this)">
+        <span>📺</span><span>Kanallar</span>
+      </div>
+      <div class="admin-nav-item" onclick="adminTab('logs',this)">
+        <span>📝</span><span>Aktiviteler</span>
+      </div>
+    </div>
+    <div class="admin-content">
+
+      <!-- DASHBOARD -->
+      <div class="admin-section active" id="adm-dashboard">
+        <h2 style="font-size:20px;font-weight:700;margin-bottom:20px;">Dashboard</h2>
+        <div class="admin-stats">
+          <div class="admin-stat">
+            <div class="admin-stat-val" id="statChannels">0</div>
+            <div class="admin-stat-label">Yüklü Kanal</div>
+          </div>
+          <div class="admin-stat">
+            <div class="admin-stat-val" id="statWatches">0</div>
+            <div class="admin-stat-label">Toplam İzlenme</div>
+          </div>
+          <div class="admin-stat">
+            <div class="admin-stat-val" id="statFavs">0</div>
+            <div class="admin-stat-label">Toplam Favori</div>
+          </div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;">
+          <h3 style="font-size:14px;font-weight:600;margin-bottom:12px;">Sistem Durumu</h3>
+          <div style="display:flex;gap:8px;align-items:center;font-size:13px;color:var(--green);">
+            <span style="width:8px;height:8px;background:var(--green);border-radius:50%;display:inline-block;"></span>
+            Sistem normal çalışıyor
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:var(--text3);">Play TV · Geliştirici: <a href="https://t.me/Zaferri" target="_blank" style="color:var(--purple3);">@Zaferri</a></div>
+        </div>
+      </div>
+
+      <!-- CHANNELS -->
+      <div class="admin-section" id="adm-channels">
+        <h2 style="font-size:20px;font-weight:700;margin-bottom:20px;">Yüklü Kanallar</h2>
+        <div class="admin-table">
+          <div class="admin-table-header">
+            <div class="admin-table-title">Kanal Listesi</div>
+          </div>
+          <table>
+            <thead>
+              <tr><th>#</th><th>Logo</th><th>Kanal Adı</th><th>Grup</th><th>URL</th></tr>
+            </thead>
+            <tbody id="adminChannelsTable">
+              <tr><td colspan="5" style="text-align:center;color:var(--text3);padding:30px;">M3U yüklenmedi</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- LOGS -->
+      <div class="admin-section" id="adm-logs">
+        <h2 style="font-size:20px;font-weight:700;margin-bottom:20px;">Aktivite Logları</h2>
+        <div class="admin-table">
+          <div class="admin-table-header">
+            <div class="admin-table-title">Son Aktiviteler</div>
+          </div>
+          <table>
+            <thead>
+              <tr><th>Zaman</th><th>İşlem</th><th>Detay</th></tr>
+            </thead>
+            <tbody id="adminLogsTable">
+              <tr><td colspan="4" style="text-align:center;color:var(--text3);padding:30px;">Log bulunamadı</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ─── TOAST ─── -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+// ══════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════
+let allChannels = [];
+let filteredChannels = [];
+let currentChannel = null;
+let currentGroup = 'Tümü';
+let hls = null;
+let favorites = [];
+let watchHistory = [];
+let activityLogs = [];
+let siteStats = { watches: 0, favs: 0 };
+
+// ══════════════════════════════════════════════
+// ADMIN ŞİFRESİ — İSTEDİĞİNİZ GİBİ DEĞİŞTİRİN
+// ══════════════════════════════════════════════
+const ADMIN_PASSWORD = 'playtv2025';
+
+// ══════════════════════════════════════════════
+// STORAGE
+// ══════════════════════════════════════════════
+const S = {
+  get: (k, def = null) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : def; } catch { return def; } },
+  set: (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
+};
+
+function loadFromStorage() {
+  favorites   = S.get('ptv_favs', []);
+  watchHistory = S.get('ptv_history', []);
+  siteStats   = S.get('ptv_stats', { watches: 0, favs: 0 });
+  activityLogs = S.get('ptv_logs', []);
+  renderFavs();
+  renderHistory();
+}
+
+function saveFavs()    { S.set('ptv_favs', favorites); }
+function saveHistory() { S.set('ptv_history', watchHistory); }
+function saveStats()   { S.set('ptv_stats', siteStats); }
+function saveLogs()    { S.set('ptv_logs', activityLogs); }
+
+function addLog(action, detail) {
+  activityLogs.unshift({ time: new Date().toLocaleString('tr-TR'), action, detail });
+  if (activityLogs.length > 200) activityLogs = activityLogs.slice(0, 200);
+  saveLogs();
+}
+
+// ══════════════════════════════════════════════
+// ADMIN ŞİFRE MODAL
+// ══════════════════════════════════════════════
+function showAdminPanel() {
+  const pass = prompt('🛡️ Admin Şifresi:');
+  if (pass === null) return;
+  if (pass !== ADMIN_PASSWORD) { toast('Hatalı şifre!', 'error'); return; }
+  document.getElementById('adminOverlay').classList.remove('hidden');
+  refreshAdminDashboard();
+}
+function hideAdminPanel() {
+  document.getElementById('adminOverlay').classList.add('hidden');
+}
+
+// ══════════════════════════════════════════════
+// M3U LOADER
+// ══════════════════════════════════════════════
+async function loadM3U() {
+  const url = document.getElementById('m3uUrl').value.trim();
+  if (!url) { toast('M3U URL girin', 'error'); return; }
+
+  const btn = document.querySelector('.m3u-load-btn');
+  btn.textContent = '⏳'; btn.disabled = true;
+
+  try {
+    const proxy = 'https://api.allorigins.win/raw?url=';
+    const res = await fetch(proxy + encodeURIComponent(url));
+    if (!res.ok) throw new Error('Bağlantı hatası');
+    const text = await res.text();
+    parseM3U(text);
+    addLog('M3U Yüklendi', `${allChannels.length} kanal`);
+  } catch (e) {
+    toast('M3U yüklenemedi: ' + e.message, 'error');
+  } finally {
+    btn.textContent = 'Yükle'; btn.disabled = false;
+  }
+}
+
+function parseM3U(text) {
+  const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+  allChannels = [];
+  let current = null;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (line.startsWith('#EXTINF')) {
+      current = { name: '', group: 'Genel', logo: '', url: '' };
+      const nameMatch = line.match(/,(.+)$/);
+      if (nameMatch) current.name = nameMatch[1].trim();
+      const groupMatch = line.match(/group-title="([^"]+)"/);
+      if (groupMatch) current.group = groupMatch[1];
+      const logoMatch = line.match(/tvg-logo="([^"]+)"/);
+      if (logoMatch) current.logo = logoMatch[1];
+    } else if (line.startsWith('http') && current) {
+      current.url = line;
+      if (current.name) allChannels.push(current);
+      current = null;
+    }
+  }
+
+  filteredChannels = [...allChannels];
+  buildGroups();
+  renderChannels();
+  toast(`${allChannels.length} kanal yüklendi ✅`, 'success');
+  document.getElementById('statChannels').textContent = allChannels.length;
+  renderAdminChannels();
+}
+
+function buildGroups() {
+  const groups = ['Tümü', ...new Set(allChannels.map(c => c.group))];
+  const scroll = document.getElementById('groupsScroll');
+  scroll.innerHTML = groups.map(g =>
+    `<div class="group-chip ${g === currentGroup ? 'active' : ''}" onclick="selectGroup('${g.replace(/'/g,"\\'")}',this)">${g}</div>`
+  ).join('');
+}
+
+function selectGroup(g, el) {
+  currentGroup = g;
+  document.querySelectorAll('.group-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  filterChannels(document.getElementById('channelSearch').value);
+}
+
+function filterChannels(q) {
+  const search = q.toLowerCase();
+  filteredChannels = allChannels.filter(c => {
+    const matchGroup = currentGroup === 'Tümü' || c.group === currentGroup;
+    const matchSearch = !search || c.name.toLowerCase().includes(search);
+    return matchGroup && matchSearch;
+  });
+  renderChannels();
+}
+
+function handleGlobalSearch(q) {
+  document.getElementById('channelSearch').value = q;
+  filterChannels(q);
+}
+
+function renderChannels() {
+  const list = document.getElementById('channelsList');
+  if (filteredChannels.length === 0) {
+    list.innerHTML = `<div class="no-channels"><div class="nc-icon">🔍</div><p>Kanal bulunamadı</p></div>`;
+    return;
+  }
+
+  list.innerHTML = filteredChannels.map((ch, i) => {
+    const isFav = favorites.some(f => f.url === ch.url);
+    const isActive = currentChannel?.url === ch.url;
+    return `
+      <div class="channel-item ${isActive ? 'active' : ''}" onclick="playChannel(${allChannels.indexOf(ch)})">
+        <div class="ch-logo">
+          ${ch.logo ? `<img src="${ch.logo}" onerror="this.parentElement.textContent='📺'" loading="lazy">` : '📺'}
+        </div>
+        <div class="ch-info">
+          <div class="ch-name">${ch.name}</div>
+          <div class="ch-group">${ch.group}</div>
+        </div>
+        <button class="ch-fav ${isFav ? 'active' : ''}" onclick="event.stopPropagation();toggleFav(${allChannels.indexOf(ch)})" title="Favoriye ekle">
+          ${isFav ? '★' : '☆'}
+        </button>
+      </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════
+// PLAYER
+// ══════════════════════════════════════════════
+function playChannel(idx) {
+  const ch = allChannels[idx];
+  if (!ch) return;
+  currentChannel = ch;
+
+  // Update sidebar active
+  document.querySelectorAll('.channel-item').forEach((el, i) => {
+    const fi = filteredChannels.indexOf(ch);
+    el.classList.toggle('active', i === fi);
+  });
+
+  // Show player
+  document.getElementById('playerIdle').style.display = 'none';
+  document.getElementById('videoPlayer').style.display = 'block';
+  document.getElementById('playerStatus').classList.remove('hidden');
+  document.getElementById('infoBar').style.display = 'flex';
+
+  // Info bar
+  document.getElementById('infoChName').textContent = ch.name;
+  document.getElementById('infoChGroup').textContent = ch.group;
+  document.getElementById('overlayChName').textContent = ch.name;
+
+  const logoEl = document.getElementById('infoChLogo');
+  logoEl.innerHTML = ch.logo
+    ? `<img src="${ch.logo}" onerror="this.parentElement.textContent='📺'" style="width:100%;height:100%;object-fit:contain;border-radius:10px;">`
+    : '📺';
+
+  updateFavBtn();
+
+  // HLS
+  if (hls) { hls.destroy(); hls = null; }
+  const video = document.getElementById('videoPlayer');
+
+  if (Hls.isSupported()) {
+    hls = new Hls({ enableWorker: true, lowLatencyMode: true });
+    hls.loadSource(ch.url);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED, () => {
+      video.play().catch(() => {});
+      document.getElementById('playerStatus').classList.add('hidden');
+    });
+    hls.on(Hls.Events.ERROR, (e, d) => {
+      if (d.fatal) {
+        document.getElementById('playerStatus').innerHTML =
+          `<div style="font-size:32px">⚠️</div><p style="color:var(--text3);font-size:13px;">Yayın yüklenemedi</p>`;
       }
     });
-  </script>
+  } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    video.src = ch.url;
+    video.play().catch(() => {});
+    document.getElementById('playerStatus').classList.add('hidden');
+  }
+
+  // History & stats
+  addToHistory(ch);
+  addLog('Kanal İzlendi', ch.name);
+  siteStats.watches++;
+  saveStats();
+  document.getElementById('statWatches').textContent = siteStats.watches;
+}
+
+function toggleMute() {
+  const v = document.getElementById('videoPlayer');
+  v.muted = !v.muted;
+}
+function setVolume(val) {
+  document.getElementById('videoPlayer').volume = val / 100;
+}
+function toggleFullscreen() {
+  const wrap = document.getElementById('playerWrap');
+  if (!document.fullscreenElement) wrap.requestFullscreen();
+  else document.exitFullscreen();
+}
+
+// ══════════════════════════════════════════════
+// FAVORITES
+// ══════════════════════════════════════════════
+function toggleFav(idx) {
+  const ch = allChannels[idx];
+  const existing = favorites.findIndex(f => f.url === ch.url);
+  if (existing >= 0) {
+    favorites.splice(existing, 1);
+    toast('Favoriden çıkarıldı', 'info');
+  } else {
+    favorites.push({ name: ch.name, group: ch.group, logo: ch.logo, url: ch.url, addedAt: Date.now() });
+    toast('Favorilere eklendi ⭐', 'success');
+    siteStats.favs++;
+    saveStats();
+    document.getElementById('statFavs').textContent = siteStats.favs;
+  }
+  saveFavs();
+  renderChannels();
+  renderFavs();
+  updateFavBtn();
+}
+
+function toggleCurrentFav() {
+  if (!currentChannel) return;
+  const idx = allChannels.indexOf(currentChannel);
+  if (idx >= 0) toggleFav(idx);
+}
+
+function updateFavBtn() {
+  const btn = document.getElementById('favToggleBtn');
+  if (!currentChannel) return;
+  const isFav = favorites.some(f => f.url === currentChannel.url);
+  btn.textContent = isFav ? '★ Favorilerde' : '☆ Favoriye Ekle';
+  btn.className = 'info-action-btn' + (isFav ? ' fav-active' : '');
+}
+
+function renderFavs() {
+  const grid = document.getElementById('favGrid');
+  if (favorites.length === 0) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+      <div class="es-icon">⭐</div>
+      <h3>Henüz favori yok</h3>
+      <p>Kanal listesinden ☆ butonuna tıklayarak favori ekleyin</p>
+    </div>`;
+    return;
+  }
+  grid.innerHTML = favorites.map((ch, i) => `
+    <div class="fav-card" onclick="playFav('${ch.url.replace(/'/g,"\\'")}','${ch.name.replace(/'/g,"\\'")}')">
+      <div class="fav-card-logo">
+        ${ch.logo ? `<img src="${ch.logo}" onerror="this.parentElement.textContent='📺'" loading="lazy">` : '📺'}
+      </div>
+      <div class="fav-card-info">
+        <div class="fav-card-name">${ch.name}</div>
+        <div class="fav-card-group">${ch.group}</div>
+      </div>
+      <button class="fav-card-remove" onclick="event.stopPropagation();removeFav(${i})">✕</button>
+    </div>`).join('');
+}
+
+function playFav(url, name) {
+  const idx = allChannels.findIndex(c => c.url === url);
+  if (idx >= 0) { playChannel(idx); switchContentTabById('now'); }
+  else toast('Kanal listesinde bulunamadı — önce M3U yükleyin', 'info');
+}
+
+function removeFav(i) {
+  favorites.splice(i, 1);
+  saveFavs();
+  renderFavs();
+  renderChannels();
+  updateFavBtn();
+  toast('Favoriden çıkarıldı', 'info');
+}
+
+// ══════════════════════════════════════════════
+// HISTORY
+// ══════════════════════════════════════════════
+function addToHistory(ch) {
+  watchHistory = watchHistory.filter(h => h.url !== ch.url);
+  watchHistory.unshift({ name: ch.name, group: ch.group, logo: ch.logo, url: ch.url, time: new Date().toLocaleString('tr-TR') });
+  if (watchHistory.length > 50) watchHistory = watchHistory.slice(0, 50);
+  saveHistory();
+  renderHistory();
+}
+
+function renderHistory() {
+  const list = document.getElementById('historyList');
+  if (watchHistory.length === 0) {
+    list.innerHTML = `<div class="empty-state">
+      <div class="es-icon">🕒</div>
+      <h3>İzleme geçmişi boş</h3>
+      <p>İzlediğiniz kanallar burada görünecek</p>
+    </div>`;
+    return;
+  }
+  list.innerHTML = watchHistory.map((h, i) => `
+    <div class="history-item" onclick="playFav('${h.url.replace(/'/g,"\\'")}','${h.name.replace(/'/g,"\\'")}')">
+      <div class="history-item-logo">
+        ${h.logo ? `<img src="${h.logo}" onerror="this.parentElement.textContent='📺'" loading="lazy">` : '📺'}
+      </div>
+      <div class="history-item-info">
+        <div class="history-item-name">${h.name}</div>
+        <div class="history-item-time">${h.time}</div>
+      </div>
+      <button class="history-item-remove" onclick="event.stopPropagation();removeHistory(${i})">✕</button>
+    </div>`).join('');
+}
+
+function removeHistory(i) {
+  watchHistory.splice(i, 1);
+  saveHistory();
+  renderHistory();
+}
+
+// ══════════════════════════════════════════════
+// TABS
+// ══════════════════════════════════════════════
+function switchTab(tab, el) {
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  if (el) el.classList.add('active');
+  switchContentTabById(tab === 'favs' ? 'favs' : tab === 'history' ? 'history' : 'now');
+}
+
+function switchTabFromMenu(tab) {
+  switchContentTabById(tab);
+}
+
+function switchContentTab(tab, el) {
+  document.querySelectorAll('.content-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  switchContentTabById(tab);
+}
+
+function switchContentTabById(tab) {
+  ['now','favs','history'].forEach(t => {
+    document.getElementById('panel' + t.charAt(0).toUpperCase() + t.slice(1)).classList.toggle('hidden', t !== tab);
+  });
+}
+
+function goHome() { switchContentTabById('now'); }
+
+function copyLink() {
+  if (!currentChannel) return;
+  navigator.clipboard.writeText(currentChannel.url).then(() => toast('Link kopyalandı 🔗', 'success'));
+}
+
+// ══════════════════════════════════════════════
+// ADMIN PANEL
+// ══════════════════════════════════════════════
+function showAdminPanel() {
+  const pass = prompt('🛡️ Admin Şifresi:');
+  if (pass === null) return;
+  if (pass !== ADMIN_PASSWORD) { toast('Hatalı şifre!', 'error'); return; }
+  document.getElementById('adminOverlay').classList.remove('hidden');
+  refreshAdminDashboard();
+}
+function hideAdminPanel() {
+  document.getElementById('adminOverlay').classList.add('hidden');
+}
+
+function adminTab(tab, el) {
+  document.querySelectorAll('.admin-nav-item').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('adm-' + tab).classList.add('active');
+  if (tab === 'logs') renderAdminLogs();
+  if (tab === 'channels') renderAdminChannels();
+}
+
+function refreshAdminDashboard() {
+  document.getElementById('statChannels').textContent = allChannels.length;
+  document.getElementById('statWatches').textContent = siteStats.watches;
+  document.getElementById('statFavs').textContent = siteStats.favs;
+}
+
+function renderAdminUsers() {
+  const tbody = document.getElementById('adminUsersTable');
+  if (users.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--text3);padding:30px;">Kullanıcı yok</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = users.map((u, i) => `
+    <tr>
+      <td>${i + 1}</td>
+      <td>${u.username}</td>
+      <td>${u.email}</td>
+      <td><span class="badge badge-${u.role === 'admin' ? 'admin' : 'user'}">${u.role === 'admin' ? 'Admin' : 'Kullanıcı'}</span></td>
+      <td><span class="badge ${u.banned ? 'badge-banned' : 'badge-user'}">${u.banned ? 'Yasaklı' : 'Aktif'}</span></td>
+      <td>
+        <button onclick="toggleBan(${i})" style="background:none;border:1px solid var(--border);border-radius:6px;color:var(--text2);padding:4px 10px;font-size:11px;cursor:pointer;">
+          ${u.banned ? 'Yasağı Kaldır' : 'Yasakla'}
+        </button>
+      </td>
+    </tr>`).join('');
+}
+
+function toggleBan(i) {
+  users[i].banned = !users[i].banned;
+  saveUsers();
+  addLog(currentUser.username, 'Admin', `${users[i].username} ${users[i].banned ? 'yasaklandı' : 'yasağı kaldırıldı'}`);
+  renderAdminUsers();
+  toast(`${users[i].username} ${users[i].banned ? 'yasaklandı' : 'yasağı kaldırıldı'}`, 'info');
+}
+
+function renderAdminChannels() {
+  const tbody = document.getElementById('adminChannelsTable');
+  if (allChannels.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--text3);padding:30px;">M3U yüklenmedi</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = allChannels.slice(0, 100).map((ch, i) => `
+    <tr>
+      <td>${i + 1}</td>
+      <td>${ch.logo ? `<img src="${ch.logo}" style="width:28px;height:28px;object-fit:contain;border-radius:4px;" onerror="this.style.display='none'">` : '📺'}</td>
+      <td>${ch.name}</td>
+      <td><span class="badge badge-user">${ch.group}</span></td>
+      <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;color:var(--text3);">${ch.url}</td>
+    </tr>`).join('');
+}
+
+function renderAdminLogs() {
+  const tbody = document.getElementById('adminLogsTable');
+  if (activityLogs.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;color:var(--text3);padding:30px;">Log yok</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = activityLogs.map(l => `
+    <tr>
+      <td style="font-size:11px;color:var(--text3);">${l.time}</td>
+      <td><span class="badge badge-user">${l.action}</span></td>
+      <td style="color:var(--text3);font-size:12px;">${l.detail}</td>
+    </tr>`).join('');
+}
+
+// ══════════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════════
+function toast(msg, type = 'info') {
+  const icons = { success: '✅', error: '❌', info: 'ℹ️' };
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.innerHTML = `<span>${icons[type]}</span><span>${msg}</span>`;
+  document.getElementById('toastContainer').appendChild(el);
+  setTimeout(() => el.remove(), 3500);
+}
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+loadFromStorage();
+
+// Otomatik M3U yükle
+const AUTO_M3U = 'https://cdn.jsdelivr.net/gh/Playtvapp/Playdeneme@main/justintv_proxy_kanallar.m3u8';
+document.getElementById('m3uUrl').value = AUTO_M3U;
+loadM3U();
+</script>
 </body>
 </html>
