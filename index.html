@@ -747,10 +747,7 @@ body {
         <p>İzlemek için bir kanal seçin</p>
       </div>
 
-      <div class="player-status hidden" id="playerStatus">
-        <div class="spinner"></div>
-        <p style="color:var(--text3);font-size:13px;">Yükleniyor...</p>
-      </div>
+
 
       <div class="player-overlay" id="playerOverlay">
         <div class="player-controls">
@@ -774,7 +771,6 @@ body {
       </div>
       <div class="info-actions">
         <button class="info-action-btn" id="favToggleBtn" onclick="toggleCurrentFav()">☆ Favoriye Ekle</button>
-        <button class="info-action-btn" onclick="copyLink()">🔗 Linki Kopyala</button>
       </div>
     </div>
 
@@ -863,10 +859,10 @@ body {
           </div>
           <table>
             <thead>
-              <tr><th>#</th><th>Logo</th><th>Kanal Adı</th><th>Grup</th><th>URL</th></tr>
+              <tr><th>#</th><th>Logo</th><th>Kanal Adı</th><th>Grup</th></tr>
             </thead>
             <tbody id="adminChannelsTable">
-              <tr><td colspan="5" style="text-align:center;color:var(--text3);padding:30px;">M3U yüklenmedi</td></tr>
+              <tr><td colspan="4" style="text-align:center;color:var(--text3);padding:30px;">M3U yüklenmedi</td></tr>
             </tbody>
           </table>
         </div>
@@ -961,23 +957,33 @@ function hideAdminPanel() {
 // ══════════════════════════════════════════════
 // M3U LOADER
 // ══════════════════════════════════════════════
+const AUTO_M3U = 'https://m3u.ch/pl/9147152ccd34d0beef4687960bdc5fb1_76068c9956f2687c48e06e79b7ba486e.m3u';
+
+function showSidebarLoading() {
+  document.getElementById('channelsList').innerHTML = `
+    <div style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:50px 20px;color:var(--text3);">
+      <div class="spinner"></div>
+      <span style="font-size:13px;">Kanallar yükleniyor...</span>
+    </div>`;
+}
+
 async function loadM3U() {
-  const url = document.getElementById('m3uUrl').value.trim();
-  if (!url) { toast('M3U URL girin', 'error'); return; }
-
-  const btn = document.querySelector('.m3u-load-btn');
-  btn.textContent = '⏳'; btn.disabled = true;
-
+  showSidebarLoading();
   try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('Bağlantı hatası');
+    const res = await fetch(AUTO_M3U);
+    if (!res.ok) throw new Error(res.status);
     const text = await res.text();
+    if (!text.includes('#EXTINF')) throw new Error('Geçersiz liste');
     parseM3U(text);
     addLog('M3U Yüklendi', `${allChannels.length} kanal`);
   } catch (e) {
-    toast('M3U yüklenemedi: ' + e.message, 'error');
-  } finally {
-    btn.textContent = 'Yükle'; btn.disabled = false;
+    document.getElementById('channelsList').innerHTML = `
+      <div style="text-align:center;padding:40px 16px;color:var(--text3);font-size:13px;">
+        ❌ Yükleme hatası<br>
+        <button onclick="loadM3U()" style="margin-top:12px;background:var(--card);border:1px solid var(--border);color:var(--text2);padding:8px 16px;border-radius:8px;cursor:pointer;font-size:12px;">
+          🔄 Tekrar Dene
+        </button>
+      </div>`;
   }
 }
 
@@ -1084,7 +1090,7 @@ function playChannel(idx) {
   // Show player
   document.getElementById('playerIdle').style.display = 'none';
   document.getElementById('videoPlayer').style.display = 'block';
-  document.getElementById('playerStatus').classList.remove('hidden');
+  
   document.getElementById('infoBar').style.display = 'flex';
 
   // Info bar
@@ -1109,18 +1115,25 @@ function playChannel(idx) {
     hls.attachMedia(video);
     hls.on(Hls.Events.MANIFEST_PARSED, () => {
       video.play().catch(() => {});
-      document.getElementById('playerStatus').classList.add('hidden');
+      
     });
+    // Timeout — 8 saniye sonra hala yükleniyor ise kapat
+    setTimeout(() => {
+      
+    }, 8000);
     hls.on(Hls.Events.ERROR, (e, d) => {
       if (d.fatal) {
-        document.getElementById('playerStatus').innerHTML =
-          `<div style="font-size:32px">⚠️</div><p style="color:var(--text3);font-size:13px;">Yayın yüklenemedi</p>`;
+        
+        toast('Yayın yüklenemedi ⚠️', 'error');
       }
     });
   } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
     video.src = ch.url;
     video.play().catch(() => {});
-    document.getElementById('playerStatus').classList.add('hidden');
+    
+  } else {
+    video.src = ch.url;
+    
   }
 
   // History & stats
@@ -1360,7 +1373,6 @@ function renderAdminChannels() {
       <td>${ch.logo ? `<img src="${ch.logo}" style="width:28px;height:28px;object-fit:contain;border-radius:4px;" onerror="this.style.display='none'">` : '📺'}</td>
       <td>${ch.name}</td>
       <td><span class="badge badge-user">${ch.group}</span></td>
-      <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;color:var(--text3);">${ch.url}</td>
     </tr>`).join('');
 }
 
@@ -1394,10 +1406,6 @@ function toast(msg, type = 'info') {
 // INIT
 // ══════════════════════════════════════════════
 loadFromStorage();
-
-// Otomatik M3U yükle
-const AUTO_M3U = 'https://m3u.ch/pl/9147152ccd34d0beef4687960bdc5fb1_76068c9956f2687c48e06e79b7ba486e.m3u';
-document.getElementById('m3uUrl').value = AUTO_M3U;
 loadM3U();
 </script>
 </body>
