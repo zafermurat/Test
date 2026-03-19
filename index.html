@@ -1607,6 +1607,54 @@ function grpEmoji(g){
   return '📺';
 }
 
+// Film/sinema kategorisi mi?
+function isFilmCat(g){
+  return /sinema|film|movie|vod|dizi|series/i.test(g||'');
+}
+
+// Kanala tıklanınca doğru sayfaya yönlendir
+function goChannel(ch){
+  if(isFilmCat(ch.grp)){
+    playMovieFromCh(ch);
+    showPage('movies');
+  } else {
+    playCh(ch);
+    showPage('player');
+  }
+}
+
+// Film sekmesinde kanal oynat (mpegts/hls ile)
+function playMovieFromCh(ch){
+  currentMovie={id:ch.id, name:ch.name, url:ch.url, ext:'', local:false};
+  const vd=document.getElementById('movieVid');
+  if(!vd) return;
+  if(movieHlsInst){ movieHlsInst.destroy(); movieHlsInst=null; }
+  vd.pause(); vd.removeAttribute('src'); vd.load();
+  const emEl=document.getElementById('movieEmpty');
+  if(emEl) emEl.style.display='none';
+  const titleEl=document.getElementById('movieTitle');
+  if(titleEl) titleEl.textContent=ch.name;
+  showMovieBuf(true);
+  const type=detectType(ch.url);
+  if(type==='ts' && typeof mpegts!=='undefined' && mpegts.isSupported()){
+    try{
+      const p=mpegts.createPlayer({type:'mpegts',url:ch.url,isLive:false,enableWorker:true},{enableWorker:true,seekType:'range'});
+      p.attachMediaElement(vd); p.load(); p.play(); showMovieBuf(false);
+    }catch{ playMovieHls(vd,ch.url); }
+  } else { playMovieHls(vd,ch.url); }
+  renderMovieLib();
+  toast('🍿 '+ch.name,'🎬');
+}
+
+function playMovieHls(vd,url){
+  if(Hls.isSupported()){
+    movieHlsInst=new Hls({enableWorker:true,maxBufferLength:60});
+    movieHlsInst.loadSource(url); movieHlsInst.attachMedia(vd);
+    movieHlsInst.on(Hls.Events.MANIFEST_PARSED,()=>{vd.play().catch(()=>{});showMovieBuf(false);});
+    movieHlsInst.on(Hls.Events.ERROR,(_,d)=>{if(d.fatal){showMovieBuf(false);toast('Akış açılamadı','❌');}});
+  } else { vd.src=url; vd.play().catch(()=>{}); showMovieBuf(false); }
+}
+
 /* ── Virtual Scroll ── */
 let vsFiltered=[], vsItemH=62, vsOverscan=5, vsRAF=null;
 let renderTimer=null;
@@ -1685,7 +1733,8 @@ function vsRender(list){
 
     const metaDiv=document.createElement('div');
     metaDiv.className='ch-meta';
-    metaDiv.innerHTML='<div class="ch-name">'+ch.name+'</div><div class="ch-sub">'+(ch.grp||'IPTV')+'</div>';
+    const grpLabel=(ch.grp||'IPTV')+(isFilmCat(ch.grp)?' 🍿':'');
+    metaDiv.innerHTML='<div class="ch-name">'+ch.name+'</div><div class="ch-sub">'+grpLabel+'</div>';
 
     const actDiv=document.createElement('div');
     actDiv.className='ch-actions';
@@ -1698,7 +1747,7 @@ function vsRender(list){
     actDiv.appendChild(favBtn); actDiv.appendChild(liveDot);
 
     d.appendChild(logoDiv); d.appendChild(metaDiv); d.appendChild(actDiv);
-    d.onclick=()=>{ playCh(ch); showPage('player'); };
+    d.onclick=()=>goChannel(ch);
     frag.appendChild(d);
   }
   list.appendChild(frag);
@@ -1752,7 +1801,7 @@ function renderFavs(){
         <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
         İZLE
       </button>`;
-    d.onclick=()=>{ playCh(ch); showPage('player'); };
+    d.onclick=()=>goChannel(ch);
     grid.appendChild(d);
   });
 }
@@ -1815,7 +1864,7 @@ function renderGuide(){
     cc.className='guide-ch-cell';
     cc.innerHTML=`<div class="guide-ch-logo">${logo}</div>
       <div class="guide-ch-name">${ch.name}</div>`;
-    cc.onclick=()=>{ playCh(ch); showPage('player'); };
+    cc.onclick=()=>goChannel(ch);
     chCol.appendChild(cc);
 
     const slots=generateEPG(ch);
@@ -1827,7 +1876,7 @@ function renderGuide(){
       sl.style.width=(s.dur>45?'180px':'120px');
       sl.innerHTML=`<span class="guide-slot-time">${fmtT(s.start)}</span>
         <span class="guide-slot-name">${s.name}</span>`;
-      sl.onclick=()=>{ playCh(ch); showPage('player'); };
+      sl.onclick=()=>goChannel(ch);
       row.appendChild(sl);
     });
     pCol.appendChild(row);
@@ -2159,26 +2208,9 @@ document.addEventListener('selectstart',e=>{
   e.preventDefault();
 });
 
-// DevTools boyut farki tespiti
-(function devGuard(){
-  let warned=false;
-  const LIMIT=160;
-  setInterval(()=>{
-    const w=window.outerWidth-window.innerWidth;
-    const hh=window.outerHeight-window.innerHeight;
-    if((w>LIMIT||hh>LIMIT)&&!warned){
-      warned=true;
-      document.body.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;background:#07090e;color:#e63946;font-family:sans-serif;gap:16px">'
-        +'<div style="font-size:56px">🔒</div>'
-        +'<div style="font-size:22px;font-weight:bold;letter-spacing:2px">ERİŞİM ENGELLENDİ</div>'
-        +'<div style="font-size:13px;color:#4a5468">Geliştirici araçları tespit edildi.</div>'
-        +'<button onclick="location.reload()" style="margin-top:10px;padding:9px 22px;background:#e63946;border:none;border-radius:8px;color:#fff;font-size:13px;cursor:pointer">Sayfayı Yenile</button>'
-        +'</div>';
-    }
-    if(w<=LIMIT&&hh<=LIMIT) warned=false;
-  },800);
-})();
+
 
 </script>
 </body>
 </html>
+
