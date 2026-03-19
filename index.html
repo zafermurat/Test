@@ -198,11 +198,10 @@ body::after {
 .auth-guest {
   text-align:center; margin-top:14px;
   font-size:11px; color:var(--txt3);
-  line-height:1.8; word-break:keep-all;
+  line-height:1.8;
 }
 .auth-guest a {
   color:var(--acc); text-decoration:underline; cursor:pointer;
-  white-space:nowrap;
 }
 
 /* ═══════════════════════════════════════════════════
@@ -357,8 +356,10 @@ body::after {
 .sb-sort:hover { border-color:var(--bd2); color:var(--txt2); }
 
 .ch-list {
-  flex:1; overflow-y:auto; padding:6px;
+  flex:1; overflow-y:auto; padding:0 6px;
+  position:relative;
 }
+.vscroll-spacer { width:1px; pointer-events:none; }
 
 .ch-item {
   display:flex; align-items:center; gap:10px;
@@ -949,463 +950,6 @@ body::after {
 .badge-acc { background:rgba(0,212,255,.12); border:1px solid rgba(0,212,255,.25); color:var(--acc); }
 .badge-red { background:rgba(255,62,62,.12); border:1px solid rgba(255,62,62,.25); color:var(--acc2); }
 .badge-gold { background:rgba(255,184,0,.12); border:1px solid rgba(255,184,0,.25); color:var(--acc3); }
-
-
-/* ═══════════════════════════════════════════════════
-   ██ FILM PLAYER PAGE
-═══════════════════════════════════════════════════ */
-#pageMovies { flex-direction:column; }
-
-.movie-topbar {
-  background:var(--s1); border-bottom:1px solid var(--bd);
-  padding:10px 16px; display:flex; gap:10px; align-items:center; flex-shrink:0;
-}
-.movie-topbar-title {
-  font-family:var(--font-d); font-size:17px; font-weight:700;
-  letter-spacing:1px; color:var(--acc); white-space:nowrap;
-}
-.movie-url-in {
-  flex:1; background:var(--s2); border:1px solid var(--bd);
-  border-radius:var(--r); padding:8px 13px; color:var(--txt);
-  font-family:var(--font-b); font-size:13px; outline:none; transition:border-color .2s;
-}
-.movie-url-in:focus { border-color:var(--acc); }
-.movie-url-in::placeholder { color:var(--txt3); }
-
-.movie-player-wrap {
-  flex:1; position:relative; background:#000;
-  display:flex; align-items:center; justify-content:center; overflow:hidden; min-height:0;
-}
-#movieVid { width:100%; height:100%; object-fit:contain; background:#000; }
-
-.movie-empty {
-  position:absolute; inset:0; display:flex; flex-direction:column;
-  align-items:center; justify-content:center; gap:14px; color:var(--txt3); pointer-events:none;
-}
-.movie-empty .me-icon { font-size:60px; opacity:.2; }
-.movie-empty h2 { font-family:var(--font-d); font-size:26px; letter-spacing:2px; opacity:.35; }
-.movie-empty p  { font-size:13px; opacity:.4; text-align:center; max-width:300px; line-height:1.7; }
-.movie-empty .me-btns { display:flex; gap:10px; pointer-events:all; margin-top:6px; }
-
-/* Movie overlay controls */
-.movie-ov {
-  position:absolute; inset:0; display:flex; flex-direction:column;
-  justify-content:flex-end; opacity:0; transition:opacity .25s; pointer-events:none;
-}
-.movie-player-wrap:hover .movie-ov, .movie-ov.vis { opacity:1; pointer-events:all; }
-.movie-ov-inner {
-  background:linear-gradient(to top, rgba(0,0,0,.9) 0%, transparent 100%);
-  padding:12px 20px 14px;
-}
-.movie-title-bar {
-  font-family:var(--font-d); font-size:18px; font-weight:700;
-  letter-spacing:.5px; color:#fff; margin-bottom:8px;
-  text-shadow:0 2px 8px rgba(0,0,0,.8);
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-}
-
-/* Seekable progress bar */
-.movie-seek-wrap {
-  position:relative; height:5px; background:rgba(255,255,255,.18);
-  border-radius:3px; margin-bottom:12px; cursor:pointer;
-}
-.movie-seek-buf {
-  position:absolute; left:0; top:0; height:100%;
-  background:rgba(255,255,255,.2); border-radius:3px; pointer-events:none;
-}
-.movie-seek-fill {
-  position:absolute; left:0; top:0; height:100%;
-  background:linear-gradient(90deg, var(--acc), var(--acc3));
-  border-radius:3px; pointer-events:none; transition:width .1s linear;
-}
-.movie-seek-thumb {
-  position:absolute; top:50%; width:14px; height:14px;
-  background:var(--acc); border-radius:50%; transform:translate(-50%,-50%);
-  box-shadow:0 0 8px var(--glow-c); pointer-events:none;
-  opacity:0; transition:opacity .2s;
-}
-.movie-seek-wrap:hover .movie-seek-thumb { opacity:1; }
-.movie-seek-tooltip {
-  position:absolute; bottom:14px; background:rgba(0,0,0,.85);
-  color:#fff; font-size:11px; padding:2px 7px; border-radius:4px;
-  transform:translateX(-50%); pointer-events:none; display:none; white-space:nowrap;
-}
-
-.movie-ctrls { display:flex; align-items:center; gap:10px; }
-.mcb {
-  background:none; border:none; color:#fff; cursor:pointer; padding:4px;
-  border-radius:6px; display:flex; align-items:center; transition:background .15s;
-}
-.mcb:hover { background:rgba(255,255,255,.15); }
-.mcb svg { width:17px; height:17px; }
-.mc-play {
-  background:rgba(0,212,255,.2); border:1px solid var(--acc);
-  border-radius:50%; width:40px; height:40px;
-  display:flex; align-items:center; justify-content:center;
-  color:var(--acc); transition:all .2s;
-}
-.mc-play:hover { background:var(--acc); color:#000; box-shadow:0 0 20px var(--glow-c); }
-.mc-play svg { width:18px; height:18px; }
-.movie-time {
-  font-family:var(--font-d); font-size:15px; font-weight:600;
-  color:rgba(255,255,255,.7); letter-spacing:.5px; font-variant-numeric:tabular-nums;
-  white-space:nowrap;
-}
-.movie-vol-wrap { display:flex; align-items:center; gap:7px; }
-.movie-vol-wrap svg { width:14px; height:14px; color:rgba(255,255,255,.6); }
-.movie-vol-slider {
-  -webkit-appearance:none; width:76px; height:3px;
-  border-radius:2px; background:rgba(255,255,255,.25); cursor:pointer;
-}
-.movie-vol-slider::-webkit-slider-thumb {
-  -webkit-appearance:none; width:11px; height:11px; border-radius:50%; background:var(--acc);
-}
-.movie-speed-select {
-  background:rgba(0,0,0,.5); border:1px solid rgba(255,255,255,.15);
-  border-radius:6px; color:rgba(255,255,255,.8);
-  font-family:var(--font-d); font-size:13px; font-weight:600;
-  padding:5px 8px; cursor:pointer; outline:none;
-}
-.movie-speed-select option { background:var(--s2); }
-
-/* Buffering for movie */
-.movie-buf {
-  position:absolute; inset:0; display:none; align-items:center; justify-content:center;
-  background:rgba(0,0,0,.45); pointer-events:none;
-}
-.movie-buf.show { display:flex; }
-
-/* Library */
-.movie-library {
-  background:var(--s1); border-top:1px solid var(--bd);
-  flex-shrink:0; max-height:150px; overflow-y:auto; padding:8px 12px;
-}
-.movie-library-title {
-  font-family:var(--font-d); font-size:12px; font-weight:700;
-  letter-spacing:1px; color:var(--txt3); text-transform:uppercase;
-  margin-bottom:6px; display:flex; align-items:center; justify-content:space-between;
-}
-.movie-lib-grid {
-  display:flex; gap:8px; flex-wrap:wrap;
-}
-.movie-lib-item {
-  display:flex; align-items:center; gap:8px;
-  background:var(--s2); border:1px solid var(--bd);
-  border-radius:var(--r); padding:6px 10px; cursor:pointer;
-  transition:all .2s; max-width:280px;
-}
-.movie-lib-item:hover { background:var(--s3); border-color:var(--acc); }
-.movie-lib-item.playing { border-color:var(--acc); background:rgba(0,212,255,.08); }
-.movie-lib-icon { font-size:18px; flex-shrink:0; }
-.movie-lib-name {
-  font-size:12px; font-weight:500; color:var(--txt2);
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:160px;
-}
-.movie-lib-ext { font-size:10px; color:var(--txt3); flex-shrink:0; }
-.movie-lib-rm {
-  background:none; border:none; color:var(--txt3); font-size:12px;
-  cursor:pointer; padding:2px 4px; border-radius:4px; transition:all .15s; flex-shrink:0;
-}
-.movie-lib-rm:hover { color:var(--acc2); background:rgba(255,62,62,.1); }
-/* ═══════════════════════════════════════════════════
-   ██ AD ZONES
-═══════════════════════════════════════════════════ */
-
-/* Sidebar bottom banner */
-.ad-sidebar {
-  flex-shrink:0; margin:8px; border-radius:var(--r2);
-  border:1px dashed rgba(255,184,0,.3); background:rgba(255,184,0,.04);
-  overflow:hidden; position:relative; min-height:90px;
-  display:flex; align-items:center; justify-content:center;
-  cursor:pointer; transition:all .2s;
-}
-.ad-sidebar:hover { border-color:rgba(255,184,0,.6); background:rgba(255,184,0,.08); }
-.ad-sidebar iframe, .ad-sidebar img { width:100%; height:100%; object-fit:cover; border:none; display:block; }
-.ad-sidebar .ad-placeholder {
-  display:flex; flex-direction:column; align-items:center; gap:6px;
-  color:var(--acc3); pointer-events:none;
-}
-.ad-sidebar .ad-placeholder span { font-size:10px; font-weight:600; letter-spacing:1px; text-transform:uppercase; opacity:.5; }
-.ad-tag {
-  position:absolute; top:5px; right:6px;
-  background:rgba(255,184,0,.15); border:1px solid rgba(255,184,0,.25);
-  border-radius:4px; font-size:9px; font-weight:700; letter-spacing:.5px;
-  color:var(--acc3); padding:1px 5px; pointer-events:none;
-}
-
-/* Player overlay banner (top or bottom) */
-.ad-player-overlay {
-  position:absolute; left:0; right:0; z-index:20;
-  display:none; animation:adFadeIn .4s ease;
-}
-.ad-player-overlay.top    { top:0; }
-.ad-player-overlay.bottom { bottom:0; }
-.ad-player-overlay.show   { display:block; }
-@keyframes adFadeIn { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
-.ad-player-overlay .ad-inner {
-  background:linear-gradient(135deg,rgba(15,20,32,.97),rgba(10,15,25,.97));
-  border-bottom:2px solid var(--acc3); padding:10px 16px;
-  display:flex; align-items:center; gap:14px;
-}
-.ad-player-overlay.bottom .ad-inner { border-bottom:none; border-top:2px solid var(--acc3); }
-.ad-player-img {
-  width:80px; height:50px; border-radius:6px; object-fit:cover; flex-shrink:0;
-  background:var(--s3); border:1px solid var(--bd);
-}
-.ad-player-body { flex:1; min-width:0; }
-.ad-player-label {
-  font-size:9px; font-weight:700; letter-spacing:1.5px; color:var(--acc3);
-  text-transform:uppercase; margin-bottom:2px;
-}
-.ad-player-title { font-size:14px; font-weight:600; color:var(--txt);
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.ad-player-sub { font-size:11px; color:var(--txt3); margin-top:1px; }
-.ad-player-cta {
-  flex-shrink:0; padding:8px 14px; border-radius:var(--r);
-  background:var(--acc3); border:none; color:#000;
-  font-family:var(--font-d); font-size:14px; font-weight:800;
-  letter-spacing:.5px; cursor:pointer; transition:all .2s;
-  white-space:nowrap;
-}
-.ad-player-cta:hover { background:#ffd040; transform:scale(1.04); }
-.ad-close-btn {
-  flex-shrink:0; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15);
-  border-radius:6px; color:rgba(255,255,255,.5); padding:6px 8px;
-  font-size:11px; cursor:pointer; transition:all .2s; white-space:nowrap;
-}
-.ad-close-btn:hover { background:rgba(255,255,255,.2); color:#fff; }
-.ad-countdown {
-  font-size:10px; color:var(--acc3); font-variant-numeric:tabular-nums;
-  font-weight:700; margin-top:2px;
-}
-
-/* Below player horizontal banner */
-.ad-leaderboard {
-  flex-shrink:0; border-top:1px solid var(--bd);
-  background:var(--s1); display:none; align-items:center; justify-content:center;
-  min-height:60px; position:relative; overflow:hidden;
-}
-.ad-leaderboard.show { display:flex; }
-.ad-leaderboard iframe, .ad-leaderboard img {
-  max-width:100%; height:60px; border:none; object-fit:cover; display:block;
-}
-.ad-leaderboard .ad-placeholder {
-  display:flex; align-items:center; gap:10px; color:var(--acc3); width:100%; justify-content:center;
-  font-size:12px; font-weight:600; letter-spacing:.5px; opacity:.5;
-}
-
-/* Admin ad panel */
-.ad-zone-card {
-  background:var(--s1); border:1px solid var(--bd);
-  border-radius:var(--r2); padding:18px; position:relative;
-}
-.ad-zone-card .az-header {
-  display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;
-}
-.az-title {
-  font-family:var(--font-d); font-size:16px; font-weight:700;
-  color:var(--acc3); letter-spacing:.5px;
-}
-.az-status {
-  display:flex; align-items:center; gap:6px;
-  font-size:12px; font-weight:600;
-}
-.az-dot { width:8px; height:8px; border-radius:50%; }
-.az-dot.on  { background:var(--acc4); box-shadow:0 0 6px var(--acc4); }
-.az-dot.off { background:var(--txt3); }
-.az-toggle {
-  background:var(--s3); border:1px solid var(--bd); border-radius:20px;
-  padding:4px 10px; font-size:12px; font-weight:600; color:var(--txt2);
-  cursor:pointer; transition:all .2s;
-}
-.az-toggle:hover { border-color:var(--acc3); color:var(--acc3); }
-.az-toggle.active { background:rgba(255,184,0,.15); border-color:var(--acc3); color:var(--acc3); }
-.az-preview {
-  background:var(--s2); border:1px dashed var(--bd); border-radius:var(--r);
-  padding:12px; margin-top:10px; font-size:12px; color:var(--txt3);
-  min-height:50px; display:flex; align-items:center; justify-content:center;
-  text-align:center;
-}
-.az-preview img { max-height:50px; max-width:100%; object-fit:contain; border-radius:4px; }
-
-/* ═══════════════════════════════════════════════════
-   ██ HAMBURGER MENU BUTTON
-═══════════════════════════════════════════════════ */
-.hdr-hamburger {
-  display:none; flex-direction:column; justify-content:center; gap:5px;
-  background:none; border:none; padding:6px; cursor:pointer; margin-left:auto;
-  border-radius:var(--r);
-}
-.hdr-hamburger span {
-  display:block; width:22px; height:2px;
-  background:var(--txt2); border-radius:2px; transition:all .3s;
-}
-.hdr-hamburger.open span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
-.hdr-hamburger.open span:nth-child(2){ opacity:0; transform:scaleX(0); }
-.hdr-hamburger.open span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
-
-/* Mobile nav drawer */
-.mobile-nav-drawer {
-  display:none;
-  position:fixed; top:var(--header-h); left:0; right:0; bottom:0; z-index:90;
-}
-.mobile-nav-drawer.open { display:block; }
-.mobile-nav-overlay {
-  position:absolute; inset:0; background:rgba(0,0,0,.6); backdrop-filter:blur(4px);
-}
-.mobile-nav-menu {
-  position:absolute; top:0; left:0; bottom:0; width:260px;
-  background:var(--s1); border-right:1px solid var(--bd);
-  display:flex; flex-direction:column; padding:12px 8px;
-  gap:4px; overflow-y:auto;
-  animation:slideInLeft .25s ease;
-}
-@keyframes slideInLeft { from{transform:translateX(-100%)} to{transform:translateX(0)} }
-.mobile-nav-item {
-  display:flex; align-items:center; gap:10px;
-  padding:12px 14px; border-radius:var(--r); border:none;
-  background:transparent; color:var(--txt2);
-  font-family:var(--font-d); font-size:18px; font-weight:700; letter-spacing:.5px;
-  cursor:pointer; transition:all .2s; text-align:left;
-}
-.mobile-nav-item:hover { background:var(--s2); color:var(--txt); }
-.mobile-nav-item.on   { background:var(--s3); color:var(--acc); }
-.mobile-nav-item svg  { width:18px; height:18px; flex-shrink:0; }
-.mobile-nav-divider { height:1px; background:var(--bd); margin:6px 8px; }
-
-/* ═══════════════════════════════════════════════════
-   ██ RESPONSIVE — TABLET (≤ 1024px)
-═══════════════════════════════════════════════════ */
-@media (max-width:1024px) {
-  :root { --sidebar-w: 240px; }
-
-  .hdr-clock { display:none; }
-  .nav-tab { padding:7px 10px; font-size:13px; }
-  .hdr-uname { display:none; }
-}
-
-/* ═══════════════════════════════════════════════════
-   ██ RESPONSIVE — MOBILE (≤ 768px)
-═══════════════════════════════════════════════════ */
-@media (max-width:768px) {
-  :root { --header-h: 54px; }
-
-  /* Header: hide desktop nav, show hamburger */
-  .hdr-nav, .hdr-live, .hdr-clock { display:none !important; }
-  .hdr-hamburger { display:flex; }
-  .hdr-logo-txt { font-size:18px; letter-spacing:1.5px; }
-  .hdr-logo-mark { width:30px; height:30px; font-size:15px; }
-  .hdr-user { padding:4px 8px 4px 4px; }
-
-  /* Body: stack sidebar below header, hide by default */
-  .app-body { flex-direction:column; }
-  .sidebar {
-    width:100%; height:auto; max-height:0;
-    overflow:hidden; border-right:none; border-bottom:1px solid var(--bd);
-    transition:max-height .3s ease;
-  }
-  .sidebar.mobile-open {
-    max-height:340px;
-  }
-  /* Sidebar search + cats inline */
-  .sb-top { display:flex; flex-direction:column; }
-  .sb-cats { padding-bottom:8px; }
-
-  /* Channel list shorter on mobile */
-  .ch-list { max-height:200px; }
-
-  /* Sidebar ad: hide on mobile */
-  .ad-sidebar { display:none !important; }
-
-  /* Main panel full width */
-  .main-panel { flex:1; min-height:0; }
-
-  /* Player overlay controls smaller */
-  .pov-title { font-size:15px; }
-  .pov-top { padding:10px 12px; }
-  .pov-bot  { padding:10px 12px; }
-  .vol-slider { width:55px; }
-  .pov-menu-btn { font-size:11px; padding:5px 7px; }
-  .pov-time { font-size:12px; }
-
-  /* Player bottom admin bar */
-  .player-bar { flex-wrap:wrap; gap:6px; padding:8px 10px; }
-  .pb-url { min-width:0; width:100%; }
-
-  /* EPG bar compact */
-  .epg-bar { padding:6px 10px; }
-  .epg-label { font-size:11px; }
-  .epg-program { padding:4px 8px; }
-  .epg-name { font-size:11px; }
-
-  /* Leaderboard ad: hide on mobile */
-  .ad-leaderboard { display:none !important; }
-
-  /* Pages padding */
-  #pageGuide,#pageFavs,#pageAdmin,#pageAbout,#pageAds { padding:12px; }
-  .page-title { font-size:22px; }
-
-  /* Guide: single column */
-  .guide-grid { grid-template-columns:100px 1fr; }
-  .guide-ch-cell { height:50px; padding:0 8px; }
-  .guide-ch-name { font-size:10px; }
-
-  /* Favs grid: 2 col */
-  .favs-grid { grid-template-columns:repeat(2, 1fr); gap:8px; }
-  .fav-card { padding:12px; }
-  .fav-logo { width:40px; height:40px; font-size:20px; }
-  .fav-name { font-size:12px; }
-
-  /* Admin grid 2 col */
-  .admin-grid { grid-template-columns:repeat(2,1fr); gap:8px; }
-  .stat-val { font-size:28px; }
-  .act-head, .act-row { grid-template-columns:30px 1fr 60px 60px; }
-  .act-url { display:none; }
-
-  /* About */
-  .about-hero { padding:24px 16px; }
-  .about-hero h1 { font-size:28px; }
-  .about-grid { grid-template-columns:1fr; gap:10px; }
-
-  /* Movie player */
-  .movie-topbar { flex-wrap:wrap; gap:6px; padding:8px 10px; }
-  .movie-time { font-size:12px; }
-  .movie-speed-select { font-size:11px; padding:4px 5px; }
-
-  /* Auth box */
-  .auth-box { padding:24px 20px; }
-  .auth-logo-txt { font-size:24px; }
-}
-
-/* ═══════════════════════════════════════════════════
-   ██ RESPONSIVE — SMALL MOBILE (≤ 480px)
-═══════════════════════════════════════════════════ */
-@media (max-width:480px) {
-  :root { --header-h: 50px; }
-
-  .hdr-logo-txt { font-size:16px; }
-  .hdr-user { display:none; }
-
-  /* Favs: single col */
-  .favs-grid { grid-template-columns:1fr; }
-
-  /* Admin stats: 2 col */
-  .admin-grid { grid-template-columns:repeat(2,1fr); }
-
-  /* Player overlay: hide quality/sub menus */
-  #qualMenu, #subMenu { display:none; }
-
-  .pov-ctrls { gap:6px; }
-  .pc-play { width:34px; height:34px; }
-  .vol-slider { width:44px; }
-
-  /* Movie controls compact */
-  .movie-ctrls { gap:5px; }
-  .mc-play { width:34px; height:34px; }
-  .movie-vol-slider { width:44px; }
-
-  .auth-box { padding:20px 16px; border-radius:14px; }
-}
 </style>
 </head>
 <body>
@@ -1475,10 +1019,6 @@ body::after {
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zM10 8l6 4-6 4V8z"/></svg>
         CANLI TV
       </button>
-      <button class="nav-tab" onclick="showPage('movies')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 7h5M17 17h5"/></svg>
-        FİLMLER
-      </button>
       <button class="nav-tab" onclick="showPage('guide')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
         REHBER
@@ -1490,10 +1030,6 @@ body::after {
       <button class="nav-tab" id="adminNavBtn" onclick="showPage('admin')" style="display:none">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
         ADMİN
-      </button>
-      <button class="nav-tab" id="adNavBtn" onclick="showPage('ads')" style="display:none">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-        REKLAMLAR
       </button>
       <button class="nav-tab" onclick="showPage('about')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -1507,54 +1043,7 @@ body::after {
       <div class="hdr-avatar" id="hdrAvatar">?</div>
       <span class="hdr-uname" id="hdrUname">Misafir</span>
     </div>
-    <button class="hdr-hamburger" id="hamburgerBtn" onclick="toggleMobileNav()" aria-label="Menü">
-      <span></span><span></span><span></span>
-    </button>
   </header>
-
-  <!-- MOBILE NAV DRAWER -->
-  <div class="mobile-nav-drawer" id="mobileNavDrawer">
-    <div class="mobile-nav-overlay" onclick="closeMobileNav()"></div>
-    <div class="mobile-nav-menu">
-      <button class="mobile-nav-item" onclick="mobileGo('player')">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zM10 8l6 4-6 4V8z"/></svg>
-        CANLI TV
-      </button>
-      <button class="mobile-nav-item" onclick="mobileGo('movies')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 7h5M17 17h5"/></svg>
-        FİLMLER
-      </button>
-      <button class="mobile-nav-item" onclick="mobileGo('guide')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        REHBER
-      </button>
-      <button class="mobile-nav-item" onclick="mobileGo('favs')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        FAVORİLER
-      </button>
-      <div class="mobile-nav-divider"></div>
-      <button class="mobile-nav-item" id="mobileAdminBtn" onclick="mobileGo('admin')" style="display:none">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-        ADMİN
-      </button>
-      <button class="mobile-nav-item" id="mobileAdsBtn" onclick="mobileGo('ads')" style="display:none">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-        REKLAMLAR
-      </button>
-      <button class="mobile-nav-item" onclick="mobileGo('about')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        HAKKINDA
-      </button>
-      <div class="mobile-nav-divider"></div>
-      <button class="mobile-nav-item" onclick="logoutUser();closeMobileNav()" style="color:var(--acc2)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        ÇIKIŞ YAP
-      </button>
-      <div style="padding:10px 14px;font-size:11px;color:var(--txt3);margin-top:auto">
-        <span id="mobileUserInfo">—</span>
-      </div>
-    </div>
-  </div>
 
   <!-- APP BODY -->
   <div class="app-body">
@@ -1564,7 +1053,7 @@ body::after {
       <div class="sb-top">
         <div class="sb-search">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" id="sbSearch" placeholder="Kanal ara…" oninput="renderChannels()">
+          <input type="text" id="sbSearch" placeholder="Kanal ara…" oninput="debouncedRender()">
         </div>
         <div class="sb-cats" id="sbCats"></div>
       </div>
@@ -1587,21 +1076,6 @@ body::after {
       <div id="pagePlayer" class="sub-page on">
         <div class="player-area" id="playerArea">
           <video id="mainVid" playsinline></video>
-
-          <!-- AD ZONE: PLAYER OVERLAY (top) -->
-          <div class="ad-player-overlay top" id="adPlayerOverlay">
-            <div class="ad-inner">
-              <img class="ad-player-img" id="adPlayerImg" src="" alt="" style="display:none">
-              <div class="ad-player-body">
-                <div class="ad-player-label">Sponsorlu İçerik</div>
-                <div class="ad-player-title" id="adPlayerTitle">Reklam başlığı buraya</div>
-                <div class="ad-player-sub" id="adPlayerSub">Reklam açıklaması</div>
-                <div class="ad-countdown" id="adCountdown"></div>
-              </div>
-              <button class="ad-player-cta" id="adPlayerCta" onclick="adPlayerCtaClick()">Ziyaret Et</button>
-              <button class="ad-close-btn" id="adCloseBtn" onclick="closePlayerAd()" style="display:none">✕ Kapat</button>
-            </div>
-          </div>
 
           <div class="player-empty" id="playerEmpty">
             <div class="pe-icon">📡</div>
@@ -1689,15 +1163,6 @@ body::after {
           <div id="epgSlots"></div>
         </div>
 
-        <!-- AD ZONE: LEADERBOARD BANNER (below player) -->
-        <div class="ad-leaderboard" id="adLeaderboard">
-          <span class="ad-tag" style="position:static;margin-right:8px">REKLAM</span>
-          <div class="ad-placeholder" id="adLeaderPlaceholder">
-            <span>📢</span>
-            <span>728 × 60 — Leaderboard Banner</span>
-          </div>
-        </div>
-
         <!-- Player URL Bar (admin only) -->
         <div class="player-bar" id="adminUrlBar">
           <input class="pb-url" type="text" id="adminUrl" placeholder="Admin — Stream URL (m3u8, .ts, rtmp)…" onkeydown="if(event.key==='Enter')adminPlayUrl()">
@@ -1709,103 +1174,6 @@ body::after {
           <button class="btn btn-ghost" onclick="openModal('m3uModal')">M3U YÜKLE</button>
         </div>
       </div><!-- /pagePlayer -->
-
-      <!-- ── MOVIES / LOCAL FILE PAGE ── -->
-      <div id="pageMovies" class="sub-page">
-
-        <!-- Top bar: URL or file open -->
-        <div class="movie-topbar">
-          <span class="movie-topbar-title">🎬 FİLM OYNATICI</span>
-          <div class="spacer"></div>
-          <button class="btn btn-acc" onclick="document.getElementById('movieFileIn').click()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-            DOSYA AÇ
-          </button>
-          <input type="file" id="movieFileIn" accept=".mkv,.mp4,.avi,.mov,.wmv,.flv,.webm,.m4v,.ts,.mpeg,.mpg,.3gp" style="display:none" onchange="movieOpenFile(event)">
-        </div>
-
-        <!-- Player -->
-        <div class="movie-player-wrap" id="moviePlayerWrap">
-          <video id="movieVid" playsinline></video>
-
-          <div class="movie-empty" id="movieEmpty">
-            <div class="me-icon">🎬</div>
-            <h2>FİLM OYNAT</h2>
-            <p>MKV, MP4, AVI, MOV ve daha fazla format desteklenir.<br>Bilgisayarınızdan dosya seçin.</p>
-            <div class="me-btns">
-              <button class="btn btn-acc" onclick="document.getElementById('movieFileIn').click()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                DOSYA AÇ
-              </button>
-            </div>
-          </div>
-
-          <div class="movie-buf" id="movieBuf"><div class="buf-ring"></div></div>
-
-          <!-- Overlay controls -->
-          <div class="movie-ov" id="movieOv">
-            <div class="movie-ov-inner">
-              <div class="movie-title-bar" id="movieTitle">—</div>
-
-              <!-- Seek bar -->
-              <div class="movie-seek-wrap" id="movieSeekWrap"
-                onmousedown="movieSeekStart(event)"
-                onmousemove="movieSeekHover(event)"
-                onmouseleave="document.getElementById('movieSeekTip').style.display='none'">
-                <div class="movie-seek-buf"  id="movieSeekBuf"></div>
-                <div class="movie-seek-fill" id="movieSeekFill"></div>
-                <div class="movie-seek-thumb" id="movieSeekThumb"></div>
-                <div class="movie-seek-tooltip" id="movieSeekTip"></div>
-              </div>
-
-              <!-- Controls -->
-              <div class="movie-ctrls">
-                <button class="mcb" onclick="movieSkip(-10)" title="-10s">
-                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/><text x="12" y="14" text-anchor="middle" font-size="6" fill="white">10</text></svg>
-                </button>
-                <button class="mc-play" onclick="toggleMoviePlay()" id="moviePlayBtn">
-                  <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                </button>
-                <button class="mcb" onclick="movieSkip(10)" title="+10s">
-                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/><text x="12" y="14" text-anchor="middle" font-size="6" fill="white">10</text></svg>
-                </button>
-                <div class="movie-vol-wrap">
-                  <button style="background:none;border:none;cursor:pointer" onclick="toggleMovieMute()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:rgba(255,255,255,.6)"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-                  </button>
-                  <input class="movie-vol-slider" type="range" min="0" max="100" value="100" oninput="setMovieVol(this.value)">
-                </div>
-                <span class="movie-time" id="movieTime">0:00 / 0:00</span>
-                <div class="spacer"></div>
-                <select class="movie-speed-select" onchange="setMovieSpeed(this.value)" title="Oynatma Hızı">
-                  <option value="0.5">0.5×</option>
-                  <option value="0.75">0.75×</option>
-                  <option value="1" selected>1×</option>
-                  <option value="1.25">1.25×</option>
-                  <option value="1.5">1.5×</option>
-                  <option value="2">2×</option>
-                </select>
-                <button class="mcb" onclick="toggleMoviePiP()" title="Picture-in-Picture">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><rect x="14" y="10" width="8" height="7" rx="1"/></svg>
-                </button>
-                <button class="mcb" onclick="toggleMovieFS()" title="Tam Ekran">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Library -->
-        <div class="movie-library" id="movieLibrary" style="display:none">
-          <div class="movie-library-title">
-            <span>📂 KÜTÜPHANEm (<span id="movieLibCount">0</span>)</span>
-            <button onclick="clearMovieLib()" style="background:none;border:none;color:var(--txt3);font-size:11px;cursor:pointer;padding:2px 6px;border-radius:4px" onmouseover="this.style.color='var(--acc2)'" onmouseout="this.style.color='var(--txt3)'">Temizle</button>
-          </div>
-          <div class="movie-lib-grid" id="movieLibGrid"></div>
-        </div>
-      </div>
-
 
       <!-- ── GUIDE PAGE ── -->
       <div id="pageGuide" class="sub-page">
@@ -1948,117 +1316,6 @@ body::after {
         </div>
       </div>
 
-
-      <!-- ── ADS MANAGEMENT PAGE ── -->
-      <div id="pageAds" class="sub-page">
-        <div style="padding:20px;display:flex;flex-direction:column;gap:20px;height:100%;overflow:auto;">
-          <div class="page-title">📢 REKLAM <span>YÖNETİMİ</span></div>
-
-          <!-- Zone Cards -->
-          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px">
-
-            <!-- Zone 1: Sidebar Banner -->
-            <div class="ad-zone-card">
-              <div class="az-header">
-                <span class="az-title">📌 Sidebar Banner</span>
-                <div style="display:flex;align-items:center;gap:8px">
-                  <div class="az-status"><div class="az-dot off" id="dot_sidebar"></div><span id="lbl_sidebar" style="font-size:12px;color:var(--txt3)">Kapalı</span></div>
-                  <button class="az-toggle" id="tog_sidebar" onclick="toggleZone('sidebar')">Aç</button>
-                </div>
-              </div>
-              <p style="font-size:12px;color:var(--txt3);margin-bottom:10px">Sol panel alt kısmında görünür. Boyut: 260×90px</p>
-              <div class="fg"><label>Görsel URL (JPG/PNG/GIF)</label>
-                <input type="text" id="z_sidebar_img" placeholder="https://...reklam.jpg" oninput="previewZone('sidebar')"></div>
-              <div class="fg"><label>Tıklama URL'si</label>
-                <input type="text" id="z_sidebar_url" placeholder="https://reklamveren.com"></div>
-              <div class="az-preview" id="prev_sidebar">Görsel URL girilmedi</div>
-              <div style="display:flex;justify-content:flex-end;margin-top:10px">
-                <button class="btn btn-acc" onclick="saveZone('sidebar')" style="font-size:13px;padding:7px 16px">KAYDET</button>
-              </div>
-            </div>
-
-            <!-- Zone 2: Player Overlay Banner -->
-            <div class="ad-zone-card">
-              <div class="az-header">
-                <span class="az-title">🎬 Player Overlay</span>
-                <div style="display:flex;align-items:center;gap:8px">
-                  <div class="az-status"><div class="az-dot off" id="dot_overlay"></div><span id="lbl_overlay" style="font-size:12px;color:var(--txt3)">Kapalı</span></div>
-                  <button class="az-toggle" id="tog_overlay" onclick="toggleZone('overlay')">Aç</button>
-                </div>
-              </div>
-              <p style="font-size:12px;color:var(--txt3);margin-bottom:10px">Kanal değiştiğinde player üstünde görünür. Geri sayım ile kapanır.</p>
-              <div class="fg"><label>Reklam Başlığı</label>
-                <input type="text" id="z_overlay_title" placeholder="Süper Fırsat!" oninput="previewZone('overlay')"></div>
-              <div class="fg"><label>Açıklama</label>
-                <input type="text" id="z_overlay_sub" placeholder="Şimdi %50 indirim…" oninput="previewZone('overlay')"></div>
-              <div class="fg"><label>Görsel URL (opsiyonel)</label>
-                <input type="text" id="z_overlay_img" placeholder="https://...banner.jpg"></div>
-              <div class="fg"><label>Tıklama URL'si</label>
-                <input type="text" id="z_overlay_url" placeholder="https://reklamveren.com"></div>
-              <div class="fg"><label>Kapatma süresi (saniye)</label>
-                <input type="number" id="z_overlay_sec" placeholder="5" min="3" max="30" value="5"></div>
-              <div class="fg"><label>CTA Butonu Metni</label>
-                <input type="text" id="z_overlay_cta" placeholder="Hemen İncele"></div>
-              <div style="display:flex;justify-content:flex-end;margin-top:10px">
-                <button class="btn btn-acc" onclick="saveZone('overlay')" style="font-size:13px;padding:7px 16px">KAYDET</button>
-              </div>
-            </div>
-
-            <!-- Zone 3: Leaderboard Banner -->
-            <div class="ad-zone-card">
-              <div class="az-header">
-                <span class="az-title">📏 Leaderboard (Alt Şerit)</span>
-                <div style="display:flex;align-items:center;gap:8px">
-                  <div class="az-status"><div class="az-dot off" id="dot_leader"></div><span id="lbl_leader" style="font-size:12px;color:var(--txt3)">Kapalı</span></div>
-                  <button class="az-toggle" id="tog_leader" onclick="toggleZone('leader')">Aç</button>
-                </div>
-              </div>
-              <p style="font-size:12px;color:var(--txt3);margin-bottom:10px">Player altında tam genişlik banner. Boyut: 728×60px</p>
-              <div class="fg"><label>Görsel URL</label>
-                <input type="text" id="z_leader_img" placeholder="https://...banner728x60.jpg" oninput="previewZone('leader')"></div>
-              <div class="fg"><label>Tıklama URL'si</label>
-                <input type="text" id="z_leader_url" placeholder="https://reklamveren.com"></div>
-              <div class="az-preview" id="prev_leader">Görsel URL girilmedi</div>
-              <div style="display:flex;justify-content:flex-end;margin-top:10px">
-                <button class="btn btn-acc" onclick="saveZone('leader')" style="font-size:13px;padding:7px 16px">KAYDET</button>
-              </div>
-            </div>
-
-            <!-- Zone 4: Google AdSense / Iframe -->
-            <div class="ad-zone-card">
-              <div class="az-header">
-                <span class="az-title">🌐 Google AdSense / Iframe</span>
-                <div style="display:flex;align-items:center;gap:8px">
-                  <div class="az-status"><div class="az-dot off" id="dot_iframe"></div><span id="lbl_iframe" style="font-size:12px;color:var(--txt3)">Kapalı</span></div>
-                  <button class="az-toggle" id="tog_iframe" onclick="toggleZone('iframe')">Aç</button>
-                </div>
-              </div>
-              <p style="font-size:12px;color:var(--txt3);margin-bottom:10px">Google AdSense, AdMob veya herhangi bir reklam script/iframe kodu.</p>
-              <div class="fg"><label>HTML / Script Kodu</label>
-                <textarea id="z_iframe_code" rows="5" placeholder="&lt;script async src=&quot;https://pagead2.googlesyndication.com/...&quot;&gt;&lt;/script&gt;&#10;&lt;ins class=&quot;adsbygoogle&quot;...&gt;&lt;/ins&gt;"
-                  style="width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);padding:10px;color:var(--txt);font-family:monospace;font-size:12px;resize:vertical;outline:none"></textarea>
-              </div>
-              <div class="fg"><label>Gösterim Konumu</label>
-                <select id="z_iframe_pos" style="width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);padding:9px;color:var(--txt);outline:none">
-                  <option value="sidebar">Sidebar Alt</option>
-                  <option value="leaderboard">Leaderboard (Player Altı)</option>
-                </select>
-              </div>
-              <div style="display:flex;justify-content:flex-end;margin-top:10px">
-                <button class="btn btn-acc" onclick="saveZone('iframe')" style="font-size:13px;padding:7px 16px">KAYDET & UYGULA</button>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- Active Ads Summary -->
-          <div>
-            <div class="admin-section-title">Aktif Reklam Özeti</div>
-            <div id="adSummary" style="margin-top:12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px"></div>
-          </div>
-        </div>
-      </div>
-
     </div><!-- /main-panel -->
   </div><!-- /app-body -->
 </div><!-- /screenApp -->
@@ -2161,7 +1418,7 @@ setInterval(tick,1000); tick();
   if(idx===-1){
     users.unshift({username:'admin',password:ADMIN_PW,name:'Admin',role:'admin'});
   } else {
-    users[idx].password = ADMIN_PW; // şifre değişirse güncelle
+    users[idx].password = ADMIN_PW;
   }
   saveUsers(users);
 })();
@@ -2210,12 +1467,9 @@ function loginSuccess(user){
   document.getElementById('hdrUname').textContent  = user.name;
   if(isAdmin){
     document.getElementById('adminNavBtn').style.display='flex';
-    document.getElementById('adNavBtn').style.display='flex';
     document.getElementById('adminUrlBar').style.display='flex';
   }
   showScreen('screenApp');
-  updateMobileAdminButtons();
-  updateMobileUser();
   loadPlaylist();
   updateAdminStats();
   toast('🎉 Hoş geldin, '+user.name+'!','✅');
@@ -2259,37 +1513,80 @@ function showPage(name){
    M3U PARSER
 ───────────────────────────────────────────── */
 function parseM3U(txt){
-  const lines = txt.split('\n').map(l=>l.trim()).filter(Boolean);
   const res=[]; let cur=null; let id=1;
-  lines.forEach(ln=>{
+  let pos=0, len=txt.length;
+  while(pos<len){
+    let nl=txt.indexOf('\n',pos); if(nl===-1) nl=len;
+    const ln=txt.slice(pos,nl).trim(); pos=nl+1;
+    if(!ln||ln.startsWith('#EXTVLCOPT')||ln.startsWith('#EXTGRP')) continue;
     if(ln.startsWith('#EXTINF')){
       cur={id:id++,name:'Kanal',url:'',grp:'Diğer',logo:''};
-      const nm=ln.match(/,(.+)$/); if(nm) cur.name=nm[1].trim();
-      const lg=ln.match(/tvg-logo="([^"]+)"/); if(lg) cur.logo=lg[1];
-      const gt=ln.match(/group-title="([^"]+)"/); if(gt) cur.grp=gt[1]||'Diğer';
-    } else if(/^(https?|rtmp|rtsp|udp):\/\//i.test(ln)){
-      if(cur){cur.url=ln; res.push(cur); cur=null;}
+      const ci=ln.lastIndexOf(','); if(ci!==-1) cur.name=ln.slice(ci+1).trim();
+      const li=ln.indexOf('tvg-logo="'); if(li!==-1){ const le=ln.indexOf('"',li+10); cur.logo=ln.slice(li+10,le); }
+      const gi=ln.indexOf('group-title="'); if(gi!==-1){ const ge=ln.indexOf('"',gi+13); cur.grp=ln.slice(gi+13,ge)||'Diğer'; }
+    } else if(cur&&(ln.startsWith('http')||ln.startsWith('rtmp')||ln.startsWith('rtsp')||ln.startsWith('udp'))){
+      cur.url=ln; res.push(cur); cur=null;
     }
-  });
+  }
   return res;
 }
 
 /* ─────────────────────────────────────────────
    LOAD PLAYLIST
 ───────────────────────────────────────────── */
+/* ── IndexedDB helpers ── */
+function idbOpen(){
+  return new Promise((res,rej)=>{
+    const r=indexedDB.open('vg_db',1);
+    r.onupgradeneeded=e=>e.target.result.createObjectStore('cache');
+    r.onsuccess=e=>res(e.target.result); r.onerror=rej;
+  });
+}
+async function idbGet(key){
+  try{const db=await idbOpen();return new Promise((res,rej)=>{const tx=db.transaction('cache','readonly');const r=tx.objectStore('cache').get(key);r.onsuccess=e=>res(e.target.result);r.onerror=rej;});}catch{return null;}
+}
+async function idbSet(key,val){
+  try{const db=await idbOpen();return new Promise((res,rej)=>{const tx=db.transaction('cache','readwrite');tx.objectStore('cache').put(val,key);tx.oncomplete=res;tx.onerror=rej;});}catch{}
+}
+
 async function loadPlaylist(){
+  const CACHE_TTL=60*60*1000; // 1 saat
   try{
-    const r = await fetch(PL_URL);
+    const cached=await idbGet('pl_data');
+    const ctime=await idbGet('pl_time');
+    if(cached&&cached.length>0&&Date.now()-(ctime||0)<CACHE_TTL){
+      allChannels=cached;
+      document.getElementById('sbLoading').style.display='none';
+      renderChannels(); updateAdminStats();
+      toast('⚡ '+allChannels.length.toLocaleString('tr')+' kanal (önbellek)','⚡');
+      fetchAndCachePL(true);
+      return;
+    }
+  }catch{}
+  await fetchAndCachePL(false);
+}
+
+async function fetchAndCachePL(silent){
+  try{
+    if(!silent) toast('📡 Playlist yükleniyor…','⏳');
+    const r=await fetch(PL_URL);
     if(!r.ok) throw new Error('HTTP '+r.status);
-    const txt = await r.text();
-    allChannels = parseM3U(txt);
-    toast('✅ '+allChannels.length+' kanal yüklendi','📡');
+    const txt=await r.text();
+    const channels=await new Promise(resolve=>setTimeout(()=>resolve(parseM3U(txt)),0));
+    allChannels=channels;
+    await idbSet('pl_data',channels);
+    await idbSet('pl_time',Date.now());
+    document.getElementById('sbLoading').style.display='none';
+    renderChannels(); renderGuide(); updateAdminStats();
+    toast('✅ '+allChannels.length.toLocaleString('tr')+' kanal yüklendi','📡');
   }catch{
-    allChannels=[];
-    toast('⚠️ Playlist yüklenemedi','⚠️');
+    if(!silent){
+      allChannels=[];
+      document.getElementById('sbLoading').style.display='none';
+      renderChannels();
+      toast('⚠️ Playlist yüklenemedi','⚠️');
+    }
   }
-  document.getElementById('sbLoading').style.display='none';
-  renderChannels(); renderGuide(); updateAdminStats();
 }
 
 /* ─────────────────────────────────────────────
@@ -2310,62 +1607,108 @@ function grpEmoji(g){
   return '📺';
 }
 
+/* ── Virtual Scroll ── */
+let vsFiltered=[], vsItemH=62, vsOverscan=5, vsRAF=null;
+let renderTimer=null;
+function debouncedRender(){ clearTimeout(renderTimer); renderTimer=setTimeout(renderChannels,200); }
+
 function renderChannels(){
-  const chs = merged();
-  const q   = (document.getElementById('sbSearch').value||'').toLowerCase();
-
-  // Cats
-  const cats = ['Tümü',...new Set(chs.map(c=>c.grp||'Diğer').filter(Boolean))];
-  const catEl = document.getElementById('sbCats');
-  catEl.innerHTML='';
-  cats.slice(0,14).forEach(c=>{
-    const b=document.createElement('button');
-    b.className='cat-pill'+(c===currentCat?' on':'');
-    b.textContent=c; b.onclick=()=>{currentCat=c;renderChannels();};
-    catEl.appendChild(b);
-  });
-
-  // Filter
-  let flt = chs.filter(c=>{
-    const mc = currentCat==='Tümü' || c.grp===currentCat;
-    const mq = c.name.toLowerCase().includes(q)||(c.grp||'').toLowerCase().includes(q);
-    return mc&&mq;
-  });
-
-  // Sort
-  flt = flt.slice().sort((a,b)=> sortAsc ? a.name.localeCompare(b.name,'tr') : b.name.localeCompare(a.name,'tr'));
-
-  document.getElementById('sbCount').textContent = flt.length+' kanal';
-
-  const list=document.getElementById('chList');
-  list.innerHTML='';
-
-  if(!flt.length){
-    list.innerHTML='<div style="text-align:center;color:var(--txt3);padding:40px 16px;font-size:13px">Kanal bulunamadı</div>';
-    return;
+  const chs=merged();
+  const q=(document.getElementById('sbSearch').value||'').toLowerCase();
+  // Kategoriler
+  const cats=['Tümü',...new Set(chs.map(c=>c.grp||'Diğer').filter(Boolean))];
+  const catEl=document.getElementById('sbCats');
+  if(catEl.children.length!==Math.min(cats.length,20)){
+    catEl.innerHTML='';
+    cats.slice(0,20).forEach(c=>{
+      const b=document.createElement('button');
+      b.className='cat-pill'+(c===currentCat?' on':'');
+      b.textContent=c; b.onclick=()=>{currentCat=c;renderChannels();};
+      catEl.appendChild(b);
+    });
+  } else {
+    catEl.querySelectorAll('.cat-pill').forEach((b,i)=>b.classList.toggle('on',cats[i]===currentCat));
   }
+  // Filtrele
+  let flt=chs.filter(c=>{
+    if(currentCat!=='Tümü'&&c.grp!==currentCat) return false;
+    if(!q) return true;
+    return c.name.toLowerCase().includes(q)||(c.grp||'').toLowerCase().includes(q);
+  });
+  // Sırala (5000+ listede skip)
+  if(flt.length<8000) flt=flt.slice().sort((a,b)=>sortAsc?a.name.localeCompare(b.name,'tr'):b.name.localeCompare(a.name,'tr'));
+  vsFiltered=flt;
+  document.getElementById('sbCount').textContent=flt.length.toLocaleString('tr')+' kanal';
+  initVS();
+}
 
-  flt.forEach(ch=>{
-    const isFav = favorites.includes(ch.id);
+function initVS(){
+  const list=document.getElementById('chList');
+  if(!vsFiltered.length){
+    list.innerHTML='<div style="text-align:center;color:var(--txt3);padding:40px 16px;font-size:13px">Kanal bulunamadi</div>';
+    list.onscroll=null; return;
+  }
+  list.innerHTML='';
+  const spacer=document.createElement('div');
+  spacer.className='vscroll-spacer';
+  spacer.style.height=(vsFiltered.length*vsItemH)+'px';
+  list.appendChild(spacer);
+  vsRender(list);
+  list.onscroll=()=>{ if(vsRAF) cancelAnimationFrame(vsRAF); vsRAF=requestAnimationFrame(()=>vsRender(list)); };
+}
+
+function vsRender(list){
+  const st=list.scrollTop, vh=list.clientHeight;
+  const s=Math.max(0,Math.floor(st/vsItemH)-vsOverscan);
+  const e=Math.min(vsFiltered.length-1,Math.ceil((st+vh)/vsItemH)+vsOverscan);
+  list.querySelectorAll('.ch-item').forEach(el=>el.remove());
+  const frag=document.createDocumentFragment();
+  for(let i=s;i<=e;i++){
+    const ch=vsFiltered[i]; if(!ch) continue;
+    const isFav=favorites.includes(ch.id);
     const d=document.createElement('div');
     d.className='ch-item'+(currentCh?.id===ch.id?' on':'');
-    const logo = ch.logo
-      ? `<img src="${ch.logo}" onerror="this.parentElement.textContent='${grpEmoji(ch.grp)}'" loading="lazy">`
-      : grpEmoji(ch.grp);
-    d.innerHTML=`
-      <div class="ch-logo">${logo}</div>
-      <div class="ch-meta">
-        <div class="ch-name">${ch.name}</div>
-        <div class="ch-sub">${ch.grp||'IPTV'}</div>
-      </div>
-      <div class="ch-actions">
-        <button class="ch-fav-btn ${isFav?'faved':''}" title="${isFav?'Favoriden çıkar':'Favorilere ekle'}"
-          onclick="event.stopPropagation();toggleFav(${ch.id})">${isFav?'★':'☆'}</button>
-        <div class="ch-live-dot"></div>
-      </div>`;
+    d.style.cssText='position:absolute;top:'+(i*vsItemH)+'px;left:6px;right:6px;height:'+(vsItemH-2)+'px';
+
+    // Logo: DOM ile oluştur — string birleştirmede quote sorunu olmaz
+    const logoDiv=document.createElement('div');
+    logoDiv.className='ch-logo';
+    if(ch.logo){
+      const img=document.createElement('img');
+      img.src=ch.logo; img.loading='lazy';
+      img.style.cssText='width:100%;height:100%;object-fit:contain';
+      img.onerror=function(){ this.parentElement.textContent=grpEmoji(ch.grp); };
+      logoDiv.appendChild(img);
+    } else {
+      logoDiv.textContent=grpEmoji(ch.grp);
+    }
+
+    const metaDiv=document.createElement('div');
+    metaDiv.className='ch-meta';
+    metaDiv.innerHTML='<div class="ch-name">'+ch.name+'</div><div class="ch-sub">'+(ch.grp||'IPTV')+'</div>';
+
+    const actDiv=document.createElement('div');
+    actDiv.className='ch-actions';
+    const favBtn=document.createElement('button');
+    favBtn.className='ch-fav-btn'+(isFav?' faved':'');
+    favBtn.textContent=isFav?'★':'☆';
+    favBtn.onclick=function(ev){ ev.stopPropagation(); toggleFav(ch.id); };
+    const liveDot=document.createElement('div');
+    liveDot.className='ch-live-dot';
+    actDiv.appendChild(favBtn); actDiv.appendChild(liveDot);
+
+    d.appendChild(logoDiv); d.appendChild(metaDiv); d.appendChild(actDiv);
     d.onclick=()=>{ playCh(ch); showPage('player'); };
-    list.appendChild(d);
-  });
+    frag.appendChild(d);
+  }
+  list.appendChild(frag);
+}
+
+function scrollToActive(){
+  if(!currentCh) return;
+  const idx=vsFiltered.findIndex(c=>c.id===currentCh.id); if(idx===-1) return;
+  const list=document.getElementById('chList'); if(!list) return;
+  list.scrollTo({top:Math.max(0,idx*vsItemH-list.clientHeight/2+vsItemH/2),behavior:'smooth'});
 }
 
 function toggleSort(){
@@ -2500,33 +1843,75 @@ function killAll(){
 }
 
 function detectType(url){
-  const u=url.toLowerCase().split('?')[0];
-  if(u.endsWith('.mpd')) return 'dash';
-  if(u.endsWith('.ts'))  return 'ts';
-  // native video formats
+  let path=url.toLowerCase();
+  try{path=new URL(url).pathname.toLowerCase();}catch{}
+  if(path.endsWith('.mpd'))  return 'dash';
+  if(path.endsWith('.m3u8')) return 'hls';
+  if(path.endsWith('.m3u'))  return 'hls';
+  if(path.endsWith('.ts'))   return 'ts';
+  const uf=url.toLowerCase();
+  if(uf.includes('.ts?')||uf.includes('.ts&')) return 'ts';
+  if(uf.includes('.m3u8?')||uf.includes('.m3u8&')) return 'hls';
+  if(uf.includes('.mpd?')) return 'dash';
   const native=['.mkv','.mp4','.avi','.mov','.wmv','.flv','.webm','.m4v','.mpeg','.mpg','.3gp'];
-  if(native.some(e=>u.endsWith(e))) return 'native';
+  if(native.some(e=>path.endsWith(e))) return 'native';
+  if(url.startsWith('rtmp://')||url.startsWith('rtmps://')) return 'rtmp';
+  if(url.startsWith('rtsp://')) return 'ts';
   return 'hls';
 }
 
 function doPlay(url){
   const vd=document.getElementById('mainVid');
-  killAll(); showBuf(true);
+  destroyAll(); showBuf(true);
   const type=detectType(url);
+
   if(type==='native'){
     vd.src=url; vd.play().catch(()=>{}); showBuf(false);
-  } else if(type==='ts' && typeof mpegts!=='undefined' && mpegts.isSupported()){
-    tsInst=mpegts.createPlayer({type:'mpegts',url,isLive:true});
-    tsInst.attachMediaElement(vd); tsInst.load(); tsInst.play(); showBuf(false);
-  } else if(Hls.isSupported()){
-    hlsInst=new Hls({enableWorker:true,lowLatencyMode:true,maxBufferLength:30});
-    hlsInst.loadSource(url); hlsInst.attachMedia(vd);
-    hlsInst.on(Hls.Events.MANIFEST_PARSED,()=>{ vd.play().catch(()=>{}); showBuf(false); });
-    hlsInst.on(Hls.Events.ERROR,(_,d)=>{ if(d.fatal){ showBuf(false); toast('⚠️ Akış yüklenemedi — başka kanal deneyin','❌'); }});
+
+  } else if(type==='ts'){
+    if(typeof mpegts!=='undefined' && mpegts.isSupported()){
+      try{
+        tsP=mpegts.createPlayer(
+          {type:'mpegts',url,isLive:true,enableWorker:true,lazyLoad:false},
+          {enableWorker:true,seekType:'range'}
+        );
+        tsP.attachMediaElement(vd); tsP.load(); tsP.play();
+        tsP.on(mpegts.Events.ERROR,(et,ed)=>{
+          if(ed&&ed.fatal){ destroyAll(); playAsHls(vd,url); }
+        });
+        showBuf(false);
+      }catch{ playAsHls(vd,url); }
+    } else { playAsHls(vd,url); }
+
+  } else if(type==='dash'){
+    vd.src=url; vd.play().catch(()=>{}); showBuf(false);
+
+  } else if(type==='rtmp'){
+    showBuf(false); toast('RTMP tarayicida calismaz','⚠️');
+
+  } else {
+    playAsHls(vd,url);
+  }
+  updatePB();
+}
+
+function playAsHls(vd,url){
+  if(Hls.isSupported()){
+    hls=new Hls({enableWorker:true,lowLatencyMode:true,maxBufferLength:30,maxMaxBufferLength:60,fragLoadingTimeOut:20000,manifestLoadingTimeOut:15000});
+    hls.loadSource(url); hls.attachMedia(vd);
+    hls.on(Hls.Events.MANIFEST_PARSED,()=>{vd.play().catch(()=>{});showBuf(false);});
+    hls.on(Hls.Events.ERROR,(_,d)=>{
+      if(d.fatal){
+        showBuf(false);
+        if(d.type===Hls.ErrorTypes.NETWORK_ERROR){ hls.destroy();hls=null; vd.src=url; vd.play().catch(()=>{}); }
+        else { toast('Akis açilamadi','❌'); }
+      }
+    });
+  } else if(vd.canPlayType('application/x-mpegURL')){
+    vd.src=url; vd.play().catch(()=>{}); showBuf(false);
   } else {
     vd.src=url; vd.play().catch(()=>{}); showBuf(false);
   }
-  updatePlayBtn();
 }
 
 function playCh(ch){
@@ -2539,7 +1924,6 @@ function playCh(ch){
   renderChannels();
   renderEpgBar();
   toast('📺 '+ch.name,'🔴');
-  setTimeout(()=>applyAds(true), 400);
 }
 
 function restartStream(){ if(currentCh) playCh(currentCh); }
@@ -2734,6 +2118,15 @@ function toast(msg, icon='ℹ️'){
 ───────────────────────────────────────────── */
 document.addEventListener('keydown',e=>{
   if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA') return;
+
+  // F12 engelle
+  if(e.key==='F12'){ e.preventDefault(); return; }
+  // Ctrl+U, Ctrl+S, Ctrl+Shift+I/J/C engelle
+  if(e.ctrlKey||e.metaKey){
+    if(['u','U','s','S'].includes(e.key)){ e.preventDefault(); return; }
+    if(e.shiftKey&&['i','I','j','J','c','C'].includes(e.key)){ e.preventDefault(); return; }
+  }
+
   switch(e.code){
     case 'Space':    e.preventDefault(); togglePlay(); break;
     case 'KeyF':     toggleFS(); break;
@@ -2757,510 +2150,34 @@ document.addEventListener('keydown',e=>{
   }
 });
 
-/* ─────────────────────────────────────────────
-   AD MANAGEMENT SYSTEM
-───────────────────────────────────────────── */
-const AD_KEY = 'vg_ads';
+// Sag tik engelle
+document.addEventListener('contextmenu',e=>e.preventDefault());
 
-function getAdConfig(){
-  return JSON.parse(ls(AD_KEY)||'{}');
-}
-function saveAdConfig(cfg){
-  lss(AD_KEY, JSON.stringify(cfg));
-}
-
-// Show ads page (admin only)
-const _origShowPage = showPage;
-function showPage(name){
-  if(name==='ads' && !isAdmin){ toast('Bu sayfa sadece adminlere açıktır','🔒'); return; }
-  document.querySelectorAll('.sub-page').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('on'));
-  const pageMap={
-    player:'pagePlayer', movies:'pageMovies', guide:'pageGuide', favs:'pageFavs',
-    admin:'pageAdmin', about:'pageAbout', ads:'pageAds'
-  };
-  document.getElementById(pageMap[name])?.classList.add('on');
-  const allTabs=document.querySelectorAll('.nav-tab');
-  const tabIdx={player:0,movies:1,guide:2,favs:3,admin:isAdmin?4:-1,ads:isAdmin?5:-1,about:isAdmin?6:4};
-  allTabs[tabIdx[name]]?.classList.add('on');
-  if(name==='favs')  renderFavs();
-  if(name==='guide') renderGuide();
-  if(name==='admin') renderAdminTable();
-  if(name==='ads')   renderAdPage();
-}
-
-// Apply all active ads on startup / channel change
-function applyAds(onChannelSwitch){
-  const cfg = getAdConfig();
-
-  // 1. SIDEBAR BANNER
-  const sb = document.getElementById('adSidebar');
-  if(sb){
-    if(cfg.sidebar?.on && cfg.sidebar?.img){
-      sb.innerHTML = `<span class="ad-tag">REKLAM</span><img src="${cfg.sidebar.img}" alt="Reklam" style="width:100%;height:90px;object-fit:cover;border-radius:var(--r2)">`;
-      sb.onclick = ()=>{ if(cfg.sidebar.url) window.open(cfg.sidebar.url,'_blank'); };
-      sb.style.display='flex';
-    } else if(!cfg.sidebar?.on){
-      sb.innerHTML='<span class="ad-tag">REKLAM</span><div class="ad-placeholder"><span style="font-size:22px">📢</span><span>260 × 90 — Sidebar Banner</span></div>';
-      sb.onclick = ()=>{ if(isAdmin) showPage('ads'); };
-    }
-  }
-
-  // 2. LEADERBOARD BANNER
-  const lb = document.getElementById('adLeaderboard');
-  if(lb){
-    if(cfg.leader?.on && cfg.leader?.img){
-      lb.innerHTML = `<span class="ad-tag" style="position:static;margin-right:8px">REKLAM</span><img src="${cfg.leader.img}" alt="Reklam" style="height:60px;max-width:100%;object-fit:contain;cursor:pointer" onclick="if('${cfg.leader.url}') window.open('${cfg.leader.url}','_blank')">`;
-      lb.classList.add('show');
-    } else {
-      lb.innerHTML='<span class="ad-tag" style="position:static;margin-right:8px">REKLAM</span><div class="ad-placeholder"><span>📢</span><span>728 × 60 — Leaderboard Banner</span></div>';
-      lb.classList.remove('show');
-    }
-  }
-
-  // 3. IFRAME / ADSENSE zone
-  if(cfg.iframe?.on && cfg.iframe?.code){
-    const pos = cfg.iframe.pos || 'sidebar';
-    if(pos==='sidebar'){
-      const sb2 = document.getElementById('adSidebar');
-      if(sb2) sb2.innerHTML = `<span class="ad-tag">REKLAM</span>${cfg.iframe.code}`;
-    } else {
-      const lb2 = document.getElementById('adLeaderboard');
-      if(lb2){ lb2.innerHTML = `<span class="ad-tag" style="position:static;margin-right:8px">REKLAM</span>${cfg.iframe.code}`; lb2.classList.add('show'); }
-    }
-  }
-
-  // 4. PLAYER OVERLAY (only on channel switch)
-  if(onChannelSwitch && cfg.overlay?.on){
-    showPlayerAd(cfg.overlay);
-  }
-}
-
-// Player overlay ad
-let adTimer = null;
-function showPlayerAd(ov){
-  const el  = document.getElementById('adPlayerOverlay');
-  const img = document.getElementById('adPlayerImg');
-  const ttl = document.getElementById('adPlayerTitle');
-  const sub = document.getElementById('adPlayerSub');
-  const cta = document.getElementById('adPlayerCta');
-  const cnt = document.getElementById('adCountdown');
-  const cls = document.getElementById('adCloseBtn');
-
-  if(!el||!ttl||!sub||!cta||!cnt||!cls) return;
-
-  ttl.textContent = ov.title || 'Sponsorlu İçerik';
-  sub.textContent = ov.sub   || '';
-  cta.textContent = ov.cta   || 'Ziyaret Et';
-  cta.dataset.url = ov.url   || '';
-
-  if(img){ if(ov.img){ img.src=ov.img; img.style.display='block'; } else { img.style.display='none'; } }
-
-  cls.style.display='none';
-  el.classList.add('show');
-
-  let sec = parseInt(ov.sec)||5;
-  cnt.textContent = `${sec}s sonra kapatılabilir`;
-
-  clearInterval(adTimer);
-  adTimer = setInterval(()=>{
-    sec--;
-    if(sec>0){ cnt.textContent=`${sec}s sonra kapatılabilir`; }
-    else {
-      clearInterval(adTimer);
-      cnt.textContent='';
-      cls.style.display='flex';
-    }
-  },1000);
-}
-function closePlayerAd(){
-  const el=document.getElementById('adPlayerOverlay');
-  if(el) el.classList.remove('show');
-  clearInterval(adTimer);
-}
-function adPlayerCtaClick(){
-  const el=document.getElementById('adPlayerCta');
-  if(el && el.dataset.url) window.open(el.dataset.url,'_blank');
-}
-function adSidebarClick(){
-  const cfg=getAdConfig();
-  if(!cfg.sidebar?.on && isAdmin) showPage('ads');
-  else if(cfg.sidebar?.url) window.open(cfg.sidebar.url,'_blank');
-}
-
-// Hook into playCh to trigger overlay ad — patch done inside original function below
-
-// ── Admin Ad Page Render ──
-function renderAdPage(){
-  const cfg = getAdConfig();
-  if(!document.getElementById('pageAds')) return;
-  // Restore saved inputs
-  const zones={
-    sidebar:['img','url'],
-    overlay:['title','sub','img','url','sec','cta'],
-    leader: ['img','url'],
-    iframe: ['code','pos'],
-  };
-  Object.entries(zones).forEach(([zone,fields])=>{
-    fields.forEach(f=>{
-      const el=document.getElementById(`z_${zone}_${f}`);
-      if(el && cfg[zone]?.[f]) el.value=cfg[zone][f];
-    });
-    updateZoneUI(zone, !!cfg[zone]?.on);
-  });
-  renderAdSummary();
-}
-
-function updateZoneUI(zone, isOn){
-  const dot = document.getElementById(`dot_${zone}`);
-  const lbl = document.getElementById(`lbl_${zone}`);
-  const tog = document.getElementById(`tog_${zone}`);
-  if(!dot||!lbl||!tog) return;
-  dot.className = 'az-dot '+(isOn?'on':'off');
-  lbl.textContent = isOn ? 'Aktif' : 'Kapalı';
-  lbl.style.color  = isOn ? 'var(--acc4)' : 'var(--txt3)';
-  tog.textContent  = isOn ? 'Kapat' : 'Aç';
-  tog.className    = 'az-toggle'+(isOn?' active':'');
-}
-
-function toggleZone(zone){
-  const cfg=getAdConfig();
-  if(!cfg[zone]) cfg[zone]={};
-  cfg[zone].on = !cfg[zone].on;
-  saveAdConfig(cfg);
-  updateZoneUI(zone, cfg[zone].on);
-  applyAds(false);
-  renderAdSummary();
-  toast(cfg[zone].on?`✅ ${zone} reklamı açıldı`:`🔴 ${zone} reklamı kapatıldı`, cfg[zone].on?'✅':'🔴');
-}
-
-function saveZone(zone){
-  const cfg=getAdConfig();
-  if(!cfg[zone]) cfg[zone]={on:false};
-  const fields={
-    sidebar:['img','url'],
-    overlay:['title','sub','img','url','sec','cta'],
-    leader: ['img','url'],
-    iframe: ['code','pos'],
-  };
-  (fields[zone]||[]).forEach(f=>{
-    const el=document.getElementById(`z_${zone}_${f}`);
-    if(el) cfg[zone][f]=el.value;
-  });
-  saveAdConfig(cfg);
-  applyAds(false);
-  renderAdSummary();
-  previewZone(zone);
-  toast('💾 Reklam kaydedildi','💾');
-}
-
-function previewZone(zone){
-  const imgEl = document.getElementById(`z_${zone}_img`);
-  const prevEl = document.getElementById(`prev_${zone}`);
-  if(!imgEl||!prevEl) return;
-  const url = imgEl.value.trim();
-  prevEl.innerHTML = url
-    ? `<img src="${url}" onerror="this.parentElement.textContent='Görsel yüklenemedi'" style="max-height:60px;border-radius:4px">`
-    : 'Görsel URL girilmedi';
-}
-
-function renderAdSummary(){
-  const cfg = getAdConfig();
-  const el = document.getElementById('adSummary');
-  if(!el || !document.body.contains(el)) return;
-  const zones=[
-    {id:'sidebar', name:'Sidebar Banner', icon:'📌'},
-    {id:'overlay', name:'Player Overlay', icon:'🎬'},
-    {id:'leader',  name:'Leaderboard',    icon:'📏'},
-    {id:'iframe',  name:'AdSense/Iframe', icon:'🌐'},
-  ];
-  el.innerHTML = zones.map(z=>{
-    const on = !!cfg[z.id]?.on;
-    return `<div style="background:var(--s1);border:1px solid ${on?'rgba(0,255,136,.2)':'var(--bd)'};border-radius:var(--r2);padding:14px;display:flex;align-items:center;gap:10px">
-      <span style="font-size:22px">${z.icon}</span>
-      <div style="flex:1">
-        <div style="font-size:13px;font-weight:600;color:var(--txt)">${z.name}</div>
-        <div style="font-size:11px;color:${on?'var(--acc4)':'var(--txt3)'};margin-top:2px">${on?'● Aktif':'○ Kapalı'}</div>
-      </div>
-      <button class="az-toggle${on?' active':''}" onclick="toggleZone('${z.id}')">${on?'Kapat':'Aç'}</button>
-    </div>`;
-  }).join('');
-}
-
-
-/* ─────────────────────────────────────────────
-   FILM / MKV PLAYER
-───────────────────────────────────────────── */
-let movieLib = JSON.parse(ls('vg_movielib')||'[]');
-let currentMovie = null;
-let movieSeeking = false;
-let movieHlsInst = null;
-
-function fmtDur(s){
-  if(isNaN(s)||!isFinite(s)) return '0:00';
-  const h=Math.floor(s/3600), m=Math.floor((s%3600)/60), sec=Math.floor(s%60);
-  return h>0 ? `${h}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}` : `${m}:${String(sec).padStart(2,'0')}`;
-}
-
-function getMovieVid(){ return document.getElementById('movieVid'); }
-
-// ── Open local file ──
-function movieOpenFile(e){
-  const file = e.target.files[0]; if(!file) return;
-  const url  = URL.createObjectURL(file);
-  const ext  = file.name.split('.').pop().toUpperCase();
-  const entry = {id:'m'+Date.now(), name:file.name, url, ext, local:true};
-  // revoke old blob for same name
-  movieLib = movieLib.filter(m=>m.name!==file.name);
-  movieLib.unshift(entry);
-  if(movieLib.length>20) movieLib.pop();
-  // don't save blob URLs to LS (they expire), save name+ext only
-  const libMeta = movieLib.map(m=>({id:m.id,name:m.name,ext:m.ext,local:m.local,url:m.local?'[local]':m.url}));
-  lss('vg_movielib', JSON.stringify(libMeta));
-  moviePlay(entry);
-  renderMovieLib();
-  e.target.value='';
-}
-
-// ── Play from URL ──
-function moviePlayUrl(){
-  const url = (document.getElementById('movieUrlIn').value||'').trim();
-  if(!url){ toast('URL girin','⚠️'); return; }
-  const name = url.split('/').pop().split('?')[0] || 'Film';
-  const ext  = name.split('.').pop().toUpperCase();
-  const entry= {id:'m'+Date.now(), name, url, ext, local:false};
-  movieLib = movieLib.filter(m=>m.url!==url);
-  movieLib.unshift(entry);
-  lss('vg_movielib', JSON.stringify(movieLib));
-  moviePlay(entry);
-  renderMovieLib();
-}
-
-// ── Core play ──
-function moviePlay(entry){
-  currentMovie = entry;
-  const vd = getMovieVid();
-  if(!vd) return;
-
-  // destroy any hls instance
-  if(movieHlsInst){ movieHlsInst.destroy(); movieHlsInst=null; }
-  vd.pause(); vd.removeAttribute('src'); vd.load();
-
-  document.getElementById('movieEmpty').style.display='none';
-  document.getElementById('movieTitle').textContent = entry.name;
-  showMovieBuf(true);
-
-  const ext = (entry.ext||'').toLowerCase();
-  const isHls = entry.url.includes('.m3u8') || ext==='m3u8';
-
-  if(isHls && Hls.isSupported()){
-    movieHlsInst = new Hls({enableWorker:true});
-    movieHlsInst.loadSource(entry.url);
-    movieHlsInst.attachMedia(vd);
-    movieHlsInst.on(Hls.Events.MANIFEST_PARSED,()=>{vd.play().catch(()=>{});showMovieBuf(false);});
-  } else {
-    vd.src = entry.url;
-    vd.play().catch(()=>{});
-    showMovieBuf(false);
-  }
-
-  updateMoviePlayBtn();
-  renderMovieLib();
-  toast('🎬 '+entry.name,'🎬');
-}
-
-function showMovieBuf(v){
-  const el=document.getElementById('movieBuf'); if(el) el.classList.toggle('show',v);
-}
-
-// ── Controls ──
-function toggleMoviePlay(){
-  const vd=getMovieVid(); if(!vd) return;
-  vd.paused ? vd.play() : vd.pause();
-  updateMoviePlayBtn();
-}
-function updateMoviePlayBtn(){
-  const vd=getMovieVid(); if(!vd) return;
-  setTimeout(()=>{
-    const btn=document.getElementById('moviePlayBtn'); if(!btn) return;
-    btn.innerHTML = vd.paused
-      ? `<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>`
-      : `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>`;
-  },60);
-}
-function movieSkip(s){
-  const vd=getMovieVid(); if(!vd) return;
-  vd.currentTime = Math.max(0, Math.min(vd.duration||0, vd.currentTime+s));
-}
-function toggleMovieMute(){
-  const vd=getMovieVid(); if(!vd) return; vd.muted=!vd.muted;
-}
-function setMovieVol(v){
-  const vd=getMovieVid(); if(!vd) return; vd.volume=v/100; vd.muted=v==0;
-}
-function setMovieSpeed(v){
-  const vd=getMovieVid(); if(!vd) return; vd.playbackRate=parseFloat(v);
-}
-function toggleMoviePiP(){
-  const vd=getMovieVid(); if(!vd) return;
-  if(document.pictureInPictureElement) document.exitPictureInPicture().catch(()=>{});
-  else if(vd.readyState) vd.requestPictureInPicture().catch(()=>toast('PiP desteklenmiyor','⚠️'));
-}
-function toggleMovieFS(){
-  const el=document.getElementById('moviePlayerWrap');
-  if(!document.fullscreenElement) el.requestFullscreen().catch(()=>{});
-  else document.exitFullscreen();
-}
-
-// ── Seek bar ──
-function movieSeekStart(e){
-  const vd=getMovieVid(); if(!vd||!vd.duration) return;
-  movieSeeking=true;
-  movieSeekTo(e);
-  const up=()=>{ movieSeeking=false; document.removeEventListener('mouseup',up); document.removeEventListener('mousemove',move); };
-  const move=(ev)=>{ if(movieSeeking) movieSeekTo(ev); };
-  document.addEventListener('mouseup',up);
-  document.addEventListener('mousemove',move);
-}
-function movieSeekTo(e){
-  const vd=getMovieVid(); if(!vd||!vd.duration) return;
-  const wrap=document.getElementById('movieSeekWrap'); if(!wrap) return;
-  const rect=wrap.getBoundingClientRect();
-  const pct=Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width));
-  vd.currentTime=pct*vd.duration;
-}
-function movieSeekHover(e){
-  const vd=getMovieVid(); if(!vd||!vd.duration) return;
-  const wrap=document.getElementById('movieSeekWrap');
-  const tip=document.getElementById('movieSeekTip'); if(!wrap||!tip) return;
-  const rect=wrap.getBoundingClientRect();
-  const pct=Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width));
-  tip.textContent=fmtDur(pct*vd.duration);
-  tip.style.display='block'; tip.style.left=(pct*100)+'%';
-}
-
-// ── Time update loop ──
-function movieTimeUpdate(){
-  const vd=getMovieVid(); if(!vd) return;
-  const cur=vd.currentTime, dur=vd.duration||0;
-  const timeEl=document.getElementById('movieTime');
-  if(timeEl) timeEl.textContent=fmtDur(cur)+' / '+fmtDur(dur);
-  const pct=dur>0?(cur/dur*100):0;
-  const fill=document.getElementById('movieSeekFill');
-  const thumb=document.getElementById('movieSeekThumb');
-  if(fill) fill.style.width=pct+'%';
-  if(thumb) thumb.style.left=pct+'%';
-  // buffered
-  if(dur>0 && vd.buffered.length){
-    const bufEnd=vd.buffered.end(vd.buffered.length-1);
-    const bf=document.getElementById('movieSeekBuf');
-    if(bf) bf.style.width=(bufEnd/dur*100)+'%';
-  }
-}
-
-// ── Library ──
-function renderMovieLib(){
-  const lib=document.getElementById('movieLibrary');
-  const grid=document.getElementById('movieLibGrid');
-  const cnt=document.getElementById('movieLibCount');
-  if(!lib||!grid) return;
-  if(!movieLib.length){ lib.style.display='none'; return; }
-  lib.style.display='block';
-  if(cnt) cnt.textContent=movieLib.length;
-  grid.innerHTML='';
-  movieLib.forEach(m=>{
-    const d=document.createElement('div');
-    d.className='movie-lib-item'+(currentMovie?.id===m.id?' playing':'');
-    const icon = ['MKV','AVI','MOV','WMV'].includes(m.ext)?'🎞️':['MP4','M4V','WEBM'].includes(m.ext)?'🎬':'📹';
-    d.innerHTML=`
-      <span class="movie-lib-icon">${icon}</span>
-      <span class="movie-lib-name">${m.name}</span>
-      <span class="movie-lib-ext">${m.ext}</span>
-      <button class="movie-lib-rm" onclick="event.stopPropagation();removeMovieLib('${m.id}')">✕</button>`;
-    if(!m.local) d.onclick=()=>moviePlay(m);
-    else d.onclick=()=>toast('Yerel dosya: tekrar seçin','📂');
-    grid.appendChild(d);
-  });
-}
-function removeMovieLib(id){
-  movieLib=movieLib.filter(m=>m.id!==id);
-  lss('vg_movielib',JSON.stringify(movieLib));
-  renderMovieLib();
-}
-function clearMovieLib(){
-  movieLib=[];lss('vg_movielib','[]');renderMovieLib();
-}
-
-// ── Wire up video events ──
-document.addEventListener('DOMContentLoaded',()=>{
-  const vd=document.getElementById('movieVid'); if(!vd) return;
-  vd.addEventListener('timeupdate', movieTimeUpdate);
-  vd.addEventListener('play',  updateMoviePlayBtn);
-  vd.addEventListener('pause', updateMoviePlayBtn);
-  vd.addEventListener('waiting',()=>showMovieBuf(true));
-  vd.addEventListener('playing',()=>showMovieBuf(false));
-  vd.addEventListener('ended', ()=>{ updateMoviePlayBtn(); toast('Film bitti','✅'); });
-  // restore library (url-only entries)
-  movieLib = movieLib.filter(m=>!m.local);
-  renderMovieLib();
+// Metin secimi engelle (input/textarea haric)
+document.addEventListener('selectstart',e=>{
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA') return;
+  e.preventDefault();
 });
 
-// ── Init ads on startup (after DOM ready) ──
-document.addEventListener('DOMContentLoaded', ()=>setTimeout(()=>applyAds(false), 400));
-if(document.readyState==='complete') setTimeout(()=>applyAds(false), 400);
-
-/* ─────────────────────────────────────────────
-   MOBİL NAV
-───────────────────────────────────────────── */
-function toggleMobileNav(){
-  const drawer = document.getElementById('mobileNavDrawer');
-  const btn    = document.getElementById('hamburgerBtn');
-  const sidebar= document.querySelector('.sidebar');
-  const isOpen = drawer.classList.contains('open');
-  drawer.classList.toggle('open', !isOpen);
-  btn.classList.toggle('open', !isOpen);
-  // Also toggle sidebar visibility on mobile
-  if(window.innerWidth <= 768){
-    sidebar?.classList.toggle('mobile-open', !isOpen);
-  }
-}
-function closeMobileNav(){
-  document.getElementById('mobileNavDrawer')?.classList.remove('open');
-  document.getElementById('hamburgerBtn')?.classList.remove('open');
-  document.querySelector('.sidebar')?.classList.remove('mobile-open');
-}
-function mobileGo(page){
-  closeMobileNav();
-  showPage(page);
-  // Update active state in mobile menu
-  document.querySelectorAll('.mobile-nav-item').forEach(b=>{
-    b.classList.remove('on');
-    if(b.getAttribute('onclick')?.includes("'"+page+"'")) b.classList.add('on');
-  });
-}
-
-// Show admin buttons in mobile drawer when logged in as admin
-function updateMobileAdminButtons(){
-  const show = isAdmin ? 'flex' : 'none';
-  const ab = document.getElementById('mobileAdminBtn');
-  const ad = document.getElementById('mobileAdsBtn');
-  if(ab) ab.style.display = show;
-  if(ad) ad.style.display = show;
-}
-
-// Update mobile user info
-function updateMobileUser(){
-  const el = document.getElementById('mobileUserInfo');
-  if(el && currentUser) el.textContent = currentUser.name + (isAdmin?' (Admin)':'');
-}
-
-// Close drawer on page resize to desktop
-window.addEventListener('resize', ()=>{
-  if(window.innerWidth > 768) closeMobileNav();
-});
-
-// Close on back gesture (popstate)
-window.addEventListener('popstate', closeMobileNav);
+// DevTools boyut farki tespiti
+(function devGuard(){
+  let warned=false;
+  const LIMIT=160;
+  setInterval(()=>{
+    const w=window.outerWidth-window.innerWidth;
+    const hh=window.outerHeight-window.innerHeight;
+    if((w>LIMIT||hh>LIMIT)&&!warned){
+      warned=true;
+      document.body.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;background:#07090e;color:#e63946;font-family:sans-serif;gap:16px">'
+        +'<div style="font-size:56px">🔒</div>'
+        +'<div style="font-size:22px;font-weight:bold;letter-spacing:2px">ERİŞİM ENGELLENDİ</div>'
+        +'<div style="font-size:13px;color:#4a5468">Geliştirici araçları tespit edildi.</div>'
+        +'<button onclick="location.reload()" style="margin-top:10px;padding:9px 22px;background:#e63946;border:none;border-radius:8px;color:#fff;font-size:13px;cursor:pointer">Sayfayı Yenile</button>'
+        +'</div>';
+    }
+    if(w<=LIMIT&&hh<=LIMIT) warned=false;
+  },800);
+})();
 
 </script>
 </body>
