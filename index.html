@@ -1369,7 +1369,6 @@ body::after {
 
   /* Movie player */
   .movie-topbar { flex-wrap:wrap; gap:6px; padding:8px 10px; }
-  .movie-url-in { width:100%; }
   .movie-time { font-size:12px; }
   .movie-speed-select { font-size:11px; padding:4px 5px; }
 
@@ -1716,15 +1715,9 @@ body::after {
 
         <!-- Top bar: URL or file open -->
         <div class="movie-topbar">
-          <span class="movie-topbar-title">🎬 FİLM</span>
-          <input class="movie-url-in" type="text" id="movieUrlIn"
-            placeholder="MKV, MP4, AVI, MOV… URL girin veya dosya açın"
-            onkeydown="if(event.key==='Enter')moviePlayUrl()">
-          <button class="btn btn-acc" onclick="moviePlayUrl()">
-            <svg viewBox="0 0 24 24" fill="currentColor" style="width:13px;height:13px"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            OYNAT
-          </button>
-          <button class="btn btn-ghost" onclick="document.getElementById('movieFileIn').click()">
+          <span class="movie-topbar-title">🎬 FİLM OYNATICI</span>
+          <div class="spacer"></div>
+          <button class="btn btn-acc" onclick="document.getElementById('movieFileIn').click()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
             DOSYA AÇ
           </button>
@@ -1738,13 +1731,12 @@ body::after {
           <div class="movie-empty" id="movieEmpty">
             <div class="me-icon">🎬</div>
             <h2>FİLM OYNAT</h2>
-            <p>MKV, MP4, AVI, MOV ve daha fazla format desteklenir.<br>URL girin veya bilgisayarınızdan dosya açın.</p>
+            <p>MKV, MP4, AVI, MOV ve daha fazla format desteklenir.<br>Bilgisayarınızdan dosya seçin.</p>
             <div class="me-btns">
               <button class="btn btn-acc" onclick="document.getElementById('movieFileIn').click()">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                 DOSYA AÇ
               </button>
-              <button class="btn btn-ghost" onclick="document.getElementById('movieUrlIn').focus()">🔗 URL Gir</button>
             </div>
           </div>
 
@@ -2117,7 +2109,6 @@ body::after {
 ───────────────────────────────────────────── */
 const PL_URL   = 'https://m3u.ch/pl/62364f9aa2563d342bc29e54eac05afd_ea93b84f79de895741b3dcf7b96ae7f2.m3u';
 const ADMIN_PW = 'Vz!G0#2024$Adm';
-const PROXY    = 'https://corsproxy.io/?';
 const KEYS = {
   users   : 'vg_users',
   session : 'vg_session',
@@ -2288,25 +2279,17 @@ function parseM3U(txt){
 ───────────────────────────────────────────── */
 async function loadPlaylist(){
   try{
-    let txt='';
-    try{
-      const r=await fetch(PL_URL);
-      if(!r.ok) throw 0;
-      txt=await r.text();
-    }catch{
-      const r=await fetch(PROXY+encodeURIComponent(PL_URL));
-      txt=await r.text();
-    }
-    allChannels=parseM3U(txt);
+    const r = await fetch(PL_URL);
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const txt = await r.text();
+    allChannels = parseM3U(txt);
     toast('✅ '+allChannels.length+' kanal yüklendi','📡');
   }catch{
     allChannels=[];
     toast('⚠️ Playlist yüklenemedi','⚠️');
   }
   document.getElementById('sbLoading').style.display='none';
-  renderChannels();
-  renderGuide();
-  updateAdminStats();
+  renderChannels(); renderGuide(); updateAdminStats();
 }
 
 /* ─────────────────────────────────────────────
@@ -2715,8 +2698,7 @@ async function loadM3uFromUrl(){
   closeModal('m3uModal'); toast('⏳ Yükleniyor…','📡');
   try{
     let txt='';
-    try{ const r=await fetch(url); txt=await r.text(); }
-    catch{ const r=await fetch(PROXY+encodeURIComponent(url)); txt=await r.text(); }
+    const r=await fetch(url); txt=await r.text();
     const p=parseM3U(txt);
     if(!p.length){ toast('Kanal bulunamadı','⚠️'); return; }
     extraChannels=[...extraChannels,...p];
