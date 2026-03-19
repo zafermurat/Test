@@ -103,6 +103,9 @@ input,select{font-family:var(--fb);}
 /* HAMBURGER */
 .hdr-ham{display:none;flex-direction:column;justify-content:center;gap:5px;background:none;border:none;padding:6px;border-radius:var(--r);margin-left:6px;}
 .hdr-ham span{display:block;width:20px;height:2px;background:var(--txt2);border-radius:2px;transition:all .3s;}
+.admin-login-btn{display:flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;border:1px solid var(--bd);background:var(--s2);color:var(--txt2);font-family:var(--fd);font-size:12px;font-weight:700;letter-spacing:.5px;transition:all .2s;cursor:pointer;white-space:nowrap;}
+.admin-login-btn:hover{border-color:var(--acc3);color:var(--acc3);}
+.admin-login-btn.on{border-color:var(--acc3);background:rgba(255,184,0,.1);color:var(--acc3);}
 .hdr-ham.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
 .hdr-ham.open span:nth-child(2){opacity:0;}
 .hdr-ham.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
@@ -353,6 +356,45 @@ input,select{font-family:var(--fb);}
 .kb-key{background:var(--s3);border:1px solid var(--bd);border-radius:5px;padding:2px 9px;font-family:var(--fd);font-size:12px;font-weight:700;color:var(--acc);}
 .kb-desc{color:var(--txt2);}
 
+/* ── LEADERBOARD AD ── */
+.ad-leader{
+  flex-shrink:0; background:var(--s1); border-top:1px solid var(--bd);
+  display:none; align-items:center; justify-content:center;
+  min-height:64px; position:relative; overflow:hidden; cursor:pointer;
+}
+.ad-leader.on{display:flex;}
+.ad-leader-inner{display:flex;align-items:center;justify-content:center;width:100%;height:100%;padding:4px 12px;}
+.ad-leader-inner img{max-height:60px;max-width:100%;object-fit:contain;border-radius:6px;}
+.ad-leader-placeholder{display:flex;align-items:center;gap:10px;color:var(--txt3);font-size:13px;}
+.ad-tag{position:absolute;top:4px;right:8px;background:rgba(255,184,0,.15);border:1px solid rgba(255,184,0,.25);border-radius:4px;font-size:9px;font-weight:700;letter-spacing:.5px;color:var(--acc3);padding:1px 5px;pointer-events:none;}
+
+/* ── REKLAM SEKMESİ ── */
+.ad-tabs{display:flex;gap:4px;margin-bottom:16px;border-bottom:1px solid var(--bd);padding-bottom:12px;}
+.ad-tab-btn{padding:7px 16px;border-radius:var(--r);border:1px solid var(--bd);background:transparent;color:var(--txt2);font-family:var(--fd);font-size:14px;font-weight:700;letter-spacing:.3px;cursor:pointer;transition:all .2s;}
+.ad-tab-btn:hover{color:var(--txt);border-color:var(--bd2);}
+.ad-tab-btn.on{background:var(--s3);color:var(--acc3);border-color:var(--acc3);}
+.ad-tab-content{display:none;}
+.ad-tab-content.on{display:block;}
+.ad-zone-card{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r2);padding:18px;margin-bottom:14px;}
+.ad-zone-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.ad-zone-title{font-family:var(--fd);font-size:16px;font-weight:700;color:var(--acc3);letter-spacing:.5px;}
+.ad-toggle-wrap{display:flex;align-items:center;gap:8px;}
+.ad-status-dot{width:8px;height:8px;border-radius:50%;background:var(--txt3);}
+.ad-status-dot.on{background:var(--acc4);box-shadow:0 0 6px var(--acc4);}
+.ad-status-lbl{font-size:12px;color:var(--txt3);}
+.ad-status-dot.on+.ad-status-lbl{color:var(--acc4);}
+.ad-toggle-btn{padding:4px 12px;border-radius:20px;border:1px solid var(--bd);background:transparent;color:var(--txt2);font-family:var(--fd);font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;}
+.ad-toggle-btn:hover{border-color:var(--acc3);color:var(--acc3);}
+.ad-toggle-btn.on{background:rgba(255,184,0,.12);border-color:var(--acc3);color:var(--acc3);}
+.ad-preview-box{background:var(--s2);border:1px dashed var(--bd);border-radius:var(--r);padding:10px;margin-top:10px;min-height:48px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:12px;color:var(--txt3);}
+.ad-preview-box img{max-height:48px;max-width:100%;object-fit:contain;border-radius:4px;}
+.ad-summary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;}
+.ad-sum-card{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r2);padding:14px;display:flex;align-items:center;gap:10px;}
+.ad-sum-icon{font-size:22px;}
+.ad-sum-name{font-size:13px;font-weight:600;color:var(--txt);}
+.ad-sum-status{font-size:11px;color:var(--txt3);margin-top:2px;}
+.ad-sum-status.on{color:var(--acc4);}
+
 /* MODAL */
 .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:300;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;backdrop-filter:blur(10px);}
 .modal-bg.on{opacity:1;pointer-events:all;}
@@ -464,6 +506,10 @@ input,select{font-family:var(--fb);}
     <div class="hdr-right">
       <div class="hdr-live"><div class="dot"></div>CANLI</div>
       <span class="hdr-clock" id="hdrClock">--:--:--</span>
+      <button class="admin-login-btn" id="adminLoginBtn" onclick="openAdminLogin()" title="Admin Girişi">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/><path d="M16 11l1.5 1.5L20 10"/></svg>
+        <span id="adminLoginTxt">ADMİN GİRİŞ</span>
+      </button>
       <div class="hdr-user" onclick="doLogout()">
         <div class="hdr-av" id="hdrAv">?</div>
         <span class="hdr-uname" id="hdrName">Misafir</span>
@@ -484,6 +530,10 @@ input,select{font-family:var(--fb);}
       <button class="mob-item" id="mobAdminBtn" style="display:none" onclick="mobGo('admin')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>ADMİN PANELİ</button>
       <button class="mob-item" onclick="mobGo('about')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>HAKKINDA</button>
       <div class="mob-div"></div>
+      <button class="mob-item" onclick="openAdminLogin();closeDrawer()" style="color:var(--acc3)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        ADMİN GİRİŞ
+      </button>
       <button class="mob-item" onclick="doLogout();closeDrawer()" style="color:var(--acc2)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:17px;height:17px"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>ÇIKIŞ YAP</button>
       <div style="padding:8px 12px;font-size:11px;color:var(--txt3);margin-top:auto" id="mobUserInfo"></div>
     </div>
@@ -567,6 +617,15 @@ input,select{font-family:var(--fb);}
           <span class="epg-lbl">📅 YAYIN AKIŞI</span>
           <div id="epgSlots" style="display:flex;gap:6px"></div>
         </div>
+        <!-- LEADERBOARD REKLAM -->
+        <div class="ad-leader" id="adLeader" onclick="adLeaderClick()">
+          <span class="ad-tag">REKLAM</span>
+          <div class="ad-leader-inner" id="adLeaderInner">
+            <div class="ad-leader-placeholder">
+              <span>📢</span><span>728 × 60 — Leaderboard Banner (Admin panelinden yönet)</span>
+            </div>
+          </div>
+        </div>
         <div class="admin-bar" id="adminBar">
           <input type="text" id="adminUrl" placeholder="Admin — URL gir (m3u8, .ts, http…)" onkeydown="if(event.key==='Enter')adminPlay()">
           <button class="btn btn-acc" onclick="adminPlay()"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>OYNAT</button>
@@ -599,7 +658,7 @@ input,select{font-family:var(--fb);}
           <div class="movie-ov" id="movieOv">
             <div class="movie-ov-inner">
               <div class="movie-title" id="movieTitle">—</div>
-              <div class="movie-seek" id="movieSeek" onmousedown="seekStart(event)" onmousemove="seekHover(event)" onmouseleave="document.getElementById('seekTip').style.display='none'">
+              <div class="movie-seek" id="movieSeek" onmousedown="seekStart(event)" onmousemove="seekHover(event)" onmouseleave="hideTip()" >
                 <div class="movie-seek-buf" id="seekBuf"></div>
                 <div class="movie-seek-fill" id="seekFill"></div>
                 <div class="movie-seek-thumb" id="seekThumb"></div>
@@ -653,33 +712,68 @@ input,select{font-family:var(--fb);}
       <div id="pageAdmin" class="sub-page">
         <div class="page-wrap">
           <div class="page-title">⚙️ ADMİN <span>PANELİ</span></div>
-          <div class="stat-grid">
-            <div class="stat-card"><div class="stat-ico">📺</div><div class="stat-val" id="stTotal">0</div><div class="stat-lbl">Toplam Kanal</div></div>
-            <div class="stat-card"><div class="stat-ico">⭐</div><div class="stat-val gold" id="stFavs">0</div><div class="stat-lbl">Favori</div></div>
-            <div class="stat-card"><div class="stat-ico">👥</div><div class="stat-val green" id="stUsers">0</div><div class="stat-lbl">Kullanıcı</div></div>
-            <div class="stat-card"><div class="stat-ico">🎬</div><div class="stat-val red" id="stMovies">0</div><div class="stat-lbl">Film Kütüphanesi</div></div>
+          <!-- Admin Alt Sekmeleri -->
+          <div class="ad-tabs">
+            <button class="ad-tab-btn on" onclick="adminTab('channels')">📺 Kanallar</button>
+            <button class="ad-tab-btn" onclick="adminTab('ads')">📢 Reklamlar</button>
           </div>
-          <div class="sec-title">Yeni Kanal Ekle</div>
-          <div class="admin-add-form">
-            <div class="form-row">
-              <div class="fg"><label>Kanal Adı</label><input type="text" id="aN" placeholder="TRT 1…"></div>
-              <div class="fg"><label>Grup</label><input type="text" id="aG" placeholder="Haber, Spor…"></div>
+          <!-- KANALLAR SEKMESİ -->
+          <div id="adminTabChannels" class="ad-tab-content on">
+            <div class="stat-grid">
+              <div class="stat-card"><div class="stat-ico">📺</div><div class="stat-val" id="stTotal">0</div><div class="stat-lbl">Toplam Kanal</div></div>
+              <div class="stat-card"><div class="stat-ico">⭐</div><div class="stat-val gold" id="stFavs">0</div><div class="stat-lbl">Favori</div></div>
+              <div class="stat-card"><div class="stat-ico">👥</div><div class="stat-val green" id="stUsers">0</div><div class="stat-lbl">Kullanıcı</div></div>
+              <div class="stat-card"><div class="stat-ico">🎬</div><div class="stat-val red" id="stMovies">0</div><div class="stat-lbl">Film Kütüphanesi</div></div>
             </div>
-            <div class="form-row">
-              <div class="fg"><label>Stream URL</label><input type="text" id="aU" placeholder="https://…"></div>
-              <div class="fg"><label>Logo URL (opsiyonel)</label><input type="text" id="aL" placeholder="https://…logo.png"></div>
+            <div class="sec-title">Yeni Kanal Ekle</div>
+            <div class="admin-add-form">
+              <div class="form-row">
+                <div class="fg"><label>Kanal Adı</label><input type="text" id="aN" placeholder="TRT 1…"></div>
+                <div class="fg"><label>Grup</label><input type="text" id="aG" placeholder="Haber, Spor…"></div>
+              </div>
+              <div class="form-row">
+                <div class="fg"><label>Stream URL</label><input type="text" id="aU" placeholder="https://…"></div>
+                <div class="fg"><label>Logo URL (opsiyonel)</label><input type="text" id="aL" placeholder="https://…logo.png"></div>
+              </div>
+              <div style="display:flex;justify-content:flex-end;margin-top:6px">
+                <button class="btn btn-acc" onclick="adminAddCh()">+ KANAL EKLE</button>
+              </div>
             </div>
-            <div style="display:flex;justify-content:flex-end;margin-top:6px">
-              <button class="btn btn-acc" onclick="adminAddCh()">+ KANAL EKLE</button>
+            <div class="sec-title">Kanal Listesi (<span id="stTableCount">0</span>)</div>
+            <div class="ch-table">
+              <div class="ch-table-head"><div>#</div><div>Kanal</div><div>URL</div><div>Grup</div><div>İşlem</div></div>
+              <div id="adminChList"></div>
+            </div>
+            <div id="adminMoreWrap" style="text-align:center;padding:12px;display:none">
+              <button class="btn btn-g" onclick="adminShowMore()">Daha fazla göster</button>
             </div>
           </div>
-          <div class="sec-title">Kanal Listesi (<span id="stTableCount">0</span>)</div>
-          <div class="ch-table">
-            <div class="ch-table-head"><div>#</div><div>Kanal</div><div>URL</div><div>Grup</div><div>İşlem</div></div>
-            <div id="adminChList"></div>
-          </div>
-          <div id="adminMoreWrap" style="text-align:center;padding:12px;display:none">
-            <button class="btn btn-g" onclick="adminShowMore()">Daha fazla göster</button>
+
+          <!-- REKLAMLAR SEKMESİ -->
+          <div id="adminTabAds" class="ad-tab-content">
+            <div class="ad-zone-card">
+              <div class="ad-zone-header">
+                <span class="ad-zone-title">📏 Leaderboard Banner</span>
+                <div class="ad-toggle-wrap">
+                  <div class="ad-status-dot" id="adDot"></div>
+                  <span class="ad-status-lbl" id="adLbl">Kapalı</span>
+                  <button class="ad-toggle-btn" id="adToggleBtn" onclick="toggleAd()">Aç</button>
+                </div>
+              </div>
+              <p style="font-size:12px;color:var(--txt3);margin-bottom:12px">Player'ın hemen altında tam genişlik banner. Boyut: 728×60px</p>
+              <div class="fg"><label>Görsel URL (JPG / PNG / GIF)</label>
+                <input type="text" id="adImgUrl" placeholder="https://…reklam.jpg" oninput="adPreview()"></div>
+              <div class="fg"><label>Tıklama URL'si</label>
+                <input type="text" id="adClickUrl" placeholder="https://reklamveren.com"></div>
+              <div class="ad-preview-box" id="adPreviewBox">Görsel URL girilmedi</div>
+              <div style="display:flex;justify-content:flex-end;margin-top:10px;gap:8px">
+                <button class="btn btn-g" onclick="clearAd()">Temizle</button>
+                <button class="btn btn-acc" onclick="saveAd()">💾 KAYDET</button>
+              </div>
+            </div>
+
+            <div class="sec-title">Aktif Reklamlar</div>
+            <div class="ad-summary-grid" id="adSummary"></div>
           </div>
         </div>
       </div>
@@ -719,6 +813,22 @@ input,select{font-family:var(--fb);}
 </div><!-- /sApp -->
 
 <!-- MODALS -->
+<!-- ADMIN LOGIN MODAL -->
+<div class="modal-bg" id="adminLoginModal">
+  <div class="modal" style="max-width:360px">
+    <h3>🔐 ADMİN GİRİŞİ</h3>
+    <div class="fg">
+      <label>Admin Şifresi</label>
+      <input type="password" id="adminPwInput" placeholder="••••••••" onkeydown="if(event.key==='Enter')doAdminLogin()">
+    </div>
+    <p id="adminPwErr" style="font-size:12px;color:var(--acc2);margin-top:6px;display:none">❌ Yanlış şifre!</p>
+    <div class="modal-acts">
+      <button class="btn btn-g" onclick="closeModal('adminLoginModal')">İptal</button>
+      <button class="btn btn-acc" onclick="doAdminLogin()">GİRİŞ YAP</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-bg" id="addChModal">
   <div class="modal">
     <h3>➕ KANAL EKLE</h3>
@@ -750,7 +860,7 @@ input,select{font-family:var(--fb);}
 // ════════════════════════════════════════
 // CONFIG
 // ════════════════════════════════════════
-const PL_URL   = 'https://m3u.ch/pl/62364f9aa2563d342bc29e54eac05afd_ea93b84f79de895741b3dcf7b96ae7f2.m3u';
+const PL_URL   = 'https://m3u.ch/pl/24df844c183d247b0fffcb8cc9955064_3e940df4f742893182c3a3753716a8b5.m3u';
 const ADMIN_PW = 'Vz!G0#2024$Adm';
 
 // ════════════════════════════════════════
@@ -831,6 +941,8 @@ function loginOk(user){
     document.getElementById('adminNavBtn').style.display='flex';
     document.getElementById('mobAdminBtn').style.display='flex';
     document.getElementById('adminBar').style.display='flex';
+    const alb=document.getElementById('adminLoginBtn');
+    if(alb){ alb.classList.add('on'); document.getElementById('adminLoginTxt').textContent='ADMİN ✓'; }
   }
   showScreen('sApp');
   loadPlaylist();
@@ -1326,6 +1438,7 @@ function seekTo(e){
   const p=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width));
   v.currentTime=p*v.duration;
 }
+function hideTip(){ var t=document.getElementById('seekTip'); if(t) t.style.display='none'; }
 function seekHover(e){
   const v=document.getElementById('movieVid'); if(!v||!v.duration) return;
   const el=document.getElementById('movieSeek'), tip=document.getElementById('seekTip');
@@ -1466,13 +1579,179 @@ function toast(msg,ico='ℹ️'){
 }
 
 // ════════════════════════════════════════
+// AD SYSTEM
+// ════════════════════════════════════════
+const AD_KEY = 'vg_ads';
+function getAdCfg(){ return JSON.parse(localStorage.getItem(AD_KEY)||'{}'); }
+function saveAdCfg(c){ localStorage.setItem(AD_KEY,JSON.stringify(c)); }
+
+function adminTab(t){
+  document.querySelectorAll('.ad-tab-btn').forEach((b,i)=>b.classList.toggle('on',(t==='channels'&&i===0)||(t==='ads'&&i===1)));
+  document.getElementById('adminTabChannels').classList.toggle('on',t==='channels');
+  document.getElementById('adminTabAds').classList.toggle('on',t==='ads');
+  if(t==='ads') renderAdPage();
+}
+
+function renderAdPage(){
+  const cfg=getAdCfg();
+  const imgEl=document.getElementById('adImgUrl');
+  const urlEl=document.getElementById('adClickUrl');
+  if(imgEl&&cfg.img) imgEl.value=cfg.img;
+  if(urlEl&&cfg.url) urlEl.value=cfg.url;
+  updateAdUI(!!cfg.on);
+  adPreview();
+  renderAdSummary();
+}
+
+function updateAdUI(isOn){
+  const dot=document.getElementById('adDot');
+  const lbl=document.getElementById('adLbl');
+  const btn=document.getElementById('adToggleBtn');
+  if(!dot) return;
+  dot.classList.toggle('on',isOn);
+  lbl.textContent=isOn?'Aktif':'Kapalı';
+  lbl.style.color=isOn?'var(--acc4)':'var(--txt3)';
+  btn.textContent=isOn?'Kapat':'Aç';
+  btn.classList.toggle('on',isOn);
+}
+
+function toggleAd(){
+  const cfg=getAdCfg();
+  cfg.on=!cfg.on;
+  saveAdCfg(cfg);
+  updateAdUI(cfg.on);
+  applyAd();
+  renderAdSummary();
+  toast(cfg.on?'✅ Reklam açıldı':'🔴 Reklam kapatıldı', cfg.on?'✅':'🔴');
+}
+
+function saveAd(){
+  const cfg=getAdCfg();
+  cfg.img=(document.getElementById('adImgUrl').value||'').trim();
+  cfg.url=(document.getElementById('adClickUrl').value||'').trim();
+  saveAdCfg(cfg);
+  applyAd();
+  renderAdSummary();
+  toast('💾 Reklam kaydedildi','💾');
+}
+
+function clearAd(){
+  saveAdCfg({});
+  const imgEl=document.getElementById('adImgUrl');
+  const urlEl=document.getElementById('adClickUrl');
+  if(imgEl) imgEl.value='';
+  if(urlEl) urlEl.value='';
+  document.getElementById('adPreviewBox').innerHTML='Görsel URL girilmedi';
+  updateAdUI(false);
+  applyAd();
+  renderAdSummary();
+  toast('Reklam temizlendi','🗑️');
+}
+
+function adPreview(){
+  const url=(document.getElementById('adImgUrl')||{}).value||'';
+  const box=document.getElementById('adPreviewBox'); if(!box) return;
+  if(url.trim()){
+    const img=document.createElement('img');
+    img.src=url.trim();
+    img.style.cssText='max-height:48px;max-width:100%;object-fit:contain;border-radius:4px';
+    img.onerror=function(){ this.parentElement.textContent='Yuklenemedi'; };
+    box.innerHTML=''; box.appendChild(img);
+  } else {
+    box.innerHTML='Görsel URL girilmedi';
+  }
+}
+
+function applyAd(){
+  const cfg=getAdCfg();
+  const el=document.getElementById('adLeader');
+  const inner=document.getElementById('adLeaderInner');
+  if(!el||!inner) return;
+  inner.innerHTML='';
+  if(cfg.on&&cfg.img){
+    const img=document.createElement('img');
+    img.src=cfg.img;
+    img.alt='Reklam';
+    img.style.cssText='max-height:60px;max-width:100%;object-fit:contain;border-radius:6px';
+    img.onerror=function(){ this.style.display='none'; };
+    inner.appendChild(img);
+    el.classList.add('on');
+    el.onclick=function(){ if(cfg.url) window.open(cfg.url,'_blank'); };
+  } else {
+    const ph=document.createElement('div');
+    ph.className='ad-leader-placeholder';
+    ph.innerHTML='<span>📢</span><span>728x60 — Leaderboard Banner</span>';
+    inner.appendChild(ph);
+    el.classList.remove('on');
+    el.onclick=function(){ if(isAdmin){ goPage('admin'); setTimeout(function(){adminTab('ads');},100); } };
+  }
+}
+
+function adLeaderClick(){
+  const cfg=getAdCfg();
+  if(cfg.on&&cfg.url) window.open(cfg.url,'_blank');
+  else if(isAdmin){ goPage('admin'); setTimeout(()=>adminTab('ads'),100); }
+}
+
+function renderAdSummary(){
+  const cfg=getAdCfg();
+  const el=document.getElementById('adSummary'); if(!el) return;
+  el.innerHTML='<div class="ad-sum-card">'
+    +'<span class="ad-sum-icon">📏</span>'
+    +'<div><div class="ad-sum-name">Leaderboard Banner</div>'
+    +'<div class="ad-sum-status'+(cfg.on?' on':'')+'">'+( cfg.on?'● Aktif':'○ Kapalı')+'</div></div>'
+    +'<div style="margin-left:auto"><button class="ad-toggle-btn'+(cfg.on?' on':'')+'" onclick="toggleAd()">'+(cfg.on?'Kapat':'Aç')+'</button></div>'
+    +'</div>';
+}
+
+// Sayfa açılışında reklamı uygula
+document.addEventListener('DOMContentLoaded',()=>{ setTimeout(applyAd,500); });
+
+// ════════════════════════════════════════
 // KEYBOARD
 // ════════════════════════════════════════
+// ════════════════════════════════════════
+// ADMIN LOGIN (ayrı buton)
+// ════════════════════════════════════════
+function openAdminLogin(){
+  if(isAdmin){
+    // Zaten admin — panele git
+    goPage('admin'); return;
+  }
+  document.getElementById('adminPwErr').style.display='none';
+  document.getElementById('adminPwInput').value='';
+  openModal('adminLoginModal');
+  setTimeout(()=>document.getElementById('adminPwInput').focus(),200);
+}
+function doAdminLogin(){
+  const pw=document.getElementById('adminPwInput').value;
+  if(pw===ADMIN_PW){
+    // Mevcut kullanıcıyı admin yap
+    isAdmin=true;
+    if(curUser) curUser.role='admin';
+    document.getElementById('adminNavBtn').style.display='flex';
+    document.getElementById('mobAdminBtn').style.display='flex';
+    document.getElementById('adminBar').style.display='flex';
+    document.getElementById('adminLoginBtn').classList.add('on');
+    document.getElementById('adminLoginTxt').textContent='ADMİN ✓';
+    closeModal('adminLoginModal');
+    goPage('admin');
+    toast('✅ Admin girişi başarılı!','🔐');
+  } else {
+    document.getElementById('adminPwErr').style.display='block';
+  }
+}
+
+// ── KORUMA ──
+// F12 engelle
 document.addEventListener('keydown',e=>{
-  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'||e.target.tagName==='SELECT') return;
   if(e.key==='F12'){ e.preventDefault(); return; }
+  // Ctrl+U, Ctrl+S
   if((e.ctrlKey||e.metaKey)&&['u','U','s','S'].includes(e.key)){ e.preventDefault(); return; }
+  // Ctrl+Shift+I/J/C (DevTools)
   if((e.ctrlKey||e.metaKey)&&e.shiftKey&&['i','I','j','J','c','C'].includes(e.key)){ e.preventDefault(); return; }
+
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'||e.target.tagName==='SELECT') return;
   switch(e.code){
     case 'Space': e.preventDefault(); togglePlay(); break;
     case 'KeyF': doFS(); break;
@@ -1491,7 +1770,33 @@ function nextCh(dir){
   let n=idx+dir; if(n<0) n=all.length-1; if(n>=all.length) n=0;
   goChannel(all[n]);
 }
-document.addEventListener('contextmenu',e=>e.preventDefault());
+
+// Sağ tık engelle
+document.addEventListener('contextmenu', e => e.preventDefault());
+
+// Metin seçimi engelle (input/textarea hariç)
+document.addEventListener('selectstart', e => {
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA') return;
+  e.preventDefault();
+});
+
+// Kopyalamayı engelle
+document.addEventListener('copy', e => {
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA') return;
+  e.preventDefault();
+});
+
+// Sürükle-bırak engelle
+document.addEventListener('dragstart', e => e.preventDefault());
+
+// Konsol uyarısı
+setTimeout(function warn(){
+  try{
+    console.warn('%c⛔ DURUN!', 'color:red;font-size:40px;font-weight:bold');
+    console.warn('%cBu alan geliştiriciler içindir. Kodu kopyalamak yasaktır.', 'color:orange;font-size:16px');
+  }catch{}
+  setTimeout(warn, 2000);
+}, 1000);
 </script>
 </body>
 </html>
