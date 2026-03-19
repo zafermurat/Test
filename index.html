@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-<title>Viziyon Go</title>
+<title>Vizion Box</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.7/hls.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mpegts.js/1.7.3/mpegts.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -356,6 +356,62 @@ input,select{font-family:var(--fb);}
 .kb-row:hover{background:var(--s2);}
 .kb-key{background:var(--s3);border:1px solid var(--bd);border-radius:5px;padding:2px 9px;font-family:var(--fd);font-size:12px;font-weight:700;color:var(--acc);}
 .kb-desc{color:var(--txt2);}
+/* ── GELİŞTİRİCİ KARTI ── */
+.dev-card{
+  background:var(--s1);border:1px solid var(--bd);border-radius:var(--r2);
+  padding:20px;margin-bottom:16px;
+  display:flex;align-items:flex-start;gap:18px;
+  position:relative;overflow:hidden;flex-wrap:wrap;
+}
+.dev-card::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 80% at 0% 50%,rgba(0,212,255,.06),transparent);
+  pointer-events:none;
+}
+.dev-avatar{
+  width:70px;height:70px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--acc),var(--acc3));
+  display:flex;align-items:center;justify-content:center;
+  font-size:32px;
+  box-shadow:0 0 30px var(--glow);
+  animation:ap 2.5s ease-in-out infinite;
+  position:relative;z-index:1;
+}
+.dev-info{flex:1;position:relative;z-index:1;}
+.dev-name{
+  font-family:var(--fd);font-size:22px;font-weight:800;
+  letter-spacing:1.5px;
+  background:linear-gradient(135deg,#fff,var(--acc));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:4px;
+}
+.dev-title{font-size:13px;color:var(--acc3);font-weight:600;letter-spacing:.5px;margin-bottom:8px;}
+.dev-desc{font-size:13px;color:var(--txt2);line-height:1.7;}
+.dev-links{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;}
+.dev-link{
+  display:flex;align-items:center;gap:6px;
+  padding:7px 14px;border-radius:20px;
+  border:1px solid var(--bd);background:var(--s2);
+  color:var(--txt2);font-size:13px;font-weight:500;
+  text-decoration:none;transition:all .2s;cursor:pointer;
+}
+.dev-link:hover{border-color:var(--acc);color:var(--acc);background:rgba(0,212,255,.07);}
+.dev-link svg{width:15px;height:15px;flex-shrink:0;}
+.dev-badge{
+  position:absolute;top:16px;right:16px;
+  background:rgba(255,184,0,.12);border:1px solid rgba(255,184,0,.3);
+  border-radius:20px;padding:4px 12px;
+  font-family:var(--fd);font-size:12px;font-weight:700;
+  color:var(--acc3);letter-spacing:1px;
+}
+.tech-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:16px;}
+.tech-item{
+  background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);
+  padding:10px 12px;display:flex;align-items:center;gap:8px;
+  font-size:12px;font-weight:500;color:var(--txt2);transition:all .2s;
+}
+.tech-item:hover{border-color:var(--acc);color:var(--txt);}
+.tech-icon{font-size:18px;}
 /* ── SON İZLENENLER ── */
 .recent-bar{background:var(--s2);border-bottom:1px solid var(--bd);padding:6px 12px;display:flex;align-items:center;gap:8px;overflow-x:auto;flex-shrink:0;}
 .recent-bar::-webkit-scrollbar{height:0;}
@@ -511,7 +567,7 @@ input,select{font-family:var(--fb);}
   <div class="auth-box">
     <div class="auth-logo">
       <div class="auth-logo-mark">📺</div>
-      <span class="auth-logo-txt">VİZİYON GO</span>
+      <span class="auth-logo-txt">VİZİON BOX</span>
     </div>
     <div class="auth-tabs">
       <button class="auth-tab on" onclick="authTab('login')">GİRİŞ YAP</button>
@@ -542,7 +598,7 @@ input,select{font-family:var(--fb);}
   <header class="hdr">
     <div class="hdr-logo">
       <div class="hdr-logo-mark">📺</div>
-      <span class="hdr-logo-txt">VİZİYON GO</span>
+      <span class="hdr-logo-txt">VİZİON BOX</span>
     </div>
     <nav class="hdr-nav">
       <button class="nav-tab on" onclick="goPage('tv')">
@@ -935,6 +991,19 @@ input,select{font-family:var(--fb);}
 
             <div class="cache-card">
               <div class="cache-info">
+                <h4>🔗 HTTP Proxy Ayarı</h4>
+                <p>http:// IPTV linklerini https üzerinden oynatmak için domain gir</p>
+                <p style="font-size:11px;color:var(--acc3);margin-top:4px">Örnek: https://senindomain.com/stream/</p>
+              </div>
+              <div class="cache-actions" style="flex-direction:column;align-items:flex-end;gap:6px">
+                <input type="text" id="proxyInput" placeholder="https://domain.com/stream/" value=""
+                  style="background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);padding:7px 10px;color:var(--txt);font-size:12px;outline:none;width:260px">
+                <button class="btn btn-acc" onclick="saveProxy()" style="font-size:12px;padding:6px 14px">Kaydet</button>
+              </div>
+            </div>
+
+            <div class="cache-card">
+              <div class="cache-info">
                 <h4>🗑️ Tüm Verileri Temizle</h4>
                 <p>Önbellek, favoriler, izleme geçmişi silinir</p>
               </div>
@@ -952,7 +1021,7 @@ input,select{font-family:var(--fb);}
         <div class="page-wrap">
           <div class="about-hero">
             <div class="about-hero-logo">📺</div>
-            <h1>VİZİYON GO</h1>
+            <h1>VİZİON BOX</h1>
             <p>Türkiye'nin en gelişmiş IPTV platformu. Tüm kanalları tek çatı altında izleyin.</p>
             <span class="about-ver">v3.0 PROFESSIONAL</span>
           </div>
@@ -974,6 +1043,33 @@ input,select{font-family:var(--fb);}
             <div class="kb-row"><span class="kb-desc">Sonraki / Önceki Kanal</span><span class="kb-key">N / B</span></div>
             <div class="kb-row"><span class="kb-desc">Picture-in-Picture</span><span class="kb-key">P</span></div>
           </div>
+
+          <!-- GELİŞTİRİCİ -->
+          <div class="sec-title" style="margin-bottom:12px;margin-top:8px">👨‍💻 GELİŞTİRİCİ</div>
+          <div class="dev-card">
+            <span class="dev-badge">💻 DEVELOPER</span>
+            <div class="dev-avatar">👑</div>
+            <div class="dev-info">
+              <div class="dev-name">ZAFERRİ</div>
+              <div class="dev-title">Vizion Box — Developer</div>
+              <div class="dev-desc">
+                Vizion Box'un geliştiricisi. Türkiye'nin en gelişmiş
+                IPTV platformunu sıfırdan tasarlayıp kodladı.
+                5000+ kanal desteği, mobil uyum, admin paneli ve daha fazlası.
+              </div>
+              <div class="dev-links">
+                <a class="dev-link" href="https://t.me/Zaferri" target="_blank">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.48 13.695l-2.95-.924c-.64-.203-.658-.64.136-.954l11.57-4.461c.537-.194 1.006.131.658.865z"/></svg>
+                  Telegram
+                </a>
+                <div class="dev-link" onclick="copyContact()">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  Kopyala
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -1031,6 +1127,10 @@ input,select{font-family:var(--fb);}
 // ════════════════════════════════════════
 const PL_URL   = 'https://m3u.ch/pl/24df844c183d247b0fffcb8cc9955064_3e940df4f742893182c3a3753716a8b5.m3u';
 const ADMIN_PW = 'Vz!G0#2024$Adm';
+// ── Domain adını buraya yaz, http:// linkleri otomatik proxy'den geçer ──
+// Örnek: 'https://senindomain.com/stream/'
+// Boş bırakırsan http linkler direkt denenecek
+const PROXY_BASE = '';
 
 // ════════════════════════════════════════
 // STORAGE
@@ -1419,7 +1519,17 @@ function startAutoNext(){
   },5000);
 }
 
+function proxyUrl(url){
+  // http:// linkleri proxy üzerinden geçir (Mixed Content çözümü)
+  const base = window._proxyBase || PROXY_BASE || ls('vg_proxy') || '';
+  if(base && url.startsWith('http://')){
+    return base + encodeURIComponent(url);
+  }
+  return url;
+}
+
 function playUrl(vd, url, isLive){
+  url = proxyUrl(url); // http → proxy
   const t=detectType(url);
   if(t==='native'){
     vd.src=url; vd.play().catch(()=>{}); return;
@@ -1693,6 +1803,14 @@ function renderMovieLib(){
   });
 }
 function clearLib(){ movieLib=[]; lss('vg_mlib','[]'); renderMovieLib(); }
+
+function copyContact(){
+  navigator.clipboard.writeText('Telegram: @Zaferri').then(function(){
+    toast('📋 İletişim kopyalandı!','📋');
+  }).catch(function(){
+    toast('t.me/Zaferri','📋');
+  });
+}
 
 // ════════════════════════════════════════
 // ADMIN
@@ -2087,6 +2205,23 @@ function setCacheInterval(val){
   if(lbl) lbl.textContent=cacheIntervalMin>=60?(cacheIntervalMin/60)+' saat':cacheIntervalMin+' dakika';
   toast('⏱️ Yenileme aralığı: '+val+' dk','⏱️');
 }
+function saveProxy(){
+  const val=(document.getElementById('proxyInput').value||'').trim();
+  lss('vg_proxy', val);
+  // PROXY_BASE güncelle (runtime)
+  window._proxyBase = val;
+  toast(val ? '✅ Proxy kaydedildi: '+val : '🔴 Proxy kaldırıldı', '🔗');
+}
+
+// Runtime proxy override
+function proxyUrlRuntime(url){
+  const base = window._proxyBase || PROXY_BASE || ls('vg_proxy') || '';
+  if(base && url.startsWith('http://')){
+    return base + encodeURIComponent(url);
+  }
+  return url;
+}
+
 async function clearAllData(){
   if(!confirm('Tüm veriler silinsin mi? Bu işlem geri alınamaz!')) return;
   ['vg_extra','vg_favs','vg_recent','vg_shist','vg_vol','vg_sort','vg_grp_alias','vg_cttl','vg_mlib'].forEach(k=>lsd(k));
