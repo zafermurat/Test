@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 <title>Viziyon Go</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.7/hls.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mpegts.js/1.7.3/mpegts.min.js"></script>
@@ -355,6 +356,68 @@ input,select{font-family:var(--fb);}
 .kb-row:hover{background:var(--s2);}
 .kb-key{background:var(--s3);border:1px solid var(--bd);border-radius:5px;padding:2px 9px;font-family:var(--fd);font-size:12px;font-weight:700;color:var(--acc);}
 .kb-desc{color:var(--txt2);}
+/* ── SON İZLENENLER ── */
+.recent-bar{background:var(--s2);border-bottom:1px solid var(--bd);padding:6px 12px;display:flex;align-items:center;gap:8px;overflow-x:auto;flex-shrink:0;}
+.recent-bar::-webkit-scrollbar{height:0;}
+.recent-lbl{font-family:var(--fd);font-size:12px;font-weight:700;color:var(--acc3);white-space:nowrap;flex-shrink:0;}
+.recent-chip{display:flex;align-items:center;gap:6px;background:var(--s3);border:1px solid var(--bd);border-radius:20px;padding:4px 10px;cursor:pointer;transition:all .2s;flex-shrink:0;}
+.recent-chip:hover{border-color:var(--acc);background:rgba(0,212,255,.07);}
+.recent-chip-name{font-size:12px;color:var(--txt2);white-space:nowrap;}
+
+/* ── ARAMA GEÇMİŞİ ── */
+.search-hist{position:absolute;top:100%;left:0;right:0;background:var(--s1);border:1px solid var(--bd);border-radius:var(--r2);padding:6px;z-index:50;display:none;box-shadow:0 8px 24px rgba(0,0,0,.5);}
+.search-hist.on{display:block;}
+.sh-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:var(--r);cursor:pointer;transition:background .15s;font-size:13px;color:var(--txt2);}
+.sh-item:hover{background:var(--s2);color:var(--txt);}
+.sh-clear{width:100%;padding:6px;border:none;background:transparent;color:var(--txt3);font-size:11px;cursor:pointer;transition:color .15s;text-align:center;}
+.sh-clear:hover{color:var(--acc2);}
+.sb-search-wrap{position:relative;}
+
+/* ── KANAL DURUM ROZETI ── */
+.ch-offline .ch-dot{background:var(--txt3);animation:none;}
+.ch-offline .ch-name{opacity:.5;}
+
+/* ── SES HAFIZASİ göstergesi ── */
+.vol-pct{font-size:10px;color:rgba(255,255,255,.5);font-variant-numeric:tabular-nums;min-width:28px;text-align:center;}
+
+/* ── AUTO NEXT göstergesi ── */
+.auto-next-bar{position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--acc3);transform:scaleX(0);transform-origin:left;transition:none;z-index:25;}
+
+/* ── SWIPE overlay ── */
+.swipe-hint{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,212,255,.15);border:1px solid var(--acc);border-radius:50px;padding:8px 18px;font-family:var(--fd);font-size:16px;font-weight:700;color:var(--acc);pointer-events:none;opacity:0;transition:opacity .2s;z-index:30;}
+.swipe-hint.left{left:12px;}
+.swipe-hint.right{right:12px;}
+.swipe-hint.vis{opacity:1;}
+
+/* ── SCREENSHOT flash ── */
+.screenshot-flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:40;transition:opacity .1s;}
+
+/* ── ADMIN KULLANICI YÖNETİMİ ── */
+.user-table{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r2);overflow:hidden;margin-bottom:12px;}
+.user-row{display:grid;grid-template-columns:1fr 80px 70px 60px;padding:9px 14px;border-bottom:1px solid var(--bd);align-items:center;font-size:13px;}
+.user-row:last-child{border-bottom:none;}
+.user-row:hover{background:var(--s2);}
+.user-head{background:var(--s2);font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--txt3);}
+.user-role{font-size:11px;padding:2px 8px;border-radius:20px;text-align:center;}
+.user-role.admin{background:rgba(255,184,0,.15);color:var(--acc3);border:1px solid rgba(255,184,0,.3);}
+.user-role.user{background:rgba(0,212,255,.1);color:var(--acc);border:1px solid rgba(0,212,255,.2);}
+.user-role.guest{background:var(--s3);color:var(--txt3);border:1px solid var(--bd);}
+.user-del{background:rgba(255,62,62,.1);border:1px solid rgba(255,62,62,.2);border-radius:5px;color:var(--acc2);font-size:11px;padding:3px 8px;transition:all .2s;}
+.user-del:hover{background:rgba(255,62,62,.3);}
+
+/* ── CACHE/PLAYLIST YÖNETİMİ ── */
+.cache-card{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r2);padding:16px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.cache-info h4{font-size:14px;font-weight:600;color:var(--txt);margin-bottom:3px;}
+.cache-info p{font-size:12px;color:var(--txt3);}
+.cache-actions{display:flex;gap:8px;flex-shrink:0;}
+
+/* ── GRUP DÜZENLEME ── */
+.grp-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--bd);}
+.grp-item:last-child{border-bottom:none;}
+.grp-name{flex:1;font-size:13px;color:var(--txt);}
+.grp-count{font-size:11px;color:var(--txt3);}
+.grp-rename-input{background:var(--s2);border:1px solid var(--acc);border-radius:var(--r);padding:4px 8px;color:var(--txt);font-size:13px;outline:none;width:140px;}
+
 
 /* ── LEADERBOARD AD ── */
 .ad-leader{
@@ -544,7 +607,10 @@ input,select{font-family:var(--fb);}
     <!-- SIDEBAR -->
     <aside class="sidebar" id="sidebar">
       <div class="sb-search">
-        <input type="text" id="sbSearch" placeholder="🔍 Kanal ara…" oninput="debRender()">
+        <div class="sb-search-wrap">
+          <input type="text" id="sbSearch" placeholder="🔍 Kanal ara…" oninput="debRender();showSearchHist()" onfocus="showSearchHist()" onblur="setTimeout(hideSearchHist,200)">
+          <div class="search-hist" id="searchHist"></div>
+        </div>
       </div>
       <div class="sb-cats" id="sbCats"></div>
       <div class="sb-info">
@@ -572,6 +638,10 @@ input,select{font-family:var(--fb);}
             <p>Sol listeden kanal seçerek izlemeye başlayın</p>
           </div>
           <div class="p-buf" id="pBuf"><div class="buf-ring"></div></div>
+          <div class="swipe-hint left" id="swipeLeft">⬅ Önceki</div>
+          <div class="swipe-hint right" id="swipeRight">Sonraki ➡</div>
+          <div class="screenshot-flash" id="screenshotFlash"></div>
+          <div class="auto-next-bar" id="autoNextBar"></div>
           <div class="p-ov" id="pOv">
             <div class="p-ov-top">
               <div class="p-ov-info">
@@ -582,6 +652,7 @@ input,select{font-family:var(--fb);}
                 </div>
               </div>
               <div class="p-top-btns">
+                <button class="pcb" onclick="takeScreenshot()" title="Ekran Görüntüsü"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></button>
                 <button class="pcb" onclick="restartStream()" title="Yenile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.06"/></svg></button>
                 <button class="pcb" onclick="doPiP()" title="PiP"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><rect x="14" y="10" width="8" height="7" rx="1"/></svg></button>
                 <button class="pcb" onclick="doFS()" title="Tam Ekran"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg></button>
@@ -596,6 +667,7 @@ input,select{font-family:var(--fb);}
                 <div class="vol-wrap">
                   <button onclick="toggleMute()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></button>
                   <input class="vol-slider" type="range" min="0" max="100" value="100" oninput="setVol(this.value)">
+                  <span class="vol-pct" id="volPct">100%</span>
                 </div>
                 <div class="p-qual-wrap">
                   <button class="p-qual-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/></svg><span id="qualLabel">OTO</span></button>
@@ -612,6 +684,11 @@ input,select{font-family:var(--fb);}
               </div>
             </div>
           </div>
+        </div>
+        <!-- SON İZLENENLER -->
+        <div class="recent-bar" id="recentBar" style="display:none">
+          <span class="recent-lbl">🕐 SON İZLENENLER</span>
+          <div id="recentChips" style="display:flex;gap:6px"></div>
         </div>
         <div class="epg-bar" id="epgBar">
           <span class="epg-lbl">📅 YAYIN AKIŞI</span>
@@ -639,8 +716,8 @@ input,select{font-family:var(--fb);}
         <div class="movie-bar">
           <span class="movie-bar-title">🎬 FİLM OYNATICI</span>
           <div style="flex:1"></div>
-          <button class="btn btn-acc" onclick="document.getElementById('movieFile').click()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>DOSYA AÇ
+          <button class="btn btn-acc" onclick="document.getElementById('movieFile').click()" title="Dosya Aç">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
           </button>
           <input type="file" id="movieFile" accept=".mkv,.mp4,.avi,.mov,.wmv,.flv,.webm,.m4v,.ts,.mpeg,.mpg,.3gp" style="display:none" onchange="movieOpenFile(event)">
         </div>
@@ -716,6 +793,9 @@ input,select{font-family:var(--fb);}
           <div class="ad-tabs">
             <button class="ad-tab-btn on" onclick="adminTab('channels')">📺 Kanallar</button>
             <button class="ad-tab-btn" onclick="adminTab('ads')">📢 Reklamlar</button>
+            <button class="ad-tab-btn" onclick="adminTab('users')">👥 Kullanıcılar</button>
+            <button class="ad-tab-btn" onclick="adminTab('groups')">🗂️ Gruplar</button>
+            <button class="ad-tab-btn" onclick="adminTab('cache')">⚙️ Sistem</button>
           </div>
           <!-- KANALLAR SEKMESİ -->
           <div id="adminTabChannels" class="ad-tab-content on">
@@ -775,6 +855,95 @@ input,select{font-family:var(--fb);}
             <div class="sec-title">Aktif Reklamlar</div>
             <div class="ad-summary-grid" id="adSummary"></div>
           </div>
+
+          <!-- KULLANICILAR SEKMESİ -->
+          <div id="adminTabUsers" class="ad-tab-content">
+            <div class="sec-title" style="margin-bottom:12px">Kullanıcı Ekle</div>
+            <div class="admin-add-form">
+              <div class="form-row">
+                <div class="fg"><label>Kullanıcı Adı</label><input type="text" id="uN" placeholder="kullanici_adi"></div>
+                <div class="fg"><label>Ad Soyad</label><input type="text" id="uNm" placeholder="Ad Soyad"></div>
+              </div>
+              <div class="form-row">
+                <div class="fg"><label>Şifre</label><input type="password" id="uP" placeholder="••••••••"></div>
+                <div class="fg"><label>Rol</label>
+                  <select id="uR" style="width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);padding:10px 12px;color:var(--txt);outline:none">
+                    <option value="user">Kullanıcı</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </div>
+              </div>
+              <div style="display:flex;justify-content:flex-end;margin-top:6px">
+                <button class="btn btn-acc" onclick="adminAddUser()">+ KULLANICI EKLE</button>
+              </div>
+            </div>
+            <div class="sec-title" style="margin-bottom:10px">Kayıtlı Kullanıcılar</div>
+            <div class="user-table">
+              <div class="user-row user-head"><div>Kullanıcı</div><div>Rol</div><div>Ad</div><div>Sil</div></div>
+              <div id="userList"></div>
+            </div>
+          </div>
+
+          <!-- GRUPLAR SEKMESİ -->
+          <div id="adminTabGroups" class="ad-tab-content">
+            <div class="sec-title" style="margin-bottom:12px">Grup / Kategori Düzenle</div>
+            <p style="font-size:12px;color:var(--txt3);margin-bottom:14px">Kanal gruplarını yeniden adlandırabilirsiniz. Değişiklik sadece bu oturumda geçerlidir.</p>
+            <div style="background:var(--s1);border:1px solid var(--bd);border-radius:var(--r2);overflow:hidden;" id="groupList"></div>
+          </div>
+
+          <!-- SİSTEM SEKMESİ -->
+          <div id="adminTabCache" class="ad-tab-content">
+            <div class="sec-title" style="margin-bottom:12px">Önbellek ve Sistem</div>
+
+            <div class="cache-card">
+              <div class="cache-info">
+                <h4>📡 Playlist Önbelleği</h4>
+                <p id="cacheInfo">Kontrol ediliyor…</p>
+              </div>
+              <div class="cache-actions">
+                <button class="btn btn-acc" onclick="forceRefreshPL()">🔄 Yenile</button>
+                <button class="btn btn-g" onclick="clearCache()">🗑️ Temizle</button>
+              </div>
+            </div>
+
+            <div class="cache-card">
+              <div class="cache-info">
+                <h4>⏱️ Playlist Yenileme Aralığı</h4>
+                <p>Şu an: <span id="cacheIntervalLbl">60 dakika</span></p>
+              </div>
+              <div class="cache-actions">
+                <select id="cacheInterval" onchange="setCacheInterval(this.value)" style="background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);padding:8px 12px;color:var(--txt);font-size:13px;outline:none">
+                  <option value="15">15 dakika</option>
+                  <option value="30">30 dakika</option>
+                  <option value="60" selected>60 dakika</option>
+                  <option value="120">2 saat</option>
+                  <option value="360">6 saat</option>
+                  <option value="720">12 saat</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="cache-card">
+              <div class="cache-info">
+                <h4>🔴 Kanal Durum Kontrolü</h4>
+                <p id="statusCheckInfo">İlk 20 kanalı kontrol eder</p>
+              </div>
+              <div class="cache-actions">
+                <button class="btn btn-acc" onclick="checkChannelStatus()">Kontrol Et</button>
+              </div>
+            </div>
+
+            <div class="cache-card">
+              <div class="cache-info">
+                <h4>🗑️ Tüm Verileri Temizle</h4>
+                <p>Önbellek, favoriler, izleme geçmişi silinir</p>
+              </div>
+              <div class="cache-actions">
+                <button class="btn btn-red" onclick="clearAllData()">Sıfırla</button>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -884,6 +1053,13 @@ let sortAsc=ls('vg_sort')!=='false';
 let curCat='Tümü';
 let hlsInst=null, tsInst=null, movieHls=null;
 let vsFiltered=[], vsItemH=60, vsRAF=null, debTimer=null;
+let recentCh=JSON.parse(ls('vg_recent')||'[]');    // son izlenenler
+let searchHist=JSON.parse(ls('vg_shist')||'[]');   // arama geçmişi
+let offlineChs=new Set();                           // offline kanallar
+let savedVol=parseFloat(ls('vg_vol')||'1');        // ses hafızası
+let cacheIntervalMin=parseInt(ls('vg_cttl')||'60');// cache süresi
+let groupAliases=JSON.parse(ls('vg_grp_alias')||'{}'); // grup aliasları
+let autoNextTimer=null;
 
 // ════════════════════════════════════════
 // CLOCK
@@ -1039,7 +1215,7 @@ async function idbSet(k,v){ try{const db=await idbOpen();return new Promise((res
 // LOAD PLAYLIST
 // ════════════════════════════════════════
 async function loadPlaylist(){
-  const CACHE_TTL=60*60*1000;
+  const CACHE_TTL=cacheIntervalMin*60*1000;
   try{
     const cached=await idbGet('pl'), ctime=await idbGet('plt');
     if(cached&&cached.length>0&&Date.now()-(ctime||0)<CACHE_TTL){
@@ -1163,13 +1339,14 @@ function vsRender(list){
     // meta
     const md=document.createElement('div'); md.className='ch-meta';
     const nm=document.createElement('div'); nm.className='ch-name'; nm.textContent=ch.name;
-    const gr=document.createElement('div'); gr.className='ch-grp'; gr.textContent=(ch.grp||'IPTV')+(isFilm(ch.grp)?' 🍿':'');
+    const gr=document.createElement('div'); gr.className='ch-grp'; gr.textContent=((groupAliases[ch.grp||'']||ch.grp)||'IPTV')+(isFilm(ch.grp)?' 🍿':'');
     md.appendChild(nm); md.appendChild(gr);
     // actions
     const ad=document.createElement('div'); ad.style.display='flex'; ad.style.gap='4px'; ad.style.flexShrink='0';
     const fb=document.createElement('button'); fb.className='ch-fav'+(isFav?' on':''); fb.textContent=isFav?'★':'☆';
     fb.onclick=function(ev){ ev.stopPropagation(); toggleFav(ch.id); };
     const dt=document.createElement('div'); dt.className='ch-dot';
+    if(offlineChs.has(ch.id)) d.classList.add('ch-offline');
     ad.appendChild(fb); ad.appendChild(dt);
     d.appendChild(ld); d.appendChild(md); d.appendChild(ad);
     d.onclick=()=>goChannel(ch);
@@ -1221,6 +1398,25 @@ function detectType(url){
 function killAll(){
   if(hlsInst){ hlsInst.destroy(); hlsInst=null; }
   if(tsInst){ try{tsInst.destroy();}catch{} tsInst=null; }
+  clearAutoNext();
+}
+function clearAutoNext(){
+  if(autoNextTimer){ clearTimeout(autoNextTimer); autoNextTimer=null; }
+  const bar=document.getElementById('autoNextBar');
+  if(bar){ bar.style.transition='none'; bar.style.transform='scaleX(0)'; }
+}
+function startAutoNext(){
+  clearAutoNext();
+  const bar=document.getElementById('autoNextBar'); if(!bar) return;
+  bar.style.transition='none'; bar.style.transform='scaleX(0)';
+  setTimeout(()=>{
+    bar.style.transition='transform 5s linear';
+    bar.style.transform='scaleX(1)';
+  },50);
+  autoNextTimer=setTimeout(()=>{
+    toast('⚠️ Akış hatası — sonraki kanala geçiliyor…','⏭️');
+    nextCh(1);
+  },5000);
 }
 
 function playUrl(vd, url, isLive){
@@ -1244,18 +1440,19 @@ function playUrl(vd, url, isLive){
 
 function playHls(vd,url){
   if(Hls.isSupported()){
-    const h=new Hls({enableWorker:true,lowLatencyMode:true,maxBufferLength:30,maxMaxBufferLength:60,fragLoadingTimeOut:20000,manifestLoadingTimeOut:15000});
-    h.loadSource(url); h.attachMedia(vd);
-    h.on(Hls.Events.MANIFEST_PARSED,()=>{ vd.play().catch(()=>{}); showBuf(false); });
-    h.on(Hls.Events.ERROR,(_,d)=>{ if(d.fatal){ showBuf(false); if(d.type===Hls.ErrorTypes.NETWORK_ERROR){ h.destroy(); vd.src=url; vd.play().catch(()=>{}); } else { toast('Akış açılamadı','❌'); } } });
-    if(vd.id==='mainVid') hlsInst=h;
-    else movieHls=h;
+    var inst=new Hls({enableWorker:true,lowLatencyMode:true,maxBufferLength:30,maxMaxBufferLength:60,fragLoadingTimeOut:20000,manifestLoadingTimeOut:15000});
+    inst.loadSource(url);
+    inst.attachMedia(vd);
+    inst.on(Hls.Events.MANIFEST_PARSED,function(){ vd.play().catch(function(){}); showBuf(false); });
+    inst.on(Hls.Events.ERROR,function(e,d){ if(d.fatal){ inst.destroy(); showBuf(false); startAutoNext(); } });
+    if(vd.id==='mainVid') hlsInst=inst; else movieHls=inst;
   } else if(vd.canPlayType('application/x-mpegURL')){
-    vd.src=url; vd.play().catch(()=>{}); showBuf(false);
+    vd.src=url; vd.play().catch(function(){}); showBuf(false);
   } else {
-    vd.src=url; vd.play().catch(()=>{}); showBuf(false);
+    vd.src=url; vd.play().catch(function(){}); showBuf(false);
   }
 }
+
 
 // ════════════════════════════════════════
 // TV PLAYER
@@ -1270,8 +1467,12 @@ function playCh(ch){
   if(isAdmin){ const u=document.getElementById('adminUrl'); if(u) u.value=ch.url; }
   const vd=document.getElementById('mainVid');
   killAll(); showBuf(true);
+  // Ses hafızası uygula
+  vd.volume=savedVol; document.querySelector('.vol-slider').value=savedVol*100;
+  const vp=document.getElementById('volPct'); if(vp) vp.textContent=Math.round(savedVol*100)+'%';
   playUrl(vd, ch.url, true);
   updatePlayBtn();
+  addRecent(ch);
   renderChannels();
   renderEpg();
   setTimeout(scrollToActive,80);
@@ -1290,7 +1491,11 @@ function updatePlayBtn(){
   },80);
 }
 function toggleMute(){ const v=document.getElementById('mainVid'); v.muted=!v.muted; }
-function setVol(val){ const v=document.getElementById('mainVid'); v.volume=val/100; v.muted=val==0; }
+function setVol(val){
+  const v=document.getElementById('mainVid'); v.volume=val/100; v.muted=val==0;
+  savedVol=val/100; lss('vg_vol',savedVol);
+  const vp=document.getElementById('volPct'); if(vp) vp.textContent=Math.round(val)+'%';
+}
 function doFS(){ const e=document.getElementById('playerWrap'); if(!document.fullscreenElement) e.requestFullscreen().catch(()=>{}); else document.exitFullscreen(); }
 function doPiP(){ const v=document.getElementById('mainVid'); if(document.pictureInPictureElement) document.exitPictureInPicture().catch(()=>{}); else if(v.readyState) v.requestPictureInPicture().catch(()=>toast('PiP desteklenmiyor','⚠️')); }
 function setQual(q){
@@ -1498,10 +1703,12 @@ function updateAdminStats(){
   const u=document.getElementById('stUsers'); if(u) u.textContent=getUsers().length;
   const m=document.getElementById('stMovies'); if(m) m.textContent=movieLib.length;
   const c=document.getElementById('stTableCount'); if(c) c.textContent=merged().length.toLocaleString('tr');
+  // recent & search geçmiş sayıları
 }
 let adminOffset=0;
 function renderAdminPage(){
   updateAdminStats(); adminOffset=0;
+  renderRecentBar();
   const el=document.getElementById('adminChList'); if(!el) return;
   el.innerHTML='';
   renderAdminRows(0,200);
@@ -1586,10 +1793,15 @@ function getAdCfg(){ return JSON.parse(localStorage.getItem(AD_KEY)||'{}'); }
 function saveAdCfg(c){ localStorage.setItem(AD_KEY,JSON.stringify(c)); }
 
 function adminTab(t){
-  document.querySelectorAll('.ad-tab-btn').forEach((b,i)=>b.classList.toggle('on',(t==='channels'&&i===0)||(t==='ads'&&i===1)));
-  document.getElementById('adminTabChannels').classList.toggle('on',t==='channels');
-  document.getElementById('adminTabAds').classList.toggle('on',t==='ads');
+  const tabs=['channels','ads','users','groups','cache'];
+  document.querySelectorAll('.ad-tab-btn').forEach((b,i)=>b.classList.toggle('on',tabs[i]===t));
+  ['adminTabChannels','adminTabAds','adminTabUsers','adminTabGroups','adminTabCache'].forEach((id,i)=>{
+    const el=document.getElementById(id); if(el) el.classList.toggle('on',tabs[i]===t);
+  });
   if(t==='ads') renderAdPage();
+  if(t==='users') renderUserList();
+  if(t==='groups') renderGroupList();
+  if(t==='cache') renderCacheInfo();
 }
 
 function renderAdPage(){
@@ -1706,6 +1918,293 @@ function renderAdSummary(){
 
 // Sayfa açılışında reklamı uygula
 document.addEventListener('DOMContentLoaded',()=>{ setTimeout(applyAd,500); });
+
+
+// ════════════════════════════════════════
+// SON İZLENENLER
+// ════════════════════════════════════════
+function addRecent(ch){
+  recentCh=recentCh.filter(c=>c.id!==ch.id);
+  recentCh.unshift({id:ch.id,name:ch.name,grp:ch.grp,logo:ch.logo,url:ch.url});
+  if(recentCh.length>10) recentCh.pop();
+  lss('vg_recent',JSON.stringify(recentCh));
+  renderRecentBar();
+}
+function renderRecentBar(){
+  const bar=document.getElementById('recentBar');
+  const chips=document.getElementById('recentChips');
+  if(!bar||!chips) return;
+  if(!recentCh.length){ bar.style.display='none'; return; }
+  bar.style.display='flex'; chips.innerHTML='';
+  recentCh.slice(0,8).forEach(ch=>{
+    const d=document.createElement('div'); d.className='recent-chip';
+    const em=grpEmoji(ch.grp);
+    d.innerHTML='<span style="font-size:13px">'+em+'</span><span class="recent-chip-name">'+ch.name+'</span>';
+    d.onclick=()=>goChannel(ch);
+    chips.appendChild(d);
+  });
+}
+
+// ════════════════════════════════════════
+// ARAMA GEÇMİŞİ
+// ════════════════════════════════════════
+function addSearchHist(q){
+  if(!q||q.length<2) return;
+  searchHist=searchHist.filter(s=>s!==q);
+  searchHist.unshift(q);
+  if(searchHist.length>8) searchHist.pop();
+  lss('vg_shist',JSON.stringify(searchHist));
+}
+function showSearchHist(){
+  const q=(document.getElementById('sbSearch').value||'').trim();
+  const el=document.getElementById('searchHist'); if(!el) return;
+  const items=q?searchHist.filter(s=>s.toLowerCase().includes(q.toLowerCase())):searchHist;
+  if(!items.length){ el.classList.remove('on'); return; }
+  el.innerHTML='';
+  items.forEach(s=>{
+    const d=document.createElement('div'); d.className='sh-item';
+    d.innerHTML='🕐 '+s;
+    d.onclick=()=>{ document.getElementById('sbSearch').value=s; debRender(); hideSearchHist(); };
+    el.appendChild(d);
+  });
+  if(searchHist.length){
+    const clr=document.createElement('button'); clr.className='sh-clear';
+    clr.textContent='Geçmişi Temizle';
+    clr.onclick=()=>{ searchHist=[]; lss('vg_shist','[]'); hideSearchHist(); };
+    el.appendChild(clr);
+  }
+  el.classList.add('on');
+}
+function hideSearchHist(){ const el=document.getElementById('searchHist'); if(el) el.classList.remove('on'); }
+
+// ════════════════════════════════════════
+// SCREENSHOT
+// ════════════════════════════════════════
+function takeScreenshot(){
+  const vd=document.getElementById('mainVid');
+  if(!vd||!vd.videoWidth){ toast('Video yok','⚠️'); return; }
+  try{
+    const cv=document.createElement('canvas');
+    cv.width=vd.videoWidth; cv.height=vd.videoHeight;
+    cv.getContext('2d').drawImage(vd,0,0);
+    const a=document.createElement('a');
+    a.href=cv.toDataURL('image/png');
+    a.download=(curCh?curCh.name:'ekran')+'_'+new Date().toISOString().slice(0,19).replace(/:/g,'-')+'.png';
+    a.click();
+    // flash efekti
+    const fl=document.getElementById('screenshotFlash');
+    if(fl){ fl.style.opacity='.6'; setTimeout(()=>fl.style.opacity='0',150); }
+    toast('📸 Ekran görüntüsü kaydedildi','📸');
+  }catch(e){ toast('Ekran görüntüsü alınamadı (CORS)','⚠️'); }
+}
+
+// ════════════════════════════════════════
+// SWIPE (dokunmatik kanal geçişi)
+// ════════════════════════════════════════
+function initSwipe(){
+  const el=document.getElementById('playerWrap'); if(!el) return;
+  let sx=0,sy=0;
+  el.addEventListener('touchstart',e=>{ sx=e.touches[0].clientX; sy=e.touches[0].clientY; },{passive:true});
+  el.addEventListener('touchend',e=>{
+    const dx=e.changedTouches[0].clientX-sx;
+    const dy=e.changedTouches[0].clientY-sy;
+    if(Math.abs(dx)<Math.abs(dy)||Math.abs(dx)<60) return;
+    const left=document.getElementById('swipeLeft');
+    const right=document.getElementById('swipeRight');
+    if(dx<0){
+      if(right){ right.classList.add('vis'); setTimeout(()=>right.classList.remove('vis'),600); }
+      nextCh(1);
+    } else {
+      if(left){ left.classList.add('vis'); setTimeout(()=>left.classList.remove('vis'),600); }
+      nextCh(-1);
+    }
+  },{passive:true});
+  // Tam ekranda yatay mod
+  document.addEventListener('fullscreenchange',()=>{
+    if(document.fullscreenElement && screen.orientation && screen.orientation.lock){
+      screen.orientation.lock('landscape').catch(()=>{});
+    }
+  });
+}
+
+// ════════════════════════════════════════
+// KANAL DURUM KONTROLÜ
+// ════════════════════════════════════════
+async function checkChannelStatus(){
+  const chs=merged().slice(0,20);
+  toast('🔍 '+chs.length+' kanal kontrol ediliyor…','🔍');
+  document.getElementById('statusCheckInfo').textContent='Kontrol ediliyor…';
+  offlineChs.clear();
+  let ok=0, fail=0;
+  for(const ch of chs){
+    try{
+      const r=await fetch(ch.url,{method:'HEAD',signal:AbortSignal.timeout(4000)});
+      if(!r.ok) throw new Error();
+      ok++;
+    }catch{
+      offlineChs.add(ch.id); fail++;
+    }
+  }
+  renderChannels();
+  document.getElementById('statusCheckInfo').textContent='Sonuç: '+ok+' çevrimiçi, '+fail+' erişilemez ('+chs.length+' kanaldan)';
+  toast('✅ Kontrol bitti: '+ok+' çevrimiçi, '+fail+' hatalı','✅');
+}
+
+// ════════════════════════════════════════
+// CACHE / SİSTEM YÖNETİMİ
+// ════════════════════════════════════════
+async function renderCacheInfo(){
+  const t=await idbGet('plt');
+  const el=document.getElementById('cacheInfo'); if(!el) return;
+  if(t){
+    const mins=Math.round((Date.now()-t)/60000);
+    el.textContent=allCh.length.toLocaleString('tr')+' kanal — '+mins+' dakika önce yüklendi';
+  } else {
+    el.textContent='Önbellekte veri yok';
+  }
+  const ci=parseInt(ls('vg_cttl')||'60');
+  const sel=document.getElementById('cacheInterval');
+  if(sel) sel.value=ci;
+  const lbl=document.getElementById('cacheIntervalLbl');
+  if(lbl) lbl.textContent=ci>=60?(ci/60)+' saat':ci+' dakika';
+}
+async function forceRefreshPL(){
+  await idbSet('plt',0);
+  toast('🔄 Playlist yenileniyor…','📡');
+  await fetchPL(false);
+}
+async function clearCache(){
+  if(!confirm('Önbellek temizlensin mi?')) return;
+  await idbSet('pl',[]); await idbSet('plt',0);
+  allCh=[];
+  renderChannels(); renderCacheInfo();
+  toast('🗑️ Önbellek temizlendi','🗑️');
+}
+function setCacheInterval(val){
+  cacheIntervalMin=parseInt(val);
+  lss('vg_cttl',cacheIntervalMin);
+  const lbl=document.getElementById('cacheIntervalLbl');
+  if(lbl) lbl.textContent=cacheIntervalMin>=60?(cacheIntervalMin/60)+' saat':cacheIntervalMin+' dakika';
+  toast('⏱️ Yenileme aralığı: '+val+' dk','⏱️');
+}
+async function clearAllData(){
+  if(!confirm('Tüm veriler silinsin mi? Bu işlem geri alınamaz!')) return;
+  ['vg_extra','vg_favs','vg_recent','vg_shist','vg_vol','vg_sort','vg_grp_alias','vg_cttl','vg_mlib'].forEach(k=>lsd(k));
+  await idbSet('pl',[]); await idbSet('plt',0);
+  location.reload();
+}
+
+// ════════════════════════════════════════
+// KULLANICI YÖNETİMİ
+// ════════════════════════════════════════
+function renderUserList(){
+  const el=document.getElementById('userList'); if(!el) return;
+  const users=getUsers();
+  el.innerHTML='';
+  users.forEach(function(u){
+    const row=document.createElement('div');
+    row.className='user-row';
+
+    const unDiv=document.createElement('div');
+    unDiv.style.cssText='font-size:13px;font-weight:500';
+    unDiv.textContent=u.username;
+
+    const roleSpan=document.createElement('span');
+    roleSpan.className='user-role '+u.role;
+    roleSpan.textContent=u.role;
+
+    const nmDiv=document.createElement('div');
+    nmDiv.style.cssText='font-size:12px;color:var(--txt2)';
+    nmDiv.textContent=u.name;
+
+    let actionEl;
+    if(u.username==='admin'){
+      actionEl=document.createElement('span');
+      actionEl.style.cssText='font-size:11px;color:var(--txt3)';
+      actionEl.textContent='—';
+    } else {
+      actionEl=document.createElement('button');
+      actionEl.className='user-del';
+      actionEl.textContent='Sil';
+      actionEl.onclick=(function(username){
+        return function(){ adminDelUser(username); };
+      })(u.username);
+    }
+
+    row.appendChild(unDiv);
+    row.appendChild(roleSpan);
+    row.appendChild(nmDiv);
+    row.appendChild(actionEl);
+    el.appendChild(row);
+  });
+}
+function adminAddUser(){
+  const un=(document.getElementById('uN').value||'').trim();
+  const nm=(document.getElementById('uNm').value||'').trim();
+  const pw=document.getElementById('uP').value;
+  const ro=document.getElementById('uR').value;
+  if(!un||!nm||!pw){ toast('Tüm alanları doldurun','⚠️'); return; }
+  const users=getUsers();
+  if(users.find(u=>u.username===un)){ toast('Bu kullanıcı adı alınmış','⚠️'); return; }
+  users.push({username:un,name:nm,password:pw,role:ro});
+  saveUsers(users);
+  ['uN','uNm','uP'].forEach(id=>document.getElementById(id).value='');
+  renderUserList(); updateAdminStats();
+  toast('✅ Kullanıcı eklendi: '+un,'✅');
+}
+function adminDelUser(username){
+  if(!confirm(username+' silinsin mi?')) return;
+  saveUsers(getUsers().filter(u=>u.username!==username));
+  renderUserList(); updateAdminStats();
+  toast('Kullanıcı silindi','🗑️');
+}
+
+// ════════════════════════════════════════
+// GRUP DÜZENLEME
+// ════════════════════════════════════════
+function renderGroupList(){
+  const el=document.getElementById('groupList'); if(!el) return;
+  const chs=merged();
+  const groups={};
+  chs.forEach(function(c){ const g=c.grp||'Diğer'; groups[g]=(groups[g]||0)+1; });
+  el.innerHTML='';
+  Object.entries(groups).sort(function(a,b){ return b[1]-a[1]; }).forEach(function(entry){
+    const g=entry[0], cnt=entry[1];
+    const alias=groupAliases[g]||g;
+    const row=document.createElement('div'); row.className='grp-item';
+
+    const nameSpan=document.createElement('span'); nameSpan.className='grp-name';
+    nameSpan.textContent=grpEmoji(g)+' '+alias;
+    if(alias!==g){
+      const small=document.createElement('small');
+      small.style.color='var(--txt3)'; small.textContent=' ('+g+')';
+      nameSpan.appendChild(small);
+    }
+
+    const cntSpan=document.createElement('span'); cntSpan.className='grp-count';
+    cntSpan.textContent=cnt+' kanal';
+
+    const inp=document.createElement('input'); inp.className='grp-rename-input';
+    inp.placeholder='Yeniden adlandır…'; inp.value=(alias!==g?alias:'');
+
+    const btn=document.createElement('button'); btn.className='btn btn-g';
+    btn.style.cssText='font-size:12px;padding:5px 10px'; btn.textContent='Kaydet';
+    btn.onclick=(function(grp,input){ return function(){ saveGroupAlias(grp,input.value); }; })(g,inp);
+
+    row.appendChild(nameSpan); row.appendChild(cntSpan);
+    row.appendChild(inp); row.appendChild(btn);
+    el.appendChild(row);
+  });
+}
+function saveGroupAlias(grp, newName){
+  newName=newName.trim();
+  if(!newName||newName===grp){ delete groupAliases[grp]; } else { groupAliases[grp]=newName; }
+  lss('vg_grp_alias',JSON.stringify(groupAliases));
+  renderGroupList(); renderChannels();
+  toast('✅ Grup adı güncellendi','✅');
+}
+// grpEmoji'de alias kullan
+const _origGrpEmoji=grpEmoji;
 
 // ════════════════════════════════════════
 // KEYBOARD
